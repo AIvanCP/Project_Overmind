@@ -61,6 +61,26 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Psychically Dull pawns have 50% resistance chance
   - "The mind speaks louder than words."
 
+### Feast of Mind Psycast (NEW!)
+- **Description**: Channel psychic energy to sustain a target, reducing hunger rate and increasing eating speed
+- **Target**: Self or friendly pawn
+- **Range**: 5 tiles
+- **Cast Time**: 1 second
+- **Cooldown**: 60 seconds
+- **Duration**: 90 seconds
+- **Psyfocus Cost**: 0.15
+- **Heat Cost**: 0.25
+- **Required Psycast Level**: 3
+- **Special**: Scales with target's psychic sensitivity
+  - Reduces hunger rate by 50% (scaled by psychic sensitivity)
+  - Increases eating speed by 50% (scaled by psychic sensitivity)
+  - If sensitivity = 1.0: full 50% reduction + 50% eating speed
+  - If sensitivity = 1.5: 75% each
+  - If sensitivity = 0.5: 25% each
+  - Does not stack - recasting refreshes duration
+  - Perfect for sustained crafting or long operations
+  - "The mind nourishes the body."
+
 ### Gameplay Details
 - **Translocate Target**: Non-violent ability (no damage, no relationship penalties)
   - Applies "Spatial Daze" debuff (5 seconds) causing brief disorientation
@@ -72,14 +92,6 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Chain effect on death allows single-target control to spread chaos
   - "The mind is a weapon — sharpen it well."
 
-- **I See You**: Anti-ambush and anomaly detection ability
-  - Reveals hidden creatures with exclamation mark indicators
-  - Detects: invisible pawns, stealthed animals, concealed entities, anomalies
-  - Safe detection: checks hediffs, comps, and thing defs for common stealth patterns
-  - Player-only reveal: enemies don't gain targeting information
-  - Alert sound plays ONLY when hostile entities detected (silent if none found)
-  - "Nothing stays hidden from the mind's eye."
-
 - **Mind Read**: Intelligence gathering ability
   - Read complete mental profile without affecting relationships
   - Works on any humanlike: enemies, visitors, guests, prisoners, quest pawns
@@ -87,6 +99,22 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Psychically Dull pawns can resist (50% chance)
   - Safe to use: no goodwill penalties or faction reactions
   - "The mind speaks louder than words."
+
+- **Feast of Mind**: Psychic sustenance ability
+  - Supports extended operations by reducing hunger needs
+  - Perfect for crafters, researchers, or pawns on long hauls
+  - Effects scale dynamically with target's psychic sensitivity
+  - Can be used on any friendly pawn including yourself
+  - Non-combat support ability with zero risk
+  - "The mind nourishes the body."
+
+- **I See You**: Anti-ambush and anomaly detection ability
+  - Reveals hidden creatures with exclamation mark indicators
+  - Detects: invisible pawns, stealthed animals, concealed entities, anomalies
+  - Safe detection: checks hediffs, comps, and thing defs for common stealth patterns
+  - Player-only reveal: enemies don't gain targeting information
+  - Alert sound plays ONLY when hostile entities detected (silent if none found)
+  - "Nothing stays hidden from the mind's eye."
 
 ### Inspiration Psycast (NEW!)
 - **Description**: Flood the minds of all allies with powerful psychic motivation
@@ -197,6 +225,7 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Translocate Target Psytrainer: 1200 silver (level 3)
   - Mind Spike Psytrainer: 1800 silver (level 3)
   - Mind Read Psytrainer: 1600 silver (level 3)
+  - Feast of Mind Psytrainer: 1500 silver (level 3)
   - Inspiration Psytrainer: 2000 silver (level 4)
   - I See You Psytrainer: 2200 silver (level 5)
   - Hallucination Psytrainer: 2400 silver (level 5)
@@ -247,7 +276,21 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.4.0 (Current)
+### Version 1.5.0 (Current)
+- Added Feast of Mind psycast (support/sustenance ability)
+- Added Feast of Mind Psytrainer item (1500 silver, level 3 required)
+- Updated trader stocks to include Feast of Mind psytrainer
+- Feast of Mind features:
+  - Reduces target's hunger rate by 50% (scaled by psychic sensitivity)
+  - Increases eating speed by 50% (scaled by psychic sensitivity)
+  - 90 second duration, 60 second cooldown
+  - Can target self or any friendly pawn
+  - Perfect for sustained crafting or long operations
+  - Cyan-green visual effects with floating text
+  - Does not stack - recasting refreshes duration
+- Build verified: 0 errors, 0 warnings
+
+### Version 1.4.0
 - Added Inspiration psycast (global buff for all player pawns)
 - Added Hallucination psycast (global debuff for all hostile pawns/animals)
 - Added Inspiration Psytrainer item (2000 silver, level 4 required)

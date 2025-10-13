@@ -7,12 +7,13 @@
 		<li>1.5</li>
 		<li>1.6</li>
 	</supportedVersions>
-	<description>Adds 6 unique psionic abilities to RimWorld inspired by various games and media. Features tactical teleportation, mind control, intelligence gathering, detection, and powerful global effects.
+	<description>Adds 7 unique psionic abilities to RimWorld inspired by various games and media. Features tactical teleportation, mind control, intelligence gathering, support buffs, detection, and powerful global effects.
 
 Abilities:
 - Translocate Target (Lv3): Instantly relocate any pawn to a new position
 - Mind Spike (Lv3): Seize enemy minds and force them to attack their allies
 - Mind Read (Lv3): Reveal complete mental profile including hidden quest intentions
+- Feast of Mind (Lv3): Reduce hunger rate and increase eating speed (scales with psychic sensitivity)
 - Inspiration (Lv4): Global buff - massive productivity boost for all colonists
 - I See You (Lv5): Reveal all hidden/invisible entities on the map
 - Hallucination (Lv5): Global debuff - cause panic and combat penalties in enemies

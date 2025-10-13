@@ -41,6 +41,10 @@
 						<countRange>0~1</countRange>
 					</li>
 					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_FeastOfMind</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
 						<thingDef>ProjectOvermind_Psytrainer_Inspiration</thingDef>
 						<countRange>0~1</countRange>
 					</li>

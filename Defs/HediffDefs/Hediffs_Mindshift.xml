@@ -155,4 +155,29 @@
 		</stages>
 	</HediffDef>
 
+	<!-- Feast of Mind Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_FeastOfMind</defName>
+		<label>feast of mind</label>
+		<description>Psychic energy sustains this pawn, reducing hunger rate and increasing eating speed. The mind nourishes the body.</description>
+		<hediffClass>ProjectOvermind.Hediff_FeastOfMind</hediffClass>
+		<defaultLabelColor>(0.3, 1.0, 0.7)</defaultLabelColor> <!-- cyan-green -->
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>5400</disappearsAfterTicks> <!-- 90 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<statOffsets>
+					<EatingSpeed>0.50</EatingSpeed> <!-- Base +50%, scaled by Severity in PostAdd -->
+				</statOffsets>
+				<hungerRateFactor>0.50</hungerRateFactor> <!-- Base 50% of normal (50% reduction), scaled by Severity -->
+			</li>
+		</stages>
+	</HediffDef>
+
 </Defs>
