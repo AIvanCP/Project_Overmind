@@ -1,57 +1,43 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
+
   <!-- Inspiration: Global buff for all player pawns on map -->
-  <VFECore.Abilities.AbilityDef ParentName="PsycastBase">
+  <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_Inspiration</defName>
-    <label>Inspiration</label>
+    <label>inspiration</label>
     <description>Channel psychic energy to inspire all colonists on the map, dramatically boosting their productivity and learning capabilities. All player-owned pawns gain massively increased work speed, learning speed, crafting quality, and movement speed for 60 seconds.\n\nThe buff's strength scales with each pawn's Psychic Sensitivity (higher sensitivity = stronger effect).\n\nThis psycast does not affect faction relations and continues even if the caster dies during the duration.</description>
     <iconPath>UI/Icons/Psycasts/Inspiration</iconPath>
-    
-    <!-- Psycast stats -->
+    <category>ProjectOvermind_MindshiftAbilities</category>
     <level>4</level>
-    <psyfocusCost>0.40</psyfocusCost>
-    <entropyGain>0.20</entropyGain>
-    <cooldownTicksRange>12000</cooldownTicksRange> <!-- 200 seconds / ~3.3 minutes -->
-    
-    <!-- Targeting -->
-    <range>0</range>
-    <needsTicking>false</needsTicking>
-    <warmupStartSound>PsycastPsychicEffect</warmupStartSound>
-    <jobDef>CastAbilityOnWorldTile</jobDef>
-    
-    <!-- Targeting parameters (self-cast / map-wide) -->
-    <targetingParameters>
-      <canTargetSelf>true</canTargetSelf>
-      <canTargetPawns>false</canTargetPawns>
-      <canTargetAnimals>false</canTargetAnimals>
-      <canTargetMechs>false</canTargetMechs>
-      <canTargetBuildings>false</canTargetBuildings>
-      <canTargetItems>false</canTargetItems>
-    </targetingParameters>
-    
-    <!-- Verb -->
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.40</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.20</Ability_EntropyGain>
+    </statBases>
     <verbProperties>
       <verbClass>ProjectOvermind.Verb_Inspiration</verbClass>
       <warmupTime>4.0</warmupTime>
       <range>0</range>
       <targetParams>
-        <canTargetSelf>true</canTargetSelf>
+        <canTargetSelf>false</canTargetSelf>
         <canTargetPawns>false</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>false</canTargetLocations>
       </targetParams>
     </verbProperties>
-    
-    <!-- Tags -->
-    <tags>
-      <li>Psycast</li>
-    </tags>
-    
-    <!-- No goodwill penalty -->
-    <goodwillImpact>0</goodwillImpact>
-    
-    <!-- Stat modifiers -->
-    <statBases>
-      <Ability_Duration>3600</Ability_Duration> <!-- 60 seconds -->
-      <Ability_EffectRadius>0</Ability_EffectRadius>
-    </statBases>
-  </VFECore.Abilities.AbilityDef>
+    <cooldownTicksRange>12000</cooldownTicksRange> <!-- 200 seconds / ~3.3 minutes -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <confirmationDialogText>Inspire all colonists on this map?</confirmationDialogText>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+    <jobDef>CastAbilityOnWorldTile</jobDef>
+  </AbilityDef>
+
 </Defs>

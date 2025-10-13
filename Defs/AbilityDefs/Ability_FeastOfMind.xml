@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-	<VFECore.Abilities.AbilityDef ParentName="PsycastBase">
+
+	<!-- Feast of Mind Psycast -->
+	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_FeastOfMind</defName>
 		<label>feast of mind</label>
 		<description>Channel psychic energy to reduce a target's hunger rate and increase their eating speed. The target's hunger will deplete 50% slower (scaled by psychic sensitivity), and they will eat 50% faster. Perfect for sustaining pawns during long crafting sessions or operations.\n\nDuration: 90 seconds\nTarget: Self or friendly pawn\nScales with target's psychic sensitivity</description>
 		<iconPath>UI/Icons/Psycasts/FeastOfMind</iconPath>
-		<abilityClass>ProjectOvermind.Verb_FeastOfMind</abilityClass>
-		<category>Psycast</category>
+		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>
-		<psyfocusCost>0.15</psyfocusCost>
-		<entropyGain>0.25</entropyGain>
-		<cooldownTime>3600</cooldownTime> <!-- 60 seconds -->
-		<castTime>60</castTime> <!-- 1 second -->
-		<range>5</range>
-		<targetMode>Pawn</targetMode>
-		<canTargetSelf>true</canTargetSelf>
-		<jobDef>CastAbilityOnThingWithoutWeapon</jobDef>
-		<targetingParameters>
-			<canTargetSelf>true</canTargetSelf>
-			<canTargetPawns>true</canTargetPawns>
-			<canTargetBuildings>false</canTargetBuildings>
-			<canTargetAnimals>false</canTargetAnimals>
-			<onlyTargetFriendly>true</onlyTargetFriendly>
-			<mustBeSelectable>true</mustBeSelectable>
-		</targetingParameters>
-		<modExtensions>
-			<li Class="VanillaGenesExpanded.PawnKindExtension">
-				<showOnHumanlikeOnly>true</showOnHumanlikeOnly>
+		<statBases>
+			<Ability_Duration>1</Ability_Duration>
+			<Ability_PsyfocusCost>0.15</Ability_PsyfocusCost>
+			<Ability_EntropyGain>0.25</Ability_EntropyGain>
+		</statBases>
+		<verbProperties>
+			<verbClass>ProjectOvermind.Verb_FeastOfMind</verbClass>
+			<warmupTime>1.0</warmupTime>
+			<range>5</range>
+			<targetParams>
+				<canTargetSelf>true</canTargetSelf>
+				<canTargetPawns>true</canTargetPawns>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetAnimals>false</canTargetAnimals>
+				<onlyTargetFriendly>true</onlyTargetFriendly>
+				<mustBeSelectable>true</mustBeSelectable>
+			</targetParams>
+		</verbProperties>
+		<cooldownTicksRange>3600</cooldownTicksRange> <!-- 60 seconds -->
+		<comps>
+			<li Class="CompProperties_AbilityFleckOnTarget">
+				<fleckDef>PsycastAreaEffect</fleckDef>
 			</li>
-		</modExtensions>
-	</VFECore.Abilities.AbilityDef>
+		</comps>
+		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+		<showGizmoOnWorldView>false</showGizmoOnWorldView>
+		<confirmationDialogText>Channel psychic sustenance to this pawn?</confirmationDialogText>
+		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+		<showPsycastEffects>true</showPsycastEffects>
+		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+		<jobDef>CastAbilityOnThing</jobDef>
+	</AbilityDef>
+
 </Defs>

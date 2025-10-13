@@ -1,35 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
+
   <!-- Mind Read: Read thoughts, intentions, skills, and stats of target pawn -->
-  <VFECore.Abilities.AbilityDef ParentName="PsycastBase">
+  <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_MindRead</defName>
-    <label>Mind Read</label>
+    <label>mind read</label>
     <description>Probe the target pawn's mind to reveal their complete mental and physical profile. You will learn all traits, skills, passions, current mood, health summary, and any hidden storyteller intentions (such as betrayal plans for guests or quest pawns).\n\nThis psycast does not affect faction goodwill and can target any humanlike pawn within range.\n\nPawns with the Psychically Dull trait have a 50% chance to resist this intrusion.</description>
     <iconPath>UI/Icons/Psycasts/MindRead</iconPath>
-    
-    <!-- Psycast stats -->
+    <category>ProjectOvermind_MindshiftAbilities</category>
     <level>3</level>
-    <psyfocusCost>0.30</psyfocusCost>
-    <entropyGain>0.08</entropyGain>
-    <cooldownTicksRange>1800</cooldownTicksRange> <!-- 30 seconds -->
-    
-    <!-- Targeting -->
-    <range>10.9</range>
-    <needsTicking>false</needsTicking>
-    <warmupStartSound>PsycastPsychicEffect</warmupStartSound>
-    <jobDef>CastAbilityOnThingWithoutWeapon</jobDef>
-    
-    <!-- Targeting parameters -->
-    <targetingParameters>
-      <canTargetSelf>false</canTargetSelf>
-      <canTargetPawns>true</canTargetPawns>
-      <canTargetAnimals>false</canTargetAnimals>
-      <canTargetMechs>false</canTargetMechs>
-      <canTargetBuildings>false</canTargetBuildings>
-      <canTargetItems>false</canTargetItems>
-    </targetingParameters>
-    
-    <!-- Verb -->
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.30</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.08</Ability_EntropyGain>
+    </statBases>
     <verbProperties>
       <verbClass>ProjectOvermind.Verb_MindRead</verbClass>
       <warmupTime>1.0</warmupTime>
@@ -40,22 +24,21 @@
         <canTargetAnimals>false</canTargetAnimals>
         <canTargetMechs>false</canTargetMechs>
         <canTargetBuildings>false</canTargetBuildings>
-        <onlyTargetHumanlike>true</onlyTargetHumanlike>
       </targetParams>
     </verbProperties>
-    
-    <!-- Tags -->
-    <tags>
-      <li>Psycast</li>
-    </tags>
-    
-    <!-- No goodwill penalty -->
-    <goodwillImpact>0</goodwillImpact>
-    
-    <!-- Stat modifiers -->
-    <statBases>
-      <Ability_Duration>0</Ability_Duration>
-      <Ability_EffectRadius>0</Ability_EffectRadius>
-    </statBases>
-  </VFECore.Abilities.AbilityDef>
+    <cooldownTicksRange>1800</cooldownTicksRange> <!-- 30 seconds -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <confirmationDialogText>Probe this pawn's mind?</confirmationDialogText>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+    <jobDef>CastAbilityOnThing</jobDef>
+  </AbilityDef>
+
 </Defs>

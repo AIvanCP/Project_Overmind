@@ -40,8 +40,9 @@
 				<useLabel>Use psytrainer to learn translocate target</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_TranslocateTarget</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_TranslocateTarget</abilityDef>
+				<level>3</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -94,8 +95,9 @@
 				<useLabel>Use psytrainer to learn mind spike</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_MindSpike</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_MindSpike</abilityDef>
+				<level>3</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -148,8 +150,9 @@
 				<useLabel>Use psytrainer to learn I see you</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_ISeeYou</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_ISeeYou</abilityDef>
+				<level>5</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -202,8 +205,9 @@
 				<useLabel>Use psytrainer to learn mind read</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_MindRead</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_MindRead</abilityDef>
+				<level>3</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -256,8 +260,9 @@
 				<useLabel>Use psytrainer to learn inspiration</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_Inspiration</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_Inspiration</abilityDef>
+				<level>4</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -310,8 +315,9 @@
 				<useLabel>Use psytrainer to learn hallucination</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_Hallucination</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_Hallucination</abilityDef>
+				<level>5</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -364,8 +370,9 @@
 				<useLabel>Use psytrainer to learn feast of mind</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="RimWorld.CompProperties_Psytrainer">
-				<ability>ProjectOvermind_FeastOfMind</ability>
+			<li Class="CompProperties_UseEffectGiveAbility">
+				<abilityDef>ProjectOvermind_FeastOfMind</abilityDef>
+				<level>3</level>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
