@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- Feast of Mind: Eating Speed Bonus -->
+	<StatDef>
+		<defName>EatingSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_FeastOfMind" />
+		</parts>
+	</StatDef>
+
+	<!-- Inspiration: Base Stats -->
+	<StatDef>
+		<defName>WorkSpeedGlobal</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>GlobalLearningFactor</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>MoveSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<!-- Inspiration Threshold 3: Farming & Production -->
+	<StatDef>
+		<defName>PlantWorkSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>PlantHarvestYield</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>DrugCookingSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<!-- Inspiration Threshold 5: Combat & Resources -->
+	<StatDef>
+		<defName>HuntingStealth</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>ButcheryFleshSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>MiningSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>MiningYield</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<!-- Inspiration Threshold 8: Advanced Crafting -->
+	<StatDef>
+		<defName>SmithingSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>ConstructionSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>GeneralLaborSpeed</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+	<StatDef>
+		<defName>MedicalSurgerySuccessChance</defName>
+		<parts>
+			<li Class="ProjectOvermind.StatPart_Inspiration" />
+		</parts>
+	</StatDef>
+
+</Defs>

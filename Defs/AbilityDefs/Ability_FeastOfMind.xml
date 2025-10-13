@@ -14,32 +14,28 @@
 			<Ability_PsyfocusCost>0.15</Ability_PsyfocusCost>
 			<Ability_EntropyGain>0.25</Ability_EntropyGain>
 		</statBases>
-		<verbProperties>
-			<verbClass>ProjectOvermind.Verb_FeastOfMind</verbClass>
-			<warmupTime>1.0</warmupTime>
-			<range>5</range>
-			<targetParams>
-				<canTargetSelf>true</canTargetSelf>
-				<canTargetPawns>true</canTargetPawns>
-				<canTargetBuildings>false</canTargetBuildings>
-				<canTargetAnimals>false</canTargetAnimals>
-				<onlyTargetFriendly>true</onlyTargetFriendly>
-				<mustBeSelectable>true</mustBeSelectable>
-			</targetParams>
-		</verbProperties>
-		<cooldownTicksRange>3600</cooldownTicksRange> <!-- 60 seconds -->
-		<comps>
-			<li Class="CompProperties_AbilityFleckOnTarget">
-				<fleckDef>PsycastAreaEffect</fleckDef>
-			</li>
-		</comps>
-		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
-		<showGizmoOnWorldView>false</showGizmoOnWorldView>
-		<confirmationDialogText>Channel psychic sustenance to this pawn?</confirmationDialogText>
-		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
-		<showPsycastEffects>true</showPsycastEffects>
-		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-		<jobDef>CastAbilityOnThing</jobDef>
-	</AbilityDef>
-
-</Defs>
+	<verbProperties>
+		<verbClass>ProjectOvermind.Verb_FeastOfMind</verbClass>
+		<warmupTime>1.0</warmupTime>
+		<range>5</range>
+		<targetParams>
+			<canTargetSelf>true</canTargetSelf>
+			<canTargetPawns>true</canTargetPawns>
+			<canTargetBuildings>false</canTargetBuildings>
+			<canTargetAnimals>false</canTargetAnimals>
+			<mustBeSelectable>true</mustBeSelectable>
+		</targetParams>
+	</verbProperties>
+	<cooldownTicksRange>3600</cooldownTicksRange> <!-- 60 seconds -->
+	<comps>
+		<li Class="CompProperties_AbilityFleckOnTarget">
+			<fleckDef>PsycastAreaEffect</fleckDef>
+		</li>
+	</comps>
+	<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+	<showGizmoOnWorldView>false</showGizmoOnWorldView>
+	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+	<showPsycastEffects>true</showPsycastEffects>
+	<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+	<jobDef>CastAbilityOnThing</jobDef>
+</AbilityDef></Defs>

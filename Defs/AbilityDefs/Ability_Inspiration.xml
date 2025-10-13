@@ -14,30 +14,27 @@
       <Ability_PsyfocusCost>0.40</Ability_PsyfocusCost>
       <Ability_EntropyGain>0.20</Ability_EntropyGain>
     </statBases>
-    <verbProperties>
-      <verbClass>ProjectOvermind.Verb_Inspiration</verbClass>
-      <warmupTime>4.0</warmupTime>
-      <range>0</range>
-      <targetParams>
-        <canTargetSelf>false</canTargetSelf>
-        <canTargetPawns>false</canTargetPawns>
-        <canTargetBuildings>false</canTargetBuildings>
-        <canTargetLocations>false</canTargetLocations>
-      </targetParams>
-    </verbProperties>
-    <cooldownTicksRange>12000</cooldownTicksRange> <!-- 200 seconds / ~3.3 minutes -->
-    <comps>
-      <li Class="CompProperties_AbilityFleckOnTarget">
-        <fleckDef>PsycastAreaEffect</fleckDef>
-      </li>
-    </comps>
-    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
-    <showGizmoOnWorldView>false</showGizmoOnWorldView>
-    <confirmationDialogText>Inspire all colonists on this map?</confirmationDialogText>
-    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
-    <showPsycastEffects>true</showPsycastEffects>
-    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-    <jobDef>CastAbilityOnWorldTile</jobDef>
-  </AbilityDef>
-
-</Defs>
+  <verbProperties>
+    <verbClass>ProjectOvermind.Verb_Inspiration</verbClass>
+    <warmupTime>4.0</warmupTime>
+    <range>-1</range>
+    <targetParams>
+      <canTargetSelf>true</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+      <canTargetLocations>false</canTargetLocations>
+    </targetParams>
+  </verbProperties>
+  <cooldownTicksRange>12000</cooldownTicksRange> <!-- 200 seconds / ~3.3 minutes -->
+  <comps>
+    <li Class="CompProperties_AbilityFleckOnTarget">
+      <fleckDef>PsycastAreaEffect</fleckDef>
+    </li>
+  </comps>
+  <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+  <showGizmoOnWorldView>false</showGizmoOnWorldView>
+  <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+  <showPsycastEffects>true</showPsycastEffects>
+  <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+  <jobDef>CastAbilityOnWorldTile</jobDef>
+</AbilityDef></Defs>

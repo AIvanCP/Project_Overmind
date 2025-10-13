@@ -40,9 +40,9 @@
 				<useLabel>Use psytrainer to learn translocate target</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_TranslocateTarget</abilityDef>
-				<level>3</level>
+				<levelRequired>3</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -95,9 +95,9 @@
 				<useLabel>Use psytrainer to learn mind spike</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_MindSpike</abilityDef>
-				<level>3</level>
+				<levelRequired>3</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -150,9 +150,9 @@
 				<useLabel>Use psytrainer to learn I see you</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_ISeeYou</abilityDef>
-				<level>5</level>
+				<levelRequired>5</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -205,9 +205,9 @@
 				<useLabel>Use psytrainer to learn mind read</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_MindRead</abilityDef>
-				<level>3</level>
+				<levelRequired>3</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -260,9 +260,9 @@
 				<useLabel>Use psytrainer to learn inspiration</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_Inspiration</abilityDef>
-				<level>4</level>
+				<levelRequired>4</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -315,9 +315,9 @@
 				<useLabel>Use psytrainer to learn hallucination</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_Hallucination</abilityDef>
-				<level>5</level>
+				<levelRequired>5</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>
@@ -370,9 +370,9 @@
 				<useLabel>Use psytrainer to learn feast of mind</useLabel>
 				<useDuration>100</useDuration>
 			</li>
-			<li Class="CompProperties_UseEffectGiveAbility">
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
 				<abilityDef>ProjectOvermind_FeastOfMind</abilityDef>
-				<level>3</level>
+				<levelRequired>3</levelRequired>
 			</li>
 			<li Class="CompProperties_UseEffectPlaySound">
 				<soundOnUsed>PsytrainerUse</soundOnUsed>

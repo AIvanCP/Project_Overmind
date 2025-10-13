@@ -1,5 +1,6 @@
 using RimWorld;
 using System;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -8,9 +9,30 @@ namespace ProjectOvermind
     public class Hediff_FeastOfMind : HediffWithComps
     {
         private new const int TickInterval = 60; // Check every 60 ticks (1 second) for visual effects
-        private const float BaseEffect = 0.5f; // 50% base effect
-        private const float MinEffect = 0.1f; // 10% minimum
-        private const float MaxEffect = 1.0f; // 100% maximum
+        
+        // Base values at sensitivity 0 - PUBLIC for StatPart access
+        public const float BaseHungerReduction = 0.10f; // 10% hunger reduction at s=0
+        public const float BaseEatingSpeed = 0.25f; // +25% eating speed at s=0
+        
+        // Scaling: each 0.1 sensitivity adds 1% to effects - PUBLIC for StatPart access
+        public const float ScalingPerPoint = 0.1f; // multiply by sensitivity
+        
+        // Hunger cap: max 99% reduction (min 1% hunger rate) - PUBLIC for StatPart access
+        public const float MaxHungerReduction = 0.99f;
+        
+        // Threshold levels for special perks - PUBLIC for StatPart access
+        public const float ThresholdLearning = 3.0f;
+        public const float ThresholdDamageReduction = 5.0f;
+        public const float ThresholdTirednessReduction = 8.0f;
+        
+        // Base values for threshold perks - PUBLIC for StatPart access
+        public const float BaseLearningBonus = 0.10f; // +10% learning at 3.0
+        public const float BaseDamageReduction = 0.05f; // +5% damage reduction at 5.0
+        public const float BaseTirednessReduction = 0.05f; // -5% rest need at 8.0
+        
+        // Threshold perk scaling: each 0.2 over threshold adds 1% - PUBLIC for StatPart access
+        public const float ThresholdScalingStep = 0.2f;
+        public const float ThresholdScalingBonus = 0.01f; // 1% per step
 
         public override void PostAdd(DamageInfo? dinfo)
         {
@@ -25,24 +47,53 @@ namespace ProjectOvermind
                     return;
                 }
 
-                // Get psychic sensitivity and scale the effect
-                float psychicSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                // Get psychic sensitivity
+                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
                 
-                // Calculate the scaling factor
-                // Formula: clamp(BaseEffect * psychicSensitivity, MinEffect, MaxEffect)
-                float scalingFactor = Mathf.Clamp(BaseEffect * psychicSensitivity, MinEffect, MaxEffect);
+                // Calculate hunger reduction: base + (sensitivity * 0.1), capped at 99%
+                float hungerReduction = Mathf.Clamp(
+                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                    BaseHungerReduction,
+                    MaxHungerReduction
+                );
                 
-                // Set severity to the scaling factor
-                // This will multiply the stat offsets defined in XML
-                Severity = scalingFactor;
+                // Calculate eating speed bonus: base + (sensitivity * 0.1), no cap
+                float eatingSpeedBonus = BaseEatingSpeed + (ScalingPerPoint * sensitivity);
+                
+                // Set severity to encode the hunger reduction factor for XML stage use
+                // Severity will be used by XML hungerRateFactor
+                // We'll store hunger reduction value in severity
+                Severity = hungerReduction;
 
                 if (Prefs.DevMode)
                 {
-                    Log.Message($"[FeastOfMind] PostAdd for {pawn.LabelShort}:");
-                    Log.Message($"  - Psychic Sensitivity: {psychicSensitivity:F2}");
-                    Log.Message($"  - Scaling Factor: {scalingFactor:F2} ({scalingFactor * 100:F0}%)");
-                    Log.Message($"  - Eating Speed Bonus: +{scalingFactor * 50:F0}%");
-                    Log.Message($"  - Hunger Rate Reduction: {(1f - scalingFactor) * 100:F0}% of normal");
+                    StringBuilder log = new StringBuilder();
+                    log.AppendLine($"[FeastOfMind] PostAdd for {pawn.LabelShort}:");
+                    log.AppendLine($"  - Psychic Sensitivity: {sensitivity:F2} ({sensitivity * 100:F0}%)");
+                    log.AppendLine($"  - Hunger Reduction: {hungerReduction * 100:F0}% (hunger rate: {(1f - hungerReduction) * 100:F0}%)");
+                    log.AppendLine($"  - Eating Speed Bonus: +{eatingSpeedBonus * 100:F0}%");
+                    
+                    // Log threshold perks
+                    if (sensitivity >= ThresholdLearning)
+                    {
+                        float learningBonus = BaseLearningBonus + 
+                            (Mathf.Floor((sensitivity - ThresholdLearning) / ThresholdScalingStep) * ThresholdScalingBonus);
+                        log.AppendLine($"  - Learning Bonus (≥3.0): +{learningBonus * 100:F0}%");
+                    }
+                    if (sensitivity >= ThresholdDamageReduction)
+                    {
+                        float damageReduction = BaseDamageReduction + 
+                            (Mathf.Floor((sensitivity - ThresholdDamageReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
+                        log.AppendLine($"  - Damage Reduction (≥5.0): +{damageReduction * 100:F0}%");
+                    }
+                    if (sensitivity >= ThresholdTirednessReduction)
+                    {
+                        float tirednessReduction = BaseTirednessReduction + 
+                            (Mathf.Floor((sensitivity - ThresholdTirednessReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
+                        log.AppendLine($"  - Tiredness Reduction (≥8.0): +{tirednessReduction * 100:F0}%");
+                    }
+                    
+                    Log.Message(log.ToString());
                 }
 
                 // Spawn initial visual effect
@@ -130,13 +181,73 @@ namespace ProjectOvermind
             }
         }
 
+        // Custom stat offset methods
+        public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+        {
+            base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+            
+            // Apply damage reduction if threshold reached
+            if (pawn != null && dinfo.Def != null)
+            {
+                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                if (sensitivity >= ThresholdDamageReduction)
+                {
+                    float damageReduction = BaseDamageReduction + 
+                        (Mathf.Floor((sensitivity - ThresholdDamageReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
+                    
+                    // Note: RimWorld damage is already applied, this is for logging only
+                    // Actual damage reduction should be via StatPart or ArmorUtility
+                    if (Prefs.DevMode)
+                        Log.Message($"[FeastOfMind] Damage reduction active: {damageReduction * 100:F0}%");
+                }
+            }
+        }
+
         public override string LabelInBrackets
         {
             get
             {
-                // Show the scaled percentage in the health tab
-                float effectPercent = Severity * 100f;
-                return $"{effectPercent:F0}% effect";
+                if (pawn == null)
+                    return "unknown";
+                    
+                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                
+                // Calculate actual hunger reduction
+                float hungerReduction = Mathf.Clamp(
+                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                    BaseHungerReduction,
+                    MaxHungerReduction
+                );
+                
+                // Show hunger reduction percentage
+                return $"{hungerReduction * 100:F0}% hunger reduction";
+            }
+        }
+
+        // Override CurStage to provide dynamic stage with calculated hungerRateFactor
+        public override HediffStage CurStage
+        {
+            get
+            {
+                if (pawn == null || def.stages == null || def.stages.Count == 0)
+                    return base.CurStage;
+
+                // Get base stage from XML
+                HediffStage stage = base.CurStage ?? def.stages[0];
+                
+                // Calculate dynamic hunger factor
+                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                float hungerReduction = Mathf.Clamp(
+                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                    BaseHungerReduction,
+                    MaxHungerReduction
+                );
+                
+                // Create dynamic stage copy with calculated hunger factor
+                HediffStage dynamicStage = new HediffStage();
+                dynamicStage.hungerRateFactor = 1f - hungerReduction;
+                
+                return dynamicStage;
             }
         }
     }

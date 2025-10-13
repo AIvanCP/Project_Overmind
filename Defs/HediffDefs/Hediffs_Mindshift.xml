@@ -94,7 +94,7 @@
 	<HediffDef>
 		<defName>ProjectOvermind_InspirationAura</defName>
 		<label>inspiration</label>
-		<description>Empowered by psychic inspiration. Work speed, learning, crafting quality, and movement are greatly enhanced. Effect scales with Psychic Sensitivity.</description>
+		<description>Empowered by psychic inspiration. Base: +50% work speed, +60% learning, +10% move speed, +15% quality. Scales +1% per 0.1 sensitivity. Threshold perks: ≥3.0 farming &amp; production, ≥5.0 combat &amp; resources, ≥8.0 advanced crafting &amp; surgery.</description>
 		<hediffClass>ProjectOvermind.Hediff_InspirationAura</hediffClass>
 		<defaultLabelColor>(0.5, 0.8, 1.0)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>
@@ -107,20 +107,8 @@
 		</comps>
 		<stages>
 			<li>
-				<!-- Base stats before sensitivity scaling -->
-				<statOffsets>
-					<WorkSpeedGlobal>2.0</WorkSpeedGlobal> <!-- +200% work speed -->
-					<GlobalLearningFactor>0.70</GlobalLearningFactor> <!-- +70% learning -->
-				</statOffsets>
-				<statFactors>
-					<MoveSpeed>1.15</MoveSpeed> <!-- +15% move speed -->
-				</statFactors>
-				<capMods>
-					<li>
-						<capacity>Moving</capacity>
-						<offset>0.15</offset>
-					</li>
-				</capMods>
+				<!-- Stat modifications are calculated dynamically in C# based on Psychic Sensitivity -->
+				<!-- See Hediff_InspirationAura.cs for comprehensive scaling formulas and threshold perks -->
 			</li>
 		</stages>
 	</HediffDef>
@@ -159,9 +147,9 @@
 	<HediffDef>
 		<defName>ProjectOvermind_FeastOfMind</defName>
 		<label>feast of mind</label>
-		<description>Psychic energy sustains this pawn, reducing hunger rate and increasing eating speed. The mind nourishes the body.</description>
+		<description>Psychic energy sustains this pawn, reducing hunger and boosting eating speed. Base at 0 sensitivity: 10% hunger reduction + 25% eating speed. Each 0.1 sensitivity adds +1%. Hunger capped at 99% reduction. Thresholds: ≥3.0 learning, ≥5.0 damage reduction, ≥8.0 less tiredness.</description>
 		<hediffClass>ProjectOvermind.Hediff_FeastOfMind</hediffClass>
-		<defaultLabelColor>(0.3, 1.0, 0.7)</defaultLabelColor> <!-- cyan-green -->
+		<defaultLabelColor>(0.3, 1.0, 0.7)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>
 		<maxSeverity>1.0</maxSeverity>
 		<isBad>false</isBad>
@@ -172,10 +160,10 @@
 		</comps>
 		<stages>
 			<li>
-				<statOffsets>
-					<EatingSpeed>0.50</EatingSpeed> <!-- Base +50%, scaled by Severity in PostAdd -->
-				</statOffsets>
-				<hungerRateFactor>0.50</hungerRateFactor> <!-- Base 50% of normal (50% reduction), scaled by Severity -->
+				<minSeverity>0</minSeverity>
+				<!-- Severity stores hunger reduction value (0.10 to 0.99) -->
+				<!-- hungerRateFactor = 1.0 - severity (e.g., severity 0.20 = 80% hunger rate) -->
+				<!-- Eating speed bonus applied via StatPart_FeastOfMind -->
 			</li>
 		</stages>
 	</HediffDef>

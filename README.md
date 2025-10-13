@@ -62,7 +62,7 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - "The mind speaks louder than words."
 
 ### Feast of Mind Psycast (NEW!)
-- **Description**: Channel psychic energy to sustain a target, reducing hunger rate and increasing eating speed
+- **Description**: Channel psychic energy to sustain a target, reducing hunger and boosting eating speed
 - **Target**: Self or friendly pawn
 - **Range**: 5 tiles
 - **Cast Time**: 1 second
@@ -71,14 +71,21 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.15
 - **Heat Cost**: 0.25
 - **Required Psycast Level**: 3
-- **Special**: Scales with target's psychic sensitivity
-  - Reduces hunger rate by 50% (scaled by psychic sensitivity)
-  - Increases eating speed by 50% (scaled by psychic sensitivity)
-  - If sensitivity = 1.0: full 50% reduction + 50% eating speed
-  - If sensitivity = 1.5: 75% each
-  - If sensitivity = 0.5: 25% each
+- **Special**: Comprehensive scaling with Psychic Sensitivity
+  - **Base effects at 0 sensitivity**: 10% hunger reduction, +25% eating speed
+  - **Scaling**: Each 0.1 sensitivity adds +1% to both effects
+  - **Examples**:
+    - Sensitivity 1.0 → 20% hunger reduction, +35% eating speed
+    - Sensitivity 2.0 → 30% hunger reduction, +45% eating speed
+    - Sensitivity 5.0 → 60% hunger reduction, +75% eating speed
+  - **Hunger cap**: Maximum 99% hunger reduction (always need some food)
+  - **Eating speed**: No cap (scales infinitely)
+  - **Threshold Perks** (extra bonuses at high sensitivity):
+    - **≥3.0**: +10% learning speed (scales: +1% per 0.2 over 3.0)
+    - **≥5.0**: +5% damage reduction (scales: +1% per 0.2 over 5.0)
+    - **≥8.0**: +5% tiredness reduction (scales: +1% per 0.2 over 8.0)
   - Does not stack - recasting refreshes duration
-  - Perfect for sustained crafting or long operations
+  - Perfect for sustained operations, long crafting sessions
   - "The mind nourishes the body."
 
 ### Gameplay Details
@@ -126,14 +133,23 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.40
 - **Heat Cost**: 0.20
 - **Required Psycast Level**: 4
-- **Special**: Empowers all colonists and player-faction humanlike pawns
-  - +200% work speed (all tasks)
-  - +70% learning speed
-  - +20% crafting quality chance (higher quality items)
-  - +15% movement speed
-  - Effects scale with psychic sensitivity (0.1x to 2.5x multiplier)
+- **Special**: Comprehensive work buff scaling with Psychic Sensitivity
+  - **Base effects at 0 sensitivity**:
+    - +50% work speed (all tasks)
+    - +60% learning speed
+    - +10% movement speed
+    - +15% crafting quality
+  - **Scaling**: Each 0.1 sensitivity adds +1% to all effects (no cap)
+  - **Examples**:
+    - Sensitivity 1.0 → +60% work, +70% learning, +20% move, +25% quality
+    - Sensitivity 2.0 → +70% work, +80% learning, +30% move, +35% quality
+    - Sensitivity 5.0 → +100% work, +110% learning, +60% move, +65% quality
+  - **Threshold Perks** (specialized work bonuses):
+    - **≥3.0 Farming & Production**: +10% plant work speed, +10% harvest yield, +10% drug production (each scales: +1% per 0.2)
+    - **≥5.0 Combat & Resources**: +10% hunting stealth, +10% butcher speed, +10% mining speed, +10% mining yield (each scales: +1% per 0.2)
+    - **≥8.0 Advanced Crafting**: +10% smithing speed, +10% construction speed, +10% general crafting, +10% surgery success (each scales: +1% per 0.2)
   - Blue aura visual effect on affected pawns
-  - Does NOT stack with itself - refreshes duration if recast
+  - Does NOT stack - refreshes duration if recast
   - "Unlock the mind's full potential."
 
 ### Hallucination Psycast (NEW!)
