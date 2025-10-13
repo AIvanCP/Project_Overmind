@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- Psytrainer for Translocate Target -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_TranslocateTarget</defName>
+		<label>psytrainer (translocate target)</label>
+		<description>A one-use psychic trainer device that teaches the user the Translocate Target psycast - the ability to instantly relocate any pawn to a chosen location.\n\nPsytrainers can be used by anyone with basic psycasting ability.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>1200</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn translocate target</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_TranslocateTarget</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Mind Spike -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_MindSpike</defName>
+		<label>psytrainer (mind spike)</label>
+		<description>A one-use psychic trainer device that teaches the user the Mind Spike psycast - the ability to seize an enemy's mind and force them to attack their allies.\n\n"The mind is a weapon — sharpen it well."\n\nPsytrainers can be used by anyone with basic psycasting ability.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>1800</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn mind spike</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_MindSpike</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for I See You -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_ISeeYou</defName>
+		<label>psytrainer (I see you)</label>
+		<description>A one-use psychic trainer device that teaches the user the I See You psycast - the ability to reveal all hidden entities on the map for a short duration.\n\n"Nothing stays hidden from the mind's eye."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 5.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2200</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn I see you</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_ISeeYou</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Mind Read -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_MindRead</defName>
+		<label>psytrainer (mind read)</label>
+		<description>A one-use psychic trainer device that teaches the user the Mind Read psycast - the ability to probe a target's mind and reveal all their thoughts, traits, skills, and hidden intentions.\n\n"The mind speaks louder than words."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 3.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>1600</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn mind read</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_MindRead</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Inspiration -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_Inspiration</defName>
+		<label>psytrainer (inspiration)</label>
+		<description>A one-use psychic trainer device that teaches the user the Inspiration psycast - the ability to empower all colonists with dramatically enhanced productivity and learning.\n\n"Channel their potential, unlock their greatness."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 4.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2000</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn inspiration</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_Inspiration</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Hallucination -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_Hallucination</defName>
+		<label>psytrainer (hallucination)</label>
+		<description>A one-use psychic trainer device that teaches the user the Hallucination psycast - the ability to induce terrifying hallucinations in all enemies across the map.\n\n"Let them see what they fear most."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 5.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2400</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn hallucination</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="RimWorld.CompProperties_Psytrainer">
+				<ability>ProjectOvermind_Hallucination</ability>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+</Defs>

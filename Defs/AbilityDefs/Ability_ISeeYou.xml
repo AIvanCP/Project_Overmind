@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- I See You Psycast -->
+	<AbilityDef ParentName="PsycastBase">
+		<defName>ProjectOvermind_ISeeYou</defName>
+		<label>I see you</label>
+		<description>Unleash a psychic pulse that pierces all concealment on the map. Hidden creatures, invisible entities, and stealthed anomalies become visible and targetable for 60 seconds. If the caster dies or leaves the map, the effect ends immediately.\n\n"Nothing stays hidden from the mind's eye."\n\nWorks with vanilla and modded invisibility systems through safe overlay detection.</description>
+		<iconPath>UI/Icons/Psycasts/ISeeYou</iconPath>
+		<category>ProjectOvermind_MindshiftAbilities</category>
+		<level>5</level>
+		<statBases>
+			<Ability_Duration>1</Ability_Duration>
+			<Ability_PsyfocusCost>0.25</Ability_PsyfocusCost>
+			<Ability_EntropyGain>0.12</Ability_EntropyGain>
+		</statBases>
+		<verbProperties>
+			<verbClass>ProjectOvermind.Verb_ISeeYou</verbClass>
+			<warmupTime>1.5</warmupTime>
+			<range>0</range>
+			<targetParams>
+				<canTargetSelf>false</canTargetSelf>
+				<canTargetPawns>false</canTargetPawns>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetLocations>false</canTargetLocations>
+			</targetParams>
+		</verbProperties>
+		<cooldownTicksRange>7200</cooldownTicksRange> <!-- 120 seconds -->
+		<comps>
+			<li Class="CompProperties_AbilityFleckOnTarget">
+				<fleckDef>PsycastAreaEffect</fleckDef>
+			</li>
+		</comps>
+		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+		<showGizmoOnWorldView>false</showGizmoOnWorldView>
+		<confirmationDialogText>Reveal all hidden entities on this map for 60 seconds?</confirmationDialogText>
+		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+		<showPsycastEffects>true</showPsycastEffects>
+		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+		<jobDef>CastAbilityOnWorldTile</jobDef>
+	</AbilityDef>
+
+</Defs>

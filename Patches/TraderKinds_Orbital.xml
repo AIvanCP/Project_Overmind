@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- Add to Orbital Bulk Goods Trader -->
+	<Operation Class="PatchOperationSequence">
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/TraderKindDef[defName="Orbital_BulkGoods"]</xpath>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/TraderKindDef[defName="Orbital_BulkGoods"]/stockGenerators</xpath>
+				<value>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_TranslocateTarget</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+				</value>
+			</li>
+		</operations>
+	</Operation>
+
+	<!-- Add to Exotic Goods Trader -->
+	<Operation Class="PatchOperationSequence">
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/TraderKindDef[defName="Orbital_ExoticGoods"]</xpath>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/TraderKindDef[defName="Orbital_ExoticGoods"]/stockGenerators</xpath>
+				<value>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_TranslocateTarget</thingDef>
+						<countRange>0~2</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_MindSpike</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_MindRead</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_Inspiration</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_Hallucination</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_ISeeYou</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+				</value>
+			</li>
+		</operations>
+	</Operation>
+
+</Patch>

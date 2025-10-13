@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- Ability Category -->
+	<AbilityCategoryDef>
+		<defName>ProjectOvermind_MindshiftAbilities</defName>
+		<label>mindshift abilities</label>
+		<displayOrder>100</displayOrder>
+	</AbilityCategoryDef>
+
+	<!-- Translocate Target Psycast -->
+	<AbilityDef ParentName="PsycastBase">
+		<defName>ProjectOvermind_TranslocateTarget</defName>
+		<label>translocate target</label>
+		<description>Instantly relocate a selected pawn to a new location. The target experiences a brief spatial daze upon arrival. Works on allies and enemies alike, but cannot affect mechanoids or downed pawns.\n\nThis ability does not cause harm or mood penalties, making it ideal for tactical repositioning without collateral damage.</description>
+		<iconPath>UI/Icons/Psycasts/TranslocateTarget</iconPath>
+		<category>ProjectOvermind_MindshiftAbilities</category>
+		<level>3</level>
+		<statBases>
+			<Ability_Duration>1</Ability_Duration>
+			<Ability_PsyfocusCost>0.10</Ability_PsyfocusCost>
+			<Ability_EntropyGain>0.05</Ability_EntropyGain>
+		</statBases>
+		<verbProperties>
+			<verbClass>ProjectOvermind.Verb_TranslocateTarget</verbClass>
+			<warmupTime>1.0</warmupTime>
+			<range>15</range>
+			<targetParams>
+				<canTargetPawns>true</canTargetPawns>
+				<canTargetSelf>true</canTargetSelf>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetAnimals>true</canTargetAnimals>
+				<canTargetHumans>true</canTargetHumans>
+				<canTargetMechs>false</canTargetMechs>
+			</targetParams>
+		</verbProperties>
+		<cooldownTicksRange>900</cooldownTicksRange> <!-- 15 seconds -->
+		<comps>
+			<li Class="CompProperties_AbilityFleckOnTarget">
+				<fleckDef>PsycastSkipFlashEntry</fleckDef>
+			</li>
+		</comps>
+		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+		<showGizmoOnWorldView>false</showGizmoOnWorldView>
+		<confirmationDialogText>Translocate this pawn to a new position?</confirmationDialogText>
+		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+		<showPsycastEffects>true</showPsycastEffects>
+		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+		<jobDef>CastAbilityOnThing</jobDef>
+	</AbilityDef>
+
+	<!-- Mind Spike Psycast -->
+	<AbilityDef ParentName="PsycastBase">
+		<defName>ProjectOvermind_MindSpike</defName>
+		<label>mind spike</label>
+		<description>Temporarily seize the mind of an enemy pawn, forcing them to attack their own allies for a short duration before becoming disoriented. If the target dies under Mind Spike, the psychic energy jumps to the nearest valid enemy within 6 tiles.\n\n"The mind is a weapon — sharpen it well."</description>
+		<iconPath>UI/Icons/Psycasts/MindSpike</iconPath>
+		<category>ProjectOvermind_MindshiftAbilities</category>
+		<level>3</level>
+		<statBases>
+			<Ability_Duration>1</Ability_Duration>
+			<Ability_PsyfocusCost>0.15</Ability_PsyfocusCost>
+			<Ability_EntropyGain>0.08</Ability_EntropyGain>
+		</statBases>
+		<verbProperties>
+			<verbClass>ProjectOvermind.Verb_MindSpike</verbClass>
+			<warmupTime>1.5</warmupTime>
+			<range>12</range>
+			<targetParams>
+				<canTargetPawns>true</canTargetPawns>
+				<canTargetSelf>false</canTargetSelf>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetAnimals>false</canTargetAnimals>
+				<canTargetHumans>true</canTargetHumans>
+				<canTargetMechs>false</canTargetMechs>
+			</targetParams>
+		</verbProperties>
+		<cooldownTicksRange>2700</cooldownTicksRange> <!-- 45 seconds -->
+		<comps>
+			<li Class="CompProperties_AbilityFleckOnTarget">
+				<fleckDef>PsycastPsychicEffect</fleckDef>
+			</li>
+		</comps>
+		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+		<showGizmoOnWorldView>false</showGizmoOnWorldView>
+		<confirmationDialogText>Seize this enemy's mind?</confirmationDialogText>
+		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+		<showPsycastEffects>true</showPsycastEffects>
+		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+		<jobDef>CastAbilityOnThing</jobDef>
+	</AbilityDef>
+
+</Defs>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- Spatial Daze Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_SpatialDaze</defName>
+		<label>spatial daze</label>
+		<description>Disorientation caused by sudden translocation through space. The mind struggles to adjust to the abrupt change in position.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(0.7, 0.7, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>300</disappearsAfterTicks> <!-- 5 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<capMods>
+					<li>
+						<capacity>Consciousness</capacity>
+						<offset>-0.10</offset>
+					</li>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.15</offset>
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Mind Spike Control Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_MindSpikeControlled</defName>
+		<label>mind spike</label>
+		<description>Mind seized by psychic energy, forced to attack allies. This pawn's will is not their own.</description>
+		<hediffClass>ProjectOvermind.Hediff_MindSpikeControlled</hediffClass>
+		<defaultLabelColor>(0.7, 0.2, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<tendable>false</tendable>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>600</disappearsAfterTicks> <!-- 10 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<capMods>
+					<li>
+						<capacity>Consciousness</capacity>
+						<setMax>0.8</setMax>
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Mind Spike Disorientation Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_MindSpikeDisoriented</defName>
+		<label>disoriented</label>
+		<description>Mental disorientation after being released from psychic control. Movement and aim are severely impaired.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(0.9, 0.5, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>300</disappearsAfterTicks> <!-- 5 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.50</offset>
+					</li>
+				</capMods>
+				<statOffsets>
+					<ShootingAccuracyPawn>-0.20</ShootingAccuracyPawn>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Inspiration Aura Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_InspirationAura</defName>
+		<label>inspiration</label>
+		<description>Empowered by psychic inspiration. Work speed, learning, crafting quality, and movement are greatly enhanced. Effect scales with Psychic Sensitivity.</description>
+		<hediffClass>ProjectOvermind.Hediff_InspirationAura</hediffClass>
+		<defaultLabelColor>(0.5, 0.8, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>3600</disappearsAfterTicks> <!-- 60 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<!-- Base stats before sensitivity scaling -->
+				<statOffsets>
+					<WorkSpeedGlobal>2.0</WorkSpeedGlobal> <!-- +200% work speed -->
+					<GlobalLearningFactor>0.70</GlobalLearningFactor> <!-- +70% learning -->
+				</statOffsets>
+				<statFactors>
+					<MoveSpeed>1.15</MoveSpeed> <!-- +15% move speed -->
+				</statFactors>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>0.15</offset>
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Hallucination Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_Hallucination</defName>
+		<label>hallucination</label>
+		<description>Mind trapped in terrifying hallucinations. Accuracy and movement are severely impaired, and panic attacks may occur randomly.</description>
+		<hediffClass>ProjectOvermind.Hediff_Hallucination</hediffClass>
+		<defaultLabelColor>(0.8, 0.3, 0.8)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>2400</disappearsAfterTicks> <!-- 40 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<statOffsets>
+					<ShootingAccuracyPawn>-0.40</ShootingAccuracyPawn> <!-- -40% accuracy -->
+				</statOffsets>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.15</offset> <!-- -15% move speed -->
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffDef>
+
+</Defs>

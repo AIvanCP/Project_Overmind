@@ -1,0 +1,59 @@
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# .NET / Mono
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# RimWorld Mod Development
+Source/**/obj/
+Source/**/bin/
+*.cache
+*.dll.mdb
+*.pdb
+
+# Personal documentation (not for public)
+PROJECT_HANDOFF.md
+IMPLEMENTATION_SUMMARY*.md
+Player.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Git
+*.orig

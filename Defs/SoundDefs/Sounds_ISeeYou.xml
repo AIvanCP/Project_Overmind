@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!-- I See You Alert Sound -->
+	<SoundDef>
+		<defName>ProjectOvermind_ISeeYou_Alert</defName>
+		<context>MapOnly</context>
+		<eventNames />
+		<maxSimultaneous>1</maxSimultaneous>
+		<subSounds>
+			<li>
+				<grains>
+					<li Class="AudioGrain_Clip">
+						<clipPath>ISeeYou/alert</clipPath>
+					</li>
+				</grains>
+				<volumeRange>50~60</volumeRange>
+				<pitchRange>1~1</pitchRange>
+			</li>
+		</subSounds>
+	</SoundDef>
+
+</Defs>

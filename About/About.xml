@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>Project Overmind - Mindshift Abilities</name>
+	<author>AIvanCP</author>
+	<packageId>AIvanCP.projectovermind</packageId>
+	<supportedVersions>
+		<li>1.5</li>
+		<li>1.6</li>
+	</supportedVersions>
+	<description>Adds 6 unique psionic abilities to RimWorld inspired by various games and media. Features tactical teleportation, mind control, intelligence gathering, detection, and powerful global effects.
+
+Abilities:
+- Translocate Target (Lv3): Instantly relocate any pawn to a new position
+- Mind Spike (Lv3): Seize enemy minds and force them to attack their allies
+- Mind Read (Lv3): Reveal complete mental profile including hidden quest intentions
+- Inspiration (Lv4): Global buff - massive productivity boost for all colonists
+- I See You (Lv5): Reveal all hidden/invisible entities on the map
+- Hallucination (Lv5): Global debuff - cause panic and combat penalties in enemies
+
+Compatible with Vanilla Psycasts Expanded, Combat Extended, and other psycast mods. All abilities obtainable via Psytrainer from traders or quest rewards.
+
+Requires: Royalty DLC (for psycasting framework)</description>
+	<modDependencies>
+		<li>
+			<packageId>ludeon.rimworld.royalty</packageId>
+			<displayName>Royalty</displayName>
+			<steamWorkshopUrl>https://store.steampowered.com/app/1149640</steamWorkshopUrl>
+		</li>
+	</modDependencies>
+	<loadAfter>
+		<li>ludeon.rimworld</li>
+		<li>ludeon.rimworld.royalty</li>
+		<li>VanillaExpanded.VPsycastsE</li>
+	</loadAfter>
+</ModMetaData>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<!-- This patch ensures compatibility with Vanilla Psycasts Expanded -->
+	<!-- It adds our psytrainer to VPE's psytrainer category if it exists -->
+	
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/ThingCategoryDef[defName="VPE_Psytrainers"]</xpath>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingCategoryDef[defName="VPE_Psytrainers"]/childThingDefs</xpath>
+				<value>
+					<li>ProjectOvermind_Psytrainer_TranslocateTarget</li>
+				</value>
+			</li>
+		</operations>
+	</Operation>
+
+	<!-- Ensure our ability shows up properly in VPE's systems -->
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/AbilityCategoryDef[defName="VPE_Technomancer"]</xpath>
+			</li>
+			<!-- VPE exists, but we keep our own category separate for independence -->
+		</operations>
+	</Operation>
+
+</Patch>

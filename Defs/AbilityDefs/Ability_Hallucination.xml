@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Hallucination: Global debuff for all enemies on map -->
+  <VFECore.Abilities.AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_Hallucination</defName>
+    <label>Hallucination</label>
+    <description>Unleash a map-wide psychic wave that induces terrifying hallucinations in all hostile creatures. All enemies suffer severe accuracy and movement penalties, and periodically experience panic attacks where they attack empty spaces or move erratically.\n\nAffects all hostile pawns and animals (but not mechanoids) on the current map for 40 seconds.\n\nThis psycast does not damage targets directly and does not affect faction goodwill — it merely disorients them psychically.</description>
+    <iconPath>UI/Icons/Psycasts/Hallucination</iconPath>
+    
+    <!-- Psycast stats -->
+    <level>5</level>
+    <psyfocusCost>0.50</psyfocusCost>
+    <entropyGain>0.30</entropyGain>
+    <cooldownTicksRange>18000</cooldownTicksRange> <!-- 300 seconds / 5 minutes -->
+    
+    <!-- Targeting -->
+    <range>0</range>
+    <needsTicking>false</needsTicking>
+    <warmupStartSound>PsycastPsychicEffect</warmupStartSound>
+    <jobDef>CastAbilityOnWorldTile</jobDef>
+    
+    <!-- Targeting parameters (self-cast / map-wide) -->
+    <targetingParameters>
+      <canTargetSelf>true</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetAnimals>false</canTargetAnimals>
+      <canTargetMechs>false</canTargetMechs>
+      <canTargetBuildings>false</canTargetBuildings>
+      <canTargetItems>false</canTargetItems>
+    </targetingParameters>
+    
+    <!-- Verb -->
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_Hallucination</verbClass>
+      <warmupTime>5.0</warmupTime>
+      <range>0</range>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+      </targetParams>
+    </verbProperties>
+    
+    <!-- Tags -->
+    <tags>
+      <li>Psycast</li>
+    </tags>
+    
+    <!-- No goodwill penalty -->
+    <goodwillImpact>0</goodwillImpact>
+    
+    <!-- Stat modifiers -->
+    <statBases>
+      <Ability_Duration>2400</Ability_Duration> <!-- 40 seconds -->
+      <Ability_EffectRadius>0</Ability_EffectRadius>
+    </statBases>
+  </VFECore.Abilities.AbilityDef>
+</Defs>
