@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Cognitive Shield: Defensive buff that scales with psychic sensitivity -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_CognitiveShield</defName>
+    <label>cognitive shield</label>
+    <description>Envelop all allied pawns in a powerful mental barrier that shields them from damage and mental manipulation. All colonists gain enhanced psychic sensitivity and resistance to mental breaks for 25 seconds.\n\nBase effects (all pawns):\n• +25% psychic sensitivity\n• -30% incoming mental/psychic damage\n• -20% stun chance\n• +15% mental break threshold\n\nScaling thresholds (based on each pawn's psychic sensitivity):\n• ≥3.0: -10% all incoming damage, +10% consciousness (base, scales +1% per 0.2)\n• ≥5.0: Immunity to panic/confusion/hallucination effects (base, scales +1% per 0.2)\n• ≥8.0: 25% reflect psychic damage, +50% heal rate (base, scales +1% per 0.2)\n\nThe shield adapts to each pawn's natural psychic attunement, becoming more powerful for those with higher sensitivity.\n\n"A fortified mind cannot be broken."</description>
+    <iconPath>UI/Icons/Psycasts/CognitiveShield</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>5</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.45</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.30</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_CognitiveShield</verbClass>
+      <warmupTime>3.0</warmupTime>
+      <range>0</range>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>false</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+  <cooldownTicksRange>7200</cooldownTicksRange> <!-- 120 seconds -->
+  <comps>
+    <li Class="CompProperties_AbilityFleckOnTarget">
+      <fleckDef>PsycastAreaEffect</fleckDef>
+    </li>
+  </comps>
+  <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+  <showGizmoOnWorldView>false</showGizmoOnWorldView>
+  <!-- Confirmation dialog removed - ability casts immediately -->
+  <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+  <showPsycastEffects>true</showPsycastEffects>
+  <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+</AbilityDef>
+
+</Defs>

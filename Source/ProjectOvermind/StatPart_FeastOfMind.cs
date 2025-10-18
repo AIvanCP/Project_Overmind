@@ -81,7 +81,14 @@ namespace ProjectOvermind
             if (pawn == null)
                 return 0f;
 
-            float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+            // SAFE: Read cached sensitivity from hediff instead of calling GetStatValue
+            // This prevents recursion during stat calculation
+            var feastHediff = GetFeastOfMindHediff(pawn);
+            if (feastHediff == null)
+                return 0f;
+
+            // Access the cached sensitivity from the hediff
+            float sensitivity = feastHediff.CachedPsychicSensitivity;
             
             // Base: +25% at sensitivity 0, +1% per 0.1 sensitivity
             return Hediff_FeastOfMind.BaseEatingSpeed + (Hediff_FeastOfMind.ScalingPerPoint * sensitivity);
@@ -161,7 +168,12 @@ namespace ProjectOvermind
             if (pawn == null)
                 return 1f;
 
-            float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+            // SAFE: Read cached sensitivity from hediff instead of calling GetStatValue
+            var feastHediff = GetFeastOfMindHediff(pawn);
+            if (feastHediff == null)
+                return 1f;
+
+            float sensitivity = feastHediff.CachedPsychicSensitivity;
             
             // Calculate hunger reduction: base 10% + (sensitivity * 0.1), capped at 99%
             float hungerReduction = Mathf.Clamp(

@@ -35,15 +35,15 @@
 			</targetParams>
 		</verbProperties>
 		<cooldownTicksRange>900</cooldownTicksRange> <!-- 15 seconds -->
-		<comps>
-			<li Class="CompProperties_AbilityFleckOnTarget">
-				<fleckDef>PsycastSkipFlashEntry</fleckDef>
-			</li>
-		</comps>
-		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
-		<showGizmoOnWorldView>false</showGizmoOnWorldView>
-		<confirmationDialogText>Translocate this pawn to a new position?</confirmationDialogText>
-		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+	<comps>
+		<li Class="CompProperties_AbilityFleckOnTarget">
+			<fleckDef>PsycastSkipFlashEntry</fleckDef>
+		</li>
+	</comps>
+	<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+	<showGizmoOnWorldView>false</showGizmoOnWorldView>
+	<!-- Confirmation dialog removed - ability casts immediately -->
+	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 		<showPsycastEffects>true</showPsycastEffects>
 		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
 		<jobDef>CastAbilityOnThing</jobDef>
@@ -76,15 +76,15 @@
 			</targetParams>
 		</verbProperties>
 		<cooldownTicksRange>2700</cooldownTicksRange> <!-- 45 seconds -->
-		<comps>
-			<li Class="CompProperties_AbilityFleckOnTarget">
-				<fleckDef>PsycastPsychicEffect</fleckDef>
-			</li>
-		</comps>
-		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
-		<showGizmoOnWorldView>false</showGizmoOnWorldView>
-		<confirmationDialogText>Seize this enemy's mind?</confirmationDialogText>
-		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+	<comps>
+		<li Class="CompProperties_AbilityFleckOnTarget">
+			<fleckDef>PsycastPsychicEffect</fleckDef>
+		</li>
+	</comps>
+	<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+	<showGizmoOnWorldView>false</showGizmoOnWorldView>
+	<!-- Confirmation dialog removed - ability casts immediately -->
+	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 		<showPsycastEffects>true</showPsycastEffects>
 		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
 		<jobDef>CastAbilityOnThing</jobDef>

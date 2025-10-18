@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+<!-- ========================================
+     Feast of Mind StatPart Injections
+     ======================================== -->
+
+<!-- EatingSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="EatingSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="EatingSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="EatingSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_FeastOfMind" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ========================================
+     Inspiration StatPart Injections
+     ======================================== -->
+
+<!-- WorkSpeedGlobal -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- GlobalLearningFactor -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="GlobalLearningFactor"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="GlobalLearningFactor"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="GlobalLearningFactor"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- MoveSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- PlantWorkSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="PlantWorkSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="PlantWorkSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="PlantWorkSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- PlantHarvestYield -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="PlantHarvestYield"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="PlantHarvestYield"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="PlantHarvestYield"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- DrugCookingSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="DrugCookingSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="DrugCookingSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="DrugCookingSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- HuntingStealth -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="HuntingStealth"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="HuntingStealth"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="HuntingStealth"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ButcheryFleshSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="ButcheryFleshSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ButcheryFleshSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ButcheryFleshSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- MiningSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MiningSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MiningSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MiningSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- MiningYield -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MiningYield"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MiningYield"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MiningYield"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- SmithingSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="SmithingSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="SmithingSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="SmithingSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ConstructionSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="ConstructionSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ConstructionSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ConstructionSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- GeneralLaborSpeed -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="GeneralLaborSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="GeneralLaborSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="GeneralLaborSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- MedicalSurgerySuccessChance -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MedicalSurgerySuccessChance"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MedicalSurgerySuccessChance"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MedicalSurgerySuccessChance"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ========================================
+     Cognitive Shield StatPart Injections
+     ======================================== -->
+
+<!-- NOTE: PsychicSensitivity bonus handled via hediff statOffsets to avoid infinite recursion -->
+<!-- StatPart_CognitiveShield MUST NOT be injected into PsychicSensitivity itself! -->
+
+<!-- NOTE: Consciousness is a PawnCapacityDef, not a StatDef - cannot patch via StatPart -->
+<!-- Cognitive Shield's consciousness bonus now handled via hediff stages instead -->
+
+<!-- IncomingDamageFactor (Mental Damage Reduction) -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_CognitiveShield" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- InjuryHealingFactor -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="InjuryHealingFactor"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="InjuryHealingFactor"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="InjuryHealingFactor"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_CognitiveShield" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ========================================
+     Psychic Diffusion StatPart Injections
+     ======================================== -->
+
+<!-- MoveSpeed (duplicate injection for Psychic Diffusion) -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_PsychicDiffusion" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- WorkSpeedGlobal (duplicate injection for Psychic Diffusion) -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="WorkSpeedGlobal"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_PsychicDiffusion" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- IncomingDamageFactor (duplicate injection for Psychic Diffusion) -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="IncomingDamageFactor"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_PsychicDiffusion" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- MedicalTendQuality -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MedicalTendQuality"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MedicalTendQuality"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MedicalTendQuality"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_PsychicDiffusion" /></value>
+</li>
+</operations>
+</Operation>
+
+</Patch>

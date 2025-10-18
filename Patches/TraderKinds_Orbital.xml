@@ -56,6 +56,18 @@
 						<thingDef>ProjectOvermind_Psytrainer_ISeeYou</thingDef>
 						<countRange>0~1</countRange>
 					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_SpatialAnchor</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_CognitiveShield</thingDef>
+						<countRange>0~1</countRange>
+					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_PsychicDiffusion</thingDef>
+						<countRange>0~1</countRange>
+					</li>
 				</value>
 			</li>
 		</operations>

@@ -34,7 +34,7 @@
     </comps>
     <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
     <showGizmoOnWorldView>false</showGizmoOnWorldView>
-    <confirmationDialogText>Probe this pawn's mind?</confirmationDialogText>
+    <!-- Confirmation dialog removed - ability casts immediately -->
     <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
     <showPsycastEffects>true</showPsycastEffects>
     <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>

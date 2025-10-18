@@ -37,6 +37,7 @@ Source/**/bin/
 PROJECT_HANDOFF.md
 IMPLEMENTATION_SUMMARY*.md
 Player.log
+error_List.txt
 
 # OS generated files
 .DS_Store

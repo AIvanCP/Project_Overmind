@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Spatial Anchor: Area control psycast with gravity pull effect -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_SpatialAnchor</defName>
+    <label>spatial anchor</label>
+    <description>Create a gravitational anchor at a target location that affects all hostile pawns within a 10-tile radius. Enemies within the anchor's influence suffer reduced movement speed and dodge chance, with a chance to be pulled toward the center.\n\nAffected enemies receive:\n• -40% movement speed\n• -20% melee dodge chance\n• 10% chance every second to be pulled 1 tile toward the anchor\n\nThe anchor lasts for 20 seconds and cannot be destroyed early. This ability is perfect for controlling enemy movement during defensive stands or chokepoint battles.\n\n"Pin them in place and watch them crumble."</description>
+    <iconPath>UI/Icons/Psycasts/SpatialAnchor</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>4</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.35</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.25</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_SpatialAnchor</verbClass>
+      <warmupTime>2.0</warmupTime>
+      <range>10</range>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>true</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+    <cooldownTicksRange>5400</cooldownTicksRange> <!-- 90 seconds -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+    <jobDef>CastAbilityOnWorldTile</jobDef>
+  </AbilityDef>
+
+</Defs>

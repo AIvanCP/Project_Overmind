@@ -15,6 +15,25 @@ namespace ProjectOvermind
         private new const int TickInterval = 60; // Update every 60 ticks (~1 second)
         private int tickCounter = 0;
 
+        // Cache for psychic sensitivity to prevent stack overflow
+        private float cachedSensitivity = 1f;
+        private int lastCacheTick = -9999;
+        private const int CacheRefreshInterval = 300; // Refresh every 5 seconds (safe)
+
+        /// <summary>
+        /// Public property for StatParts to access cached sensitivity safely
+        /// </summary>
+        public float CachedPsychicSensitivity => cachedSensitivity;
+
+        /// <summary>
+        /// SAFE: Returns only cached value, NEVER calls GetStatValue to prevent recursion
+        /// </summary>
+        private float GetCachedSensitivity()
+        {
+            if (pawn == null) return 1f;
+            return cachedSensitivity;
+        }
+
         // Base values at sensitivity 0 - PUBLIC for StatPart access
         public const float BaseWorkSpeed = 0.50f; // +50% work speed at s=0
         public const float BaseLearning = 0.60f; // +60% learning at s=0
@@ -63,8 +82,8 @@ namespace ProjectOvermind
                     return;
                 }
 
-                // Get psychic sensitivity
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                // Get cached psychic sensitivity
+                float sensitivity = GetCachedSensitivity();
                 
                 // Calculate base stat bonuses
                 float workSpeed = BaseWorkSpeed + (ScalingPerPoint * sensitivity);
@@ -126,6 +145,23 @@ namespace ProjectOvermind
             }
         }
 
+        /// <summary>
+        /// SAFE cache refresh every 5 seconds
+        /// </summary>
+        public override void Tick()
+        {
+            base.Tick();
+
+            if (pawn == null) return;
+
+            int currentTick = Find.TickManager.TicksGame;
+            if (currentTick - lastCacheTick >= CacheRefreshInterval)
+            {
+                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                lastCacheTick = currentTick;
+            }
+        }
+
         public override void PostTick()
         {
             base.PostTick();
@@ -171,7 +207,7 @@ namespace ProjectOvermind
                 if (pawn == null)
                     return "unknown";
                     
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                float sensitivity = GetCachedSensitivity();
                 float workSpeed = BaseWorkSpeed + (ScalingPerPoint * sensitivity);
                 
                 // Show main work speed bonus

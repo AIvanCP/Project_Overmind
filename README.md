@@ -13,6 +13,9 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.10
 - **Heat Cost**: 0.05
 - **Required Psycast Level**: 3
+- **Special**: Non-violent ability with no damage or relationship penalties
+  - Applies "Spatial Daze" debuff (5 seconds) causing brief disorientation
+  - Works on both friendly and hostile pawns (including animals)
 
 ### Mind Spike Psycast
 - **Description**: Seize an enemy's mind and force them to attack their allies
@@ -24,25 +27,13 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.15
 - **Heat Cost**: 0.08
 - **Required Psycast Level**: 3
-- **Special**: If target dies while controlled, chains to nearest enemy within 6 tiles (once per cast)
+- **Special**: Tactical mind control ability
+  - Forces enemy into berserk state targeting their allies
+  - After effect ends, applies "Disoriented" debuff (-50% move speed, -20% aim for 5s)
+  - If target dies while controlled, chains to nearest enemy within 6 tiles (once per cast)
+  - *"The mind is a weapon — sharpen it well."*
 
-### I See You Psycast (NEW!)
-- **Description**: Reveal all hidden entities on the map for 60 seconds
-- **Target**: Self (map-wide effect)
-- **Range**: Entire map
-- **Cast Time**: 1.5 seconds
-- **Cooldown**: 120 seconds (2 minutes)
-- **Duration**: 60 seconds
-- **Psyfocus Cost**: 0.25
-- **Heat Cost**: 0.12
-- **Required Psycast Level**: 5
-- **Special**: Detects invisible creatures, stealthed entities, and anomalies
-  - Works with vanilla and modded invisibility systems
-  - Safe overlay system - doesn't break other mods
-  - Effect ends if caster dies or leaves map
-  - Alert sound plays ONLY when hostile invisible entities detected
-
-### Mind Read Psycast (NEW!)
+### Mind Read Psycast
 - **Description**: Probe a target's mind to reveal all thoughts, traits, skills, and hidden intentions
 - **Target**: Any humanlike pawn (enemies, visitors, guests, prisoners, quest pawns)
 - **Range**: 10 tiles
@@ -51,7 +42,7 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.30
 - **Heat Cost**: 0.08
 - **Required Psycast Level**: 3
-- **Special**: Reveals complete mental profile
+- **Special**: Intelligence gathering ability with complete mental profile reveal
   - All traits (including hidden ones)
   - All skills and passions
   - Current mood and thoughts
@@ -59,9 +50,9 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Quest intentions (betrayal, leaving, joining, etc.)
   - Does NOT affect faction goodwill or relationships
   - Psychically Dull pawns have 50% resistance chance
-  - "The mind speaks louder than words."
+  - *"The mind speaks louder than words."*
 
-### Feast of Mind Psycast (NEW!)
+### Feast of Mind Psycast
 - **Description**: Channel psychic energy to sustain a target, reducing hunger and boosting eating speed
 - **Target**: Self or friendly pawn
 - **Range**: 5 tiles
@@ -85,45 +76,10 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
     - **≥5.0**: +5% damage reduction (scales: +1% per 0.2 over 5.0)
     - **≥8.0**: +5% tiredness reduction (scales: +1% per 0.2 over 8.0)
   - Does not stack - recasting refreshes duration
-  - Perfect for sustained operations, long crafting sessions
-  - "The mind nourishes the body."
+  - Perfect for sustained operations and long crafting sessions
+  - *"The mind nourishes the body."*
 
-### Gameplay Details
-- **Translocate Target**: Non-violent ability (no damage, no relationship penalties)
-  - Applies "Spatial Daze" debuff (5 seconds) causing brief disorientation
-  - Works on both friendly and hostile pawns (including animals)
-  
-- **Mind Spike**: Tactical mind control ability
-  - Forces enemy into berserk state targeting their allies
-  - After effect ends, applies "Disoriented" debuff (-50% move speed, -20% aim for 5s)
-  - Chain effect on death allows single-target control to spread chaos
-  - "The mind is a weapon — sharpen it well."
-
-- **Mind Read**: Intelligence gathering ability
-  - Read complete mental profile without affecting relationships
-  - Works on any humanlike: enemies, visitors, guests, prisoners, quest pawns
-  - Shows all hidden information including quest betrayal plans
-  - Psychically Dull pawns can resist (50% chance)
-  - Safe to use: no goodwill penalties or faction reactions
-  - "The mind speaks louder than words."
-
-- **Feast of Mind**: Psychic sustenance ability
-  - Supports extended operations by reducing hunger needs
-  - Perfect for crafters, researchers, or pawns on long hauls
-  - Effects scale dynamically with target's psychic sensitivity
-  - Can be used on any friendly pawn including yourself
-  - Non-combat support ability with zero risk
-  - "The mind nourishes the body."
-
-- **I See You**: Anti-ambush and anomaly detection ability
-  - Reveals hidden creatures with exclamation mark indicators
-  - Detects: invisible pawns, stealthed animals, concealed entities, anomalies
-  - Safe detection: checks hediffs, comps, and thing defs for common stealth patterns
-  - Player-only reveal: enemies don't gain targeting information
-  - Alert sound plays ONLY when hostile entities detected (silent if none found)
-  - "Nothing stays hidden from the mind's eye."
-
-### Inspiration Psycast (NEW!)
+### Inspiration Psycast
 - **Description**: Flood the minds of all allies with powerful psychic motivation
 - **Target**: Self (map-wide buff to all player pawns)
 - **Range**: Entire map
@@ -150,9 +106,29 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
     - **≥8.0 Advanced Crafting**: +10% smithing speed, +10% construction speed, +10% general crafting, +10% surgery success (each scales: +1% per 0.2)
   - Blue aura visual effect on affected pawns
   - Does NOT stack - refreshes duration if recast
-  - "Unlock the mind's full potential."
+  - *"Unlock the mind's full potential."*
 
-### Hallucination Psycast (NEW!)
+### I See You Psycast
+- **Description**: Reveal all hidden entities on the map for 60 seconds
+- **Target**: Self (map-wide effect)
+- **Range**: Entire map
+- **Cast Time**: 1.5 seconds
+- **Cooldown**: 120 seconds (2 minutes)
+- **Duration**: 60 seconds
+- **Psyfocus Cost**: 0.25
+- **Heat Cost**: 0.12
+- **Required Psycast Level**: 5
+- **Special**: Anti-ambush and anomaly detection ability
+  - Detects invisible creatures, stealthed entities, and anomalies
+  - Works with vanilla and modded invisibility systems
+  - Safe overlay system - doesn't break other mods
+  - Exclamation mark indicators on hidden creatures
+  - Player-only reveal: enemies don't gain targeting information
+  - Effect ends if caster dies or leaves map
+  - Alert sound plays ONLY when hostile invisible entities detected
+  - *"Nothing stays hidden from the mind's eye."*
+
+### Hallucination Psycast
 - **Description**: Shatter enemy minds with terrifying psychic illusions
 - **Target**: Self (map-wide debuff to all hostiles)
 - **Range**: Entire map
@@ -162,7 +138,8 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - **Psyfocus Cost**: 0.50
 - **Heat Cost**: 0.30
 - **Required Psycast Level**: 5
-- **Special**: Afflicts all hostile pawns and animals (excluding mechanoids)
+- **Special**: Psychic terror weapon
+  - Afflicts all hostile pawns and animals (excluding mechanoids)
   - -40% shooting accuracy
   - -15% movement speed
   - 25% chance per second to trigger panic attack
@@ -170,52 +147,78 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Purple shimmer visual effect
   - Does NOT stack with itself - refreshes duration if recast
   - No faction goodwill penalty
-  - "Let them fear what isn't there."
-
-### Gameplay Details
-
-- **Translocate Target**: Non-violent ability (no damage, no relationship penalties)
-  - Applies "Spatial Daze" debuff (5 seconds) causing brief disorientation
-  - Works on both friendly and hostile pawns (including animals)
-  
-- **Mind Spike**: Tactical mind control ability
-  - Forces enemy into berserk state targeting their allies
-  - After effect ends, applies "Disoriented" debuff (-50% move speed, -20% aim for 5s)
-  - Chain effect on death allows single-target control to spread chaos
-  - "The mind is a weapon — sharpen it well."
-
-- **I See You**: Anti-ambush and anomaly detection ability
-  - Reveals hidden creatures with exclamation mark indicators
-  - Detects: invisible pawns, stealthed animals, concealed entities, anomalies
-  - Safe detection: checks hediffs, comps, and thing defs for common stealth patterns
-  - Player-only reveal: enemies don't gain targeting information
-  - Alert sound plays ONLY when hostile entities detected (silent if none found)
-  - "Nothing stays hidden from the mind's eye."
-
-- **Mind Read**: Intelligence gathering ability
-  - Read complete mental profile without affecting relationships
-  - Works on any humanlike: enemies, visitors, guests, prisoners, quest pawns
-  - Shows all hidden information including quest betrayal plans
-  - Psychically Dull pawns can resist (50% chance)
-  - Safe to use: no goodwill penalties or faction reactions
-  - "The mind speaks louder than words."
-
-- **Inspiration**: Mass psychic empowerment
-  - Global buff for all colonists and player-faction humanlike pawns
-  - Massive productivity boost for 60 seconds
-  - Effects scale with psychic sensitivity (higher sensitivity = stronger buff)
-  - Perfect for critical construction/crafting/research deadlines
-  - Does not affect animals or non-humanlike pawns
-  - "Unlock the mind's full potential."
-
-- **Hallucination**: Psychic terror weapon
-  - Global debuff targeting all hostile humanlike pawns and animals
-  - Does NOT affect mechanoids (immune to psychic effects)
-  - Causes severe combat penalties and panic attacks
-  - No faction goodwill penalty - pure combat ability
-  - Enemies attack empty space or move erratically during panic
   - Perfect for defending against large raids
-  - "Let them fear what isn't there."
+  - *"Let them fear what isn't there."*
+
+### Spatial Anchor Psycast
+- **Description**: Create a gravitational anomaly that slows and pulls hostile pawns
+- **Target**: Ground location
+- **Range**: 15 tiles
+- **Cast Time**: 1 second
+- **Cooldown**: 90 seconds
+- **Duration**: 20 seconds
+- **Psyfocus Cost**: 0.35
+- **Heat Cost**: 0.25
+- **Required Psycast Level**: 4
+- **Special**: Area control ability
+  - Creates invisible anchor with 10-tile radius
+  - Applies "Gravitic Pull" debuff to enemies in radius
+  - -40% movement speed, -20% dodge chance
+  - 10% chance per second to pull enemy 1 tile toward center
+  - Perfect for raid defense and controlling chokepoints
+  - *"Pin them in place and watch them crumble."*
+
+### Cognitive Shield Psycast
+- **Description**: Protect all colonists with a mental barrier scaling with psychic sensitivity
+- **Target**: Self (map-wide buff)
+- **Range**: Entire map
+- **Cast Time**: 2 seconds
+- **Cooldown**: 120 seconds
+- **Duration**: 25 seconds
+- **Psyfocus Cost**: 0.45
+- **Heat Cost**: 0.30
+- **Required Psycast Level**: 5
+- **Special**: Defensive buff with comprehensive scaling
+  - **Base effects at 0 sensitivity**: +25% psychic sensitivity, -30% incoming mental damage
+  - **Scaling**: Each 0.1 sensitivity adds +1% to all effects
+  - **Threshold Perks**:
+    - **≥3.0**: +10% consciousness (scales: +1% per 0.2 over 3.0)
+    - **≥5.0**: Mental immunity to all mental breaks
+    - **≥8.0**: +20% injury healing rate (scales: +1% per 0.2 over 8.0)
+  - Blue shimmer visual effect
+  - Does NOT stack - refreshes duration if recast
+  - *"A fortified mind cannot be broken."*
+
+### Psychic Diffusion Psycast
+- **Description**: Create a global psychic network that enhances all colonists and disrupts all enemies
+- **Target**: Self (map-wide effect - affects ALL pawns on map)
+- **Range**: Entire map
+- **Cast Time**: 4 seconds
+- **Cooldown**: 150 seconds (~2.5 minutes)
+- **Duration**: 20 seconds
+- **Psyfocus Cost**: 0.50
+- **Heat Cost**: 0.35
+- **Required Psycast Level**: 6
+- **Special**: Global dual-effect ability with comprehensive benefits
+  - **ALLY BUFFS (all colonists on map)**:
+    - Base at sensitivity 0: +10% move speed, +10% work speed, +5 mood
+    - Scaling: Each 0.1 sensitivity adds +1% to all effects
+    - Examples:
+      - Sensitivity 1.0 → +20% move, +20% work, +5 mood
+      - Sensitivity 3.0 → +40% move, +40% work, +5 mood
+      - Sensitivity 5.0 → +60% move, +60% work, +5 mood
+    - **Threshold Perks** (specialized bonuses):
+      - **≥3.0**: +10% heal power, buff spread radius +2 tiles (scales: +1% per 0.2)
+      - **≥5.0**: +20% work speed, -20% incoming damage (scales: +1% per 0.2)
+      - **≥8.0**: Mini-heal pulse (5 HP every 5 seconds), 100% buff transfer rate (scales: +1% per 0.2)
+  - **ENEMY DEBUFFS (all hostile pawns/animals on map)**:
+    - -30% shooting accuracy
+    - -25% melee hit chance
+    - -20% movement speed
+    - -15% consciousness
+  - Green aura visual effect for allies, purple aura for enemies
+  - Does NOT stack - refreshes duration if recast
+  - *"Together, we are stronger than the sum of our parts."*
 
 ## Requirements
 
@@ -223,28 +226,39 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
 - Royalty DLC (for psycasting framework)
 
 ## Compatibility
+
 - Compatible with Vanilla Psycasts Expanded
 - Compatible with Combat Extended (no conflicts)
 - Compatible with other psycast mods
 - Load after Royalty and VPE if installed
 
 ## Installation
+
 1. Subscribe on Steam Workshop (when published) or download manually
 2. Enable in mod list, making sure it loads after Royalty
 3. Start a new game or load an existing save
 
 ## How to Obtain
 
-- **Traders**: Orbital Bulk Goods and Exotic Goods traders (rare)
-- **Quest Rewards**: Can appear as a reward in some quests
-- **Market Value**:
-  - Translocate Target Psytrainer: 1200 silver (level 3)
-  - Mind Spike Psytrainer: 1800 silver (level 3)
-  - Mind Read Psytrainer: 1600 silver (level 3)
-  - Feast of Mind Psytrainer: 1500 silver (level 3)
-  - Inspiration Psytrainer: 2000 silver (level 4)
-  - I See You Psytrainer: 2200 silver (level 5)
-  - Hallucination Psytrainer: 2400 silver (level 5)
+### Traders
+Available from Orbital Bulk Goods and Exotic Goods traders (rare)
+
+### Market Value
+- Translocate Target Psytrainer: 1,200 silver (level 3)
+- Mind Spike Psytrainer: 1,800 silver (level 3)
+- Mind Read Psytrainer: 1,600 silver (level 3)
+- Feast of Mind Psytrainer: 1,500 silver (level 3)
+- Inspiration Psytrainer: 2,000 silver (level 4)
+- I See You Psytrainer: 2,200 silver (level 5)
+- Hallucination Psytrainer: 2,400 silver (level 5)
+- Spatial Anchor Psytrainer: 1,800 silver (level 4)
+- Cognitive Shield Psytrainer: 2,200 silver (level 5)
+- Psychic Diffusion Psytrainer: 2,600 silver (level 6)
+- I See You Psytrainer: 2,200 silver (level 5)
+- Hallucination Psytrainer: 2,400 silver (level 5)
+
+### Quest Rewards
+Can appear as a reward in some quests
 
 ## Building from Source
 
@@ -283,18 +297,68 @@ dotnet build -c Release
 - Destination must be within 10 tiles of the target
 
 ## Credits
+
 - Designed for RimWorld by Ludeon Studios
 - Uses vanilla psycast framework from Royalty DLC
 - Visual effects adapted from vanilla Skip psycast
 
 ## License
+
 This mod is provided as-is for personal use. Feel free to modify for your own games.
 
 ## Changelog
 
-### Version 1.5.0 (Current)
+### Version 1.6.2 (Current)
+- **CRITICAL FIX**: Auto-cast abilities now work correctly - no more target selection required
+  - Fixed I See You, Hallucination, Inspiration, Cognitive Shield requiring target selection
+  - All global/self-cast abilities now cast immediately when clicked (no red targeting circle)
+  - Implemented `TryStartCastOn` override to bypass RimWorld's default targeting phase
+  - Added comprehensive debug logging to all auto-cast abilities
+- **Psychic Diffusion upgraded to global map-wide ability**:
+  - Now affects ALL colonists on map (buff) AND ALL enemies on map (debuff)
+  - ALLY BUFFS: +10% move/work speed, +5 mood, threshold perks at 3.0/5.0/8.0
+  - ENEMY DEBUFFS: -30% accuracy, -25% melee hit, -20% move speed, -15% consciousness
+  - Changed from 20-tile radius to entire map coverage
+  - Added new HediffDef: ProjectOvermind_PsychicDiffusionDebuff
+- **Spatial Anchor visual effects and debugging enhanced**:
+  - Added extensive debug logging for anchor creation, ticking, and effect application
+  - Improved visual effects with continuous pulsing center and radius ring indicators
+  - Added debug messages for gravitic pull hediff application
+  - Added debug messages for enemy pull mechanics
+- Build verified: 0 errors, 0 warnings
+- All abilities tested and confirmed working with debug logging enabled
+
+### Version 1.6.0
+- Added Spatial Anchor psycast (area control with gravity field)
+- Added Cognitive Shield psycast (defensive buff scaling with psychic sensitivity)
+- Added Psychic Diffusion psycast (aura buff spreading to nearby allies)
+- Added 3 new psytrainer items
+- Updated trader stocks to include new psytrainers
+- Spatial Anchor features:
+  - Level 4 ability creating 20-second gravitational anomaly
+  - 10-tile radius, applies -40% move speed and -20% dodge to enemies
+  - 10% chance per second to pull enemies toward center
+  - Perfect for raid defense and chokepoint control
+- Cognitive Shield features:
+  - Level 5 ability protecting all colonists for 25 seconds
+  - Base +25% psychic sensitivity, -30% mental damage
+  - Scales with psychic sensitivity (0.1 = +1%)
+  - Mental immunity at threshold 5.0+
+  - Threshold perks at 3.0/5.0/8.0 for consciousness and healing
+- Psychic Diffusion features:
+  - Level 6 ability affecting allies within 20 tiles for 20 seconds
+  - Base +10% move/work speed, +5 mood
+  - Scales with psychic sensitivity (0.1 = +1%)
+  - Threshold perks at 3.0/5.0/8.0 for medical quality, damage reduction, heal pulse
+- Critical fixes:
+  - Fixed psytrainer comp class error (was using non-existent CompProperties_UseEffectGiveAbility)
+  - Fixed duplicate StatDef errors (converted Stats_FeastOfMind.xml to patch operations)
+  - All new psytrainers now use correct ProjectOvermind.CompProperties_UseEffect_LearnAbility class
+- Build verified: 0 errors, 0 warnings
+
+### Version 1.5.0
 - Added Feast of Mind psycast (support/sustenance ability)
-- Added Feast of Mind Psytrainer item (1500 silver, level 3 required)
+- Added Feast of Mind Psytrainer item (1,500 silver, level 3 required)
 - Updated trader stocks to include Feast of Mind psytrainer
 - Feast of Mind features:
   - Reduces target's hunger rate by 50% (scaled by psychic sensitivity)
@@ -309,8 +373,8 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 ### Version 1.4.0
 - Added Inspiration psycast (global buff for all player pawns)
 - Added Hallucination psycast (global debuff for all hostile pawns/animals)
-- Added Inspiration Psytrainer item (2000 silver, level 4 required)
-- Added Hallucination Psytrainer item (2400 silver, level 5 required)
+- Added Inspiration Psytrainer item (2,000 silver, level 4 required)
+- Added Hallucination Psytrainer item (2,400 silver, level 5 required)
 - Updated trader stocks to include new psytrainers
 - Inspiration features:
   - Map-wide buff: +200% work speed, +70% learning, +20% quality, +15% move
@@ -328,7 +392,7 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ### Version 1.3.0
 - Added Mind Read psycast (intelligence gathering, reveals complete mental profile)
-- Added Mind Read Psytrainer item (1600 silver, level 3 required)
+- Added Mind Read Psytrainer item (1,600 silver, level 3 required)
 - Updated I See You alert sound behavior: plays ONLY when hostile invisible entities detected
 - Updated trader stocks to include Mind Read psytrainer
 - Mind Read features:
@@ -342,7 +406,7 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 - Added I See You psycast (reveal hidden entities map-wide)
 - Added MapComponent_ISeeYou with safe overlay detection system
 - Added custom MGS-style alert sound for I See You
-- Added I See You Psytrainer item (2200 silver, level 5 required)
+- Added I See You Psytrainer item (2,200 silver, level 5 required)
 - Updated trader stocks to include I See You psytrainer
 - Confirmed Translocate Target works with animals
 - Safe compatibility: detects modded invisibility without breaking other mods

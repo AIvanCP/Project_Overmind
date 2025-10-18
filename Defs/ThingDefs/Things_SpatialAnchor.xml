@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Spatial Anchor Thing (invisible anchor point) -->
+  <ThingDef>
+    <defName>ProjectOvermind_SpatialAnchor</defName>
+    <label>spatial anchor</label>
+    <description>An invisible gravitational anomaly created by psychic energy.</description>
+    <thingClass>ProjectOvermind.Thing_SpatialAnchor</thingClass>
+    <category>Ethereal</category>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <hasTooltip>false</hasTooltip>
+    <drawOffscreen>false</drawOffscreen>
+    <selectable>false</selectable>
+    <size>(1,1)</size>
+    <passability>Standable</passability>
+    <drawerType>None</drawerType>
+    <rotatable>false</rotatable>
+    <pathCost>0</pathCost>
+    <statBases />
+    <building>
+      <isEdifice>false</isEdifice>
+    </building>
+  </ThingDef>
+
+</Defs>

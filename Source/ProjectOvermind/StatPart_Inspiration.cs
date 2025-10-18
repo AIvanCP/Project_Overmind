@@ -27,7 +27,8 @@ namespace ProjectOvermind
                 return;
             }
 
-            float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+            // SAFE: Read cached sensitivity from hediff instead of calling GetStatValue
+            float sensitivity = inspiration.CachedPsychicSensitivity;
             float bonus = 0f;
 
             // Base stats (always active)
@@ -121,7 +122,8 @@ namespace ProjectOvermind
             if (inspiration == null)
                 return null;
 
-            float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+            // SAFE: Read cached sensitivity from hediff instead of calling GetStatValue
+            float sensitivity = inspiration.CachedPsychicSensitivity;
             float bonus = 0f;
             string label = "Inspiration";
 

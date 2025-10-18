@@ -17,21 +17,50 @@ namespace ProjectOvermind
         private const int DebuffDurationTicks = 2400; // 40 seconds
         private static readonly HediffDef HallucinationHediffDef = HediffDef.Named("ProjectOvermind_Hallucination");
 
+        /// <summary>
+        /// Override to prevent targeting UI and cast immediately on self
+        /// This is called when the ability button is clicked
+        /// </summary>
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            Log.Message("[Hallucination] OrderForceTarget called - executing immediately without targeting");
+            
+            // Cast immediately on caster without showing targeting UI
+            if (CasterPawn != null)
+            {
+                ability.QueueCastingJob(CasterPawn, CasterPawn);
+            }
+        }
+
+        /// <summary>
+        /// Override to always return available (no target validation needed)
+        /// </summary>
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            // Always return true - this is a self-cast ability
+            return true;
+        }
+
         protected override bool TryCastShot()
         {
+            Log.Message("[Hallucination] TryCastShot called");
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
                 {
+                    Log.Warning("[Hallucination] Failed: No valid map");
                     Messages.Message("Hallucination failed: No valid map.", MessageTypeDefOf.RejectInput, false);
                     return false;
                 }
+
+                Log.Message($"[Hallucination] Executing on map {CasterPawn.Map}");
 
                 // Get all hostile pawns and animals on the map (not mechs)
                 List<Pawn> hostilePawns = GetHostilePawnsOnMap();
 
                 if (hostilePawns.Count == 0)
                 {
+                    Log.Message("[Hallucination] No hostile creatures found");
                     Messages.Message("Hallucination: No hostile creatures found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast
                 }
@@ -61,11 +90,7 @@ namespace ProjectOvermind
                 // Play sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                if (Prefs.DevMode)
-                {
-                    Log.Message($"[Hallucination] Debuffed {debuffedCount} hostile pawns on map");
-                }
-
+                Log.Message($"[Hallucination] Debuffed {debuffedCount} hostile pawns on map");
                 return true;
             }
             catch (Exception ex)

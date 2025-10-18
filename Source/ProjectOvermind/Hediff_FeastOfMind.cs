@@ -34,6 +34,28 @@ namespace ProjectOvermind
         public const float ThresholdScalingStep = 0.2f;
         public const float ThresholdScalingBonus = 0.01f; // 1% per step
 
+        // Cache for psychic sensitivity to avoid recursive GetStatValue calls
+        private float cachedSensitivity = 1f;
+        private int lastCacheTick = -9999;
+        private const int CacheRefreshInterval = 300; // Refresh every 5 seconds (safe interval)
+
+        /// <summary>
+        /// Public property for StatParts to access cached sensitivity safely
+        /// </summary>
+        public float CachedPsychicSensitivity => cachedSensitivity;
+
+        /// <summary>
+        /// SAFE: Returns only cached value, NEVER calls GetStatValue to prevent recursion
+        /// Cache is refreshed only in PostAdd and Tick (safe contexts)
+        /// </summary>
+        private float GetCachedSensitivity()
+        {
+            if (pawn == null)
+                return 1f;
+            
+            return cachedSensitivity;
+        }
+
         public override void PostAdd(DamageInfo? dinfo)
         {
             base.PostAdd(dinfo);
@@ -47,18 +69,19 @@ namespace ProjectOvermind
                     return;
                 }
 
-                // Get psychic sensitivity
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                // Get psychic sensitivity and cache it
+                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                lastCacheTick = Find.TickManager.TicksGame;
                 
                 // Calculate hunger reduction: base + (sensitivity * 0.1), capped at 99%
                 float hungerReduction = Mathf.Clamp(
-                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                    BaseHungerReduction + (ScalingPerPoint * cachedSensitivity),
                     BaseHungerReduction,
                     MaxHungerReduction
                 );
                 
                 // Calculate eating speed bonus: base + (sensitivity * 0.1), no cap
-                float eatingSpeedBonus = BaseEatingSpeed + (ScalingPerPoint * sensitivity);
+                float eatingSpeedBonus = BaseEatingSpeed + (ScalingPerPoint * cachedSensitivity);
                 
                 // Set severity to encode the hunger reduction factor for XML stage use
                 // Severity will be used by XML hungerRateFactor
@@ -69,27 +92,27 @@ namespace ProjectOvermind
                 {
                     StringBuilder log = new StringBuilder();
                     log.AppendLine($"[FeastOfMind] PostAdd for {pawn.LabelShort}:");
-                    log.AppendLine($"  - Psychic Sensitivity: {sensitivity:F2} ({sensitivity * 100:F0}%)");
+                    log.AppendLine($"  - Psychic Sensitivity: {cachedSensitivity:F2} ({cachedSensitivity * 100:F0}%)");
                     log.AppendLine($"  - Hunger Reduction: {hungerReduction * 100:F0}% (hunger rate: {(1f - hungerReduction) * 100:F0}%)");
                     log.AppendLine($"  - Eating Speed Bonus: +{eatingSpeedBonus * 100:F0}%");
                     
                     // Log threshold perks
-                    if (sensitivity >= ThresholdLearning)
+                    if (cachedSensitivity >= ThresholdLearning)
                     {
                         float learningBonus = BaseLearningBonus + 
-                            (Mathf.Floor((sensitivity - ThresholdLearning) / ThresholdScalingStep) * ThresholdScalingBonus);
+                            (Mathf.Floor((cachedSensitivity - ThresholdLearning) / ThresholdScalingStep) * ThresholdScalingBonus);
                         log.AppendLine($"  - Learning Bonus (≥3.0): +{learningBonus * 100:F0}%");
                     }
-                    if (sensitivity >= ThresholdDamageReduction)
+                    if (cachedSensitivity >= ThresholdDamageReduction)
                     {
                         float damageReduction = BaseDamageReduction + 
-                            (Mathf.Floor((sensitivity - ThresholdDamageReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
+                            (Mathf.Floor((cachedSensitivity - ThresholdDamageReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
                         log.AppendLine($"  - Damage Reduction (≥5.0): +{damageReduction * 100:F0}%");
                     }
-                    if (sensitivity >= ThresholdTirednessReduction)
+                    if (cachedSensitivity >= ThresholdTirednessReduction)
                     {
                         float tirednessReduction = BaseTirednessReduction + 
-                            (Mathf.Floor((sensitivity - ThresholdTirednessReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
+                            (Mathf.Floor((cachedSensitivity - ThresholdTirednessReduction) / ThresholdScalingStep) * ThresholdScalingBonus);
                         log.AppendLine($"  - Tiredness Reduction (≥8.0): +{tirednessReduction * 100:F0}%");
                     }
                     
@@ -110,6 +133,26 @@ namespace ProjectOvermind
             catch (Exception ex)
             {
                 Log.Error($"[FeastOfMind] PostAdd error for {pawn?.LabelShort ?? "null"}: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// SAFE cache refresh: Only called from Tick (safe context), never during stat calculation
+        /// Refreshes cached psychic sensitivity every 5 seconds
+        /// </summary>
+        public override void Tick()
+        {
+            base.Tick();
+
+            if (pawn == null)
+                return;
+
+            // Refresh cache every 5 seconds (300 ticks)
+            int currentTick = Find.TickManager.TicksGame;
+            if (currentTick - lastCacheTick >= CacheRefreshInterval)
+            {
+                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                lastCacheTick = currentTick;
             }
         }
 
@@ -189,7 +232,7 @@ namespace ProjectOvermind
             // Apply damage reduction if threshold reached
             if (pawn != null && dinfo.Def != null)
             {
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                float sensitivity = GetCachedSensitivity();
                 if (sensitivity >= ThresholdDamageReduction)
                 {
                     float damageReduction = BaseDamageReduction + 
@@ -210,7 +253,7 @@ namespace ProjectOvermind
                 if (pawn == null)
                     return "unknown";
                     
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                float sensitivity = GetCachedSensitivity();
                 
                 // Calculate actual hunger reduction
                 float hungerReduction = Mathf.Clamp(
@@ -235,8 +278,8 @@ namespace ProjectOvermind
                 // Get base stage from XML
                 HediffStage stage = base.CurStage ?? def.stages[0];
                 
-                // Calculate dynamic hunger factor
-                float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
+                // Calculate dynamic hunger factor using cached sensitivity
+                float sensitivity = GetCachedSensitivity();
                 float hungerReduction = Mathf.Clamp(
                     BaseHungerReduction + (ScalingPerPoint * sensitivity),
                     BaseHungerReduction,

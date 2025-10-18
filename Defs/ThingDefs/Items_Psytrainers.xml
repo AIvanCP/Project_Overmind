@@ -386,4 +386,169 @@
 		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
 	</ThingDef>
 
+	<!-- Psytrainer for Spatial Anchor -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_SpatialAnchor</defName>
+		<label>psytrainer (spatial anchor)</label>
+		<description>A one-use psychic trainer device that teaches the user the Spatial Anchor psycast - the ability to create a gravitational anomaly that slows and pulls hostile pawns toward its center.\n\n"Pin them in place and watch them crumble."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 4.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>1800</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn spatial anchor</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
+				<abilityDef>ProjectOvermind_SpatialAnchor</abilityDef>
+				<levelRequired>4</levelRequired>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Cognitive Shield -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_CognitiveShield</defName>
+		<label>psytrainer (cognitive shield)</label>
+		<description>A one-use psychic trainer device that teaches the user the Cognitive Shield psycast - the ability to protect all colonists with a powerful mental barrier that scales with psychic sensitivity.\n\n"A fortified mind cannot be broken."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 5.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2200</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn cognitive shield</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
+				<abilityDef>ProjectOvermind_CognitiveShield</abilityDef>
+				<levelRequired>5</levelRequired>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
+	<!-- Psytrainer for Psychic Diffusion -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_PsychicDiffusion</defName>
+		<label>psytrainer (psychic diffusion)</label>
+		<description>A one-use psychic trainer device that teaches the user the Psychic Diffusion psycast - the ability to create a network of shared vitality and mental energy among all colonists.\n\n"Together, we are stronger than the sum of our parts."\n\nPsytrainers can be used by anyone with basic psycasting ability. Requires psycast level 6.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>5</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2600</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn psychic diffusion</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
+				<abilityDef>ProjectOvermind_PsychicDiffusion</abilityDef>
+				<levelRequired>6</levelRequired>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
 </Defs>

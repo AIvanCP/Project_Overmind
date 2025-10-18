@@ -17,21 +17,50 @@ namespace ProjectOvermind
         private const int BuffDurationTicks = 3600; // 60 seconds
         private static readonly HediffDef InspirationHediffDef = HediffDef.Named("ProjectOvermind_InspirationAura");
 
+        /// <summary>
+        /// Override to prevent targeting UI and cast immediately on self
+        /// This is called when the ability button is clicked
+        /// </summary>
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            Log.Message("[Inspiration] OrderForceTarget called - executing immediately without targeting");
+            
+            // Cast immediately on caster without showing targeting UI
+            if (CasterPawn != null)
+            {
+                ability.QueueCastingJob(CasterPawn, CasterPawn);
+            }
+        }
+
+        /// <summary>
+        /// Override to always return available (no target validation needed)
+        /// </summary>
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            // Always return true - this is a self-cast ability
+            return true;
+        }
+
         protected override bool TryCastShot()
         {
+            Log.Message("[Inspiration] TryCastShot called");
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
                 {
+                    Log.Warning("[Inspiration] Failed: No valid map");
                     Messages.Message("Inspiration failed: No valid map.", MessageTypeDefOf.RejectInput, false);
                     return false;
                 }
+
+                Log.Message($"[Inspiration] Executing on map {CasterPawn.Map}");
 
                 // Get all player-owned pawns on the map
                 List<Pawn> playerPawns = GetPlayerPawnsOnMap();
 
                 if (playerPawns.Count == 0)
                 {
+                    Log.Message("[Inspiration] No colonists found");
                     Messages.Message("Inspiration: No colonists found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast (cooldown applies)
                 }
@@ -61,11 +90,7 @@ namespace ProjectOvermind
                 // Play sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                if (Prefs.DevMode)
-                {
-                    Log.Message($"[Inspiration] Buffed {buffedCount} pawns on map");
-                }
-
+                Log.Message($"[Inspiration] Buffed {buffedCount} pawns on map");
                 return true;
             }
             catch (Exception ex)

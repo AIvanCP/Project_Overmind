@@ -24,6 +24,7 @@
 				<canTargetBuildings>false</canTargetBuildings>
 				<canTargetLocations>false</canTargetLocations>
 			</targetParams>
+			
 		</verbProperties>
 		<cooldownTicksRange>7200</cooldownTicksRange> <!-- 120 seconds -->
 		<comps>
@@ -33,11 +34,10 @@
 		</comps>
 		<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
 		<showGizmoOnWorldView>false</showGizmoOnWorldView>
-		<confirmationDialogText>Reveal all hidden entities on this map for 60 seconds?</confirmationDialogText>
+		<!-- Confirmation dialog removed - ability casts immediately -->
 		<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 		<showPsycastEffects>true</showPsycastEffects>
 		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-		<jobDef>CastAbilityOnWorldTile</jobDef>
 	</AbilityDef>
 
 </Defs>

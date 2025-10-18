@@ -168,4 +168,130 @@
 		</stages>
 	</HediffDef>
 
+	<!-- Gravitic Pull Hediff (from Spatial Anchor) -->
+	<HediffDef>
+		<defName>ProjectOvermind_GraviticPull</defName>
+		<label>gravitic pull</label>
+		<description>Caught in a gravitational anomaly. Movement is heavily impaired, and there's a constant pull toward the anchor center.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(0.5, 0.7, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<makesAlert>false</makesAlert>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>120</disappearsAfterTicks> <!-- Auto-remove after 2 seconds if not refreshed -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.40</offset>
+					</li>
+				</capMods>
+				<statOffsets>
+					<MeleeDodgeChance>-20</MeleeDodgeChance>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Cognitive Shield Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_CognitiveShield</defName>
+		<label>cognitive shield</label>
+		<description>Protected by a powerful mental barrier. Base: +25% psychic sensitivity, -30% mental damage, -20% stun chance, +15% mental break threshold. Scales with sensitivity: ≥3.0 damage reduction &amp; consciousness, ≥5.0 mental immunity, ≥8.0 reflect &amp; healing.</description>
+		<hediffClass>ProjectOvermind.Hediff_CognitiveShield</hediffClass>
+		<defaultLabelColor>(0.7, 0.9, 1.0)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>1500</disappearsAfterTicks> <!-- 25 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<minSeverity>0</minSeverity>
+				<!-- Base effects: +25% psychic sensitivity, +10% consciousness -->
+				<statOffsets>
+					<PsychicSensitivity>0.25</PsychicSensitivity>
+				</statOffsets>
+				<capMods>
+					<li>
+						<capacity>Consciousness</capacity>
+						<offset>0.10</offset> <!-- +10% consciousness at base -->
+					</li>
+				</capMods>
+				<!-- Other threshold-based effects via StatPart_CognitiveShield -->
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Psychic Diffusion Hediff -->
+	<HediffDef>
+		<defName>ProjectOvermind_PsychicDiffusion</defName>
+		<label>psychic diffusion</label>
+		<description>Connected to a psychic diffusion network. Base: +10% move speed, +10% work speed, +5 mood. Scales +1% per 0.1 sensitivity. Threshold perks: ≥3.0 healing, ≥5.0 work &amp; defense, ≥8.0 regeneration pulse.</description>
+		<hediffClass>ProjectOvermind.Hediff_PsychicDiffusion</hediffClass>
+		<defaultLabelColor>(0.6, 1.0, 0.9)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>1200</disappearsAfterTicks> <!-- 20 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<minSeverity>0</minSeverity>
+				<!-- Base mood bonus -->
+				<statOffsets>
+					<MoodOffset>5</MoodOffset>
+				</statOffsets>
+				<!-- Other effects applied via StatPart_PsychicDiffusion and HediffComp -->
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!-- Psychic Diffusion Debuff (for enemies) -->
+	<HediffDef>
+		<defName>ProjectOvermind_PsychicDiffusionDebuff</defName>
+		<label>psychic disruption</label>
+		<description>Psychic network interference disrupts this creature's combat effectiveness.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(0.7, 0.3, 0.9)</defaultLabelColor>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<maxSeverity>1.0</maxSeverity>
+		<isBad>true</isBad>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>1200</disappearsAfterTicks> <!-- 20 seconds -->
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<statOffsets>
+					<ShootingAccuracyPawn>-0.30</ShootingAccuracyPawn> <!-- -30% accuracy -->
+					<MeleeHitChance>-0.25</MeleeHitChance> <!-- -25% melee hit chance -->
+				</statOffsets>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.20</offset> <!-- -20% move speed -->
+					</li>
+					<li>
+						<capacity>Consciousness</capacity>
+						<offset>-0.15</offset> <!-- -15% consciousness -->
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffDef>
+
 </Defs>
