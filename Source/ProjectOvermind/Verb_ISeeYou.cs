@@ -21,7 +21,7 @@ namespace ProjectOvermind
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
         {
-            Log.Message("[I See You] OrderForceTarget called - executing immediately without targeting");
+            
             
             // Cast immediately on caster without showing targeting UI
             if (CasterPawn != null)
@@ -41,7 +41,7 @@ namespace ProjectOvermind
 
         protected override bool TryCastShot()
         {
-            Log.Message("[I See You] TryCastShot called");
+            
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
@@ -51,7 +51,7 @@ namespace ProjectOvermind
                     return false;
                 }
 
-                Log.Message($"[I See You] Executing on map {CasterPawn.Map}");
+                
 
                 // Start reveal effect and get hostile count
                 int hostileCount = 0;
@@ -59,7 +59,7 @@ namespace ProjectOvermind
                 if (component != null)
                 {
                     hostileCount = component.StartReveal(CasterPawn, RevealDurationTicks);
-                    Log.Message($"[I See You] Component found, hostile count: {hostileCount}");
+                    
                 }
                 else
                 {
@@ -94,7 +94,7 @@ namespace ProjectOvermind
                 // Visual feedback (always show psycast effect)
                 FleckMaker.Static(CasterPawn.Position, CasterPawn.Map, FleckDefOf.PsycastAreaEffect, 3f);
 
-                Log.Message("[I See You] Cast completed successfully");
+                
                 return true;
             }
             catch (Exception ex)

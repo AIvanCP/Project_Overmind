@@ -156,6 +156,98 @@ namespace ProjectOvermind
             }
         }
 
+        /// <summary>
+        /// Override to provide custom stat display in health tab tooltip
+        /// Prevents NullReferenceException when hovering over hediff
+        /// </summary>
+        public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
+        {
+            foreach (StatDrawEntry stat in base.SpecialDisplayStats(req))
+            {
+                yield return stat;
+            }
+
+            if (pawn == null) yield break;
+
+            float sensitivity = GetCachedSensitivity();
+
+            // Movement Speed Bonus
+            float moveSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+            float moveSpeedBonus = BaseMoveSpeed + moveSpeedScaling;
+            yield return new StatDrawEntry(
+                StatCategoryDefOf.Basics,
+                "Movement Speed",
+                $"+{(moveSpeedBonus * 100f):F1}%",
+                "Psychic diffusion enhances movement speed based on psychic sensitivity.",
+                5100
+            );
+
+            // Work Speed Bonus
+            float workSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+            float workSpeedBonus = BaseWorkSpeed + workSpeedScaling;
+            if (sensitivity >= Threshold5)
+            {
+                float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
+                workSpeedBonus += BaseWorkSpeedThreshold5 + thresholdBonus;
+            }
+            yield return new StatDrawEntry(
+                StatCategoryDefOf.Basics,
+                "Work Speed",
+                $"+{(workSpeedBonus * 100f):F1}%",
+                "Psychic diffusion boosts work efficiency. Extra bonus at sensitivity ≥5.0.",
+                5099
+            );
+
+            // Threshold-based bonuses
+            if (sensitivity >= Threshold3)
+            {
+                float thresholdBonus = Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus;
+                float healPower = BaseHealPowerBonus + thresholdBonus;
+                yield return new StatDrawEntry(
+                    StatCategoryDefOf.Basics,
+                    "Heal Power",
+                    $"+{(healPower * 100f):F1}%",
+                    "Enhanced medical treatment quality. Active at sensitivity ≥3.0.",
+                    5098
+                );
+            }
+
+            if (sensitivity >= Threshold5)
+            {
+                float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
+                float damageReduction = BaseIncomingDamageReduction + thresholdBonus;
+                yield return new StatDrawEntry(
+                    StatCategoryDefOf.Basics,
+                    "Damage Reduction",
+                    $"-{(damageReduction * 100f):F1}%",
+                    "Reduced incoming damage. Active at sensitivity ≥5.0.",
+                    5097
+                );
+            }
+
+            if (sensitivity >= Threshold8)
+            {
+                float thresholdBonus = Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus;
+                float healAmount = BaseMiniHealAmount * (1f + thresholdBonus);
+                yield return new StatDrawEntry(
+                    StatCategoryDefOf.Basics,
+                    "Regeneration Pulse",
+                    $"{healAmount:F1} HP/5s",
+                    "Periodic healing pulse for nearby allies. Active at sensitivity ≥8.0.",
+                    5096
+                );
+            }
+
+            // Healing spread info
+            yield return new StatDrawEntry(
+                StatCategoryDefOf.Basics,
+                "Healing Spread",
+                $"{(BaseHealingSpread * 100f):F0}%",
+                "Portion of healing effects that spread to nearby allies.",
+                5095
+            );
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

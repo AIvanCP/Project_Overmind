@@ -88,9 +88,6 @@ namespace ProjectOvermind
                     historical: false
                 );
 
-                if (Prefs.DevMode)
-                    Log.Message($"[FeastOfMind] applied to {targetPawn.LabelShort}");
-
                 return true;
             }
             catch (Exception ex)
@@ -121,8 +118,6 @@ namespace ProjectOvermind
                     if (comp != null)
                     {
                         comp.ticksToDisappear = BuffDurationTicks;
-                        if (Prefs.DevMode)
-                            Log.Message($"[FeastOfMind] Refreshed buff duration for {pawn.LabelShort}");
                     }
                 }
                 else
@@ -130,9 +125,6 @@ namespace ProjectOvermind
                     // Add new hediff
                     Hediff hediff = HediffMaker.MakeHediff(FeastOfMindHediffDef, pawn);
                     pawn.health.AddHediff(hediff);
-                    
-                    if (Prefs.DevMode)
-                        Log.Message($"[FeastOfMind] Added new buff to {pawn.LabelShort}");
                 }
 
                 // Spawn visual effect at pawn location

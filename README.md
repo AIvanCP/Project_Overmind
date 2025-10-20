@@ -308,25 +308,61 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.6.2 (Current)
-- **CRITICAL FIX**: Auto-cast abilities now work correctly - no more target selection required
-  - Fixed I See You, Hallucination, Inspiration, Cognitive Shield requiring target selection
-  - All global/self-cast abilities now cast immediately when clicked (no red targeting circle)
-  - Implemented `TryStartCastOn` override to bypass RimWorld's default targeting phase
-  - Added comprehensive debug logging to all auto-cast abilities
-- **Psychic Diffusion upgraded to global map-wide ability**:
-  - Now affects ALL colonists on map (buff) AND ALL enemies on map (debuff)
-  - ALLY BUFFS: +10% move/work speed, +5 mood, threshold perks at 3.0/5.0/8.0
-  - ENEMY DEBUFFS: -30% accuracy, -25% melee hit, -20% move speed, -15% consciousness
-  - Changed from 20-tile radius to entire map coverage
-  - Added new HediffDef: ProjectOvermind_PsychicDiffusionDebuff
-- **Spatial Anchor visual effects and debugging enhanced**:
-  - Added extensive debug logging for anchor creation, ticking, and effect application
-  - Improved visual effects with continuous pulsing center and radius ring indicators
-  - Added debug messages for gravitic pull hediff application
-  - Added debug messages for enemy pull mechanics
-- Build verified: 0 errors, 0 warnings
-- All abilities tested and confirmed working with debug logging enabled
+### Version 1.6.4 (Current - Emergency Fix)
+- **⚠️ CRITICAL: v1.6.3 FAILED - User reported neither fix worked in-game**
+  - Global abilities STILL showed red targeting circle (screenshot evidence)
+  - Spatial Anchor showed NO visual effects and NO debuffs applied
+  
+- **v1.6.4 ROOT CAUSE DISCOVERIES & CORRECT FIXES:**
+  - **Global Abilities FIX (Range=-1 Pattern):**
+    - REMOVED failed custom `Ability_GlobalSelfCast` class approach (targeting UI controlled by VerbProperties, not Ability class!)
+    - CHANGED all 5 global ability XMLs from `<range>0</range>` to `<range>-1</range>` (vanilla RimWorld self-cast pattern)
+    - How it works: `range=-1` tells RimWorld "cast on caster immediately" (same as Word of Inspiration in Royalty DLC)
+    - No custom C# classes needed - vanilla XML pattern handles everything
+  
+  - **Spatial Anchor HEAVY DEBUG LOGGING:**
+    - Added extensive yellow warning logs to diagnose runtime failure:
+      - TryCastShot: ThingDef lookup, ThingMaker.MakeThing, GenSpawn.Spawn success verification
+      - Tick(): Per-second status (Thing exists, Spawned, Map, Position)
+      - ProcessGraviticEffects(): Total pawn scan, hostile count, affected pawn list with positions
+      - ApplyGraviticPull(): Hediff creation success, HediffDef null checks, comp.ticksToDisappear values
+    - User MUST enable Dev Mode + F12 console to see diagnostic output
+    - Logs will reveal exact failure point (Thing not spawning? Tick not called? Hediff not applying?)
+  
+  - **Files Modified (v1.6.4):**
+    - `Defs/AbilityDefs/Ability_Inspiration.xml` (removed abilityClass, range → -1)
+    - `Defs/AbilityDefs/Ability_ISeeYou.xml` (removed abilityClass, range → -1)
+    - `Defs/AbilityDefs/Ability_Hallucination.xml` (removed abilityClass, range → -1)
+    - `Defs/AbilityDefs/Ability_CognitiveShield.xml` (removed abilityClass, range → -1)
+    - `Defs/AbilityDefs/Ability_PsychicDiffusion.xml` (removed abilityClass, range → -1)
+    - `Source/ProjectOvermind/Verb_SpatialAnchor.cs` (added heavy debug logging)
+  
+  - **Build Status:** Code compiles successfully (0 errors)
+  - **Testing Required:** User MUST test with Dev Mode enabled:
+    1. Global abilities should cast immediately without targeting circle
+    2. F12 console shows yellow "[SPATIAL ANCHOR v1.6.4]" warnings with Thing spawn/tick/hediff verification
+    3. Report exact console messages if either fix still fails
+
+### Version 1.6.3 (DEPRECATED - Solutions Failed)
+- **❌ v1.6.3 FAILED IN-GAME - Do not use**
+  - Custom `Ability_GlobalSelfCast` class did NOT prevent targeting UI (wrong approach)
+  - Spatial Anchor Thing did NOT spawn or visual effects did NOT appear (root cause unknown)
+  - Build succeeded but runtime behavior completely broken
+  - User provided screenshot evidence proving neither fix worked
+  
+- **v1.6.3 Attempted Fixes (Incorrect Theories):**
+  - Created custom `Ability_GlobalSelfCast` class to override `QueueCastingJob()` (WRONG - targeting UI controlled by VerbProperties, not Ability)
+  - Added `DrawHighlight()` to Spatial Anchor for targeting preview
+  - Enhanced Tick() with persistent visual effects
+  - Reduced CheckInterval from 60→30 ticks for reliable debuff application
+  - All code compiled cleanly but did not execute correctly in-game
+
+### Version 1.6.2
+- **Previous attempt at auto-cast fix (SUPERSEDED by v1.6.3)**
+  - Used `TryStartCastOn` override approach (didn't work - targeting UI still appeared)
+  - Enhanced Spatial Anchor visuals with debug logging
+  - Upgraded Psychic Diffusion to map-wide buff/debuff
+- **Note:** Version 1.6.2 fixes were incomplete. Version 1.6.3 provides the definitive solution.
 
 ### Version 1.6.0
 - Added Spatial Anchor psycast (area control with gravity field)

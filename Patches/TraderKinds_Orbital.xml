@@ -3,6 +3,7 @@
 
 	<!-- Add to Orbital Bulk Goods Trader -->
 	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
 		<operations>
 			<li Class="PatchOperationTest">
 				<xpath>/Defs/TraderKindDef[defName="Orbital_BulkGoods"]</xpath>
@@ -21,6 +22,7 @@
 
 	<!-- Add to Exotic Goods Trader -->
 	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
 		<operations>
 			<li Class="PatchOperationTest">
 				<xpath>/Defs/TraderKindDef[defName="Orbital_ExoticGoods"]</xpath>

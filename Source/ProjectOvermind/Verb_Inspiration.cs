@@ -11,6 +11,9 @@ namespace ProjectOvermind
     /// <summary>
     /// Verb for "Inspiration" psycast - applies global buff to all player pawns on map
     /// Provides massive productivity bonuses scaled by psychic sensitivity
+    /// 
+    /// CRITICAL: This verb is used with Ability_GlobalSelfCast class which handles
+    /// bypassing the targeting UI. The verb only needs to implement the actual effect logic.
     /// </summary>
     public class Verb_Inspiration : Verb_CastAbility
     {
@@ -18,49 +21,44 @@ namespace ProjectOvermind
         private static readonly HediffDef InspirationHediffDef = HediffDef.Named("ProjectOvermind_InspirationAura");
 
         /// <summary>
-        /// Override to prevent targeting UI and cast immediately on self
-        /// This is called when the ability button is clicked
+        /// Always return true - target validation is handled by Ability_GlobalSelfCast
+        /// </summary>
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// DevMode hook: log when the player clicks the ability button.
+        /// This helps determine whether RimWorld is invoking targeting or directly
+        /// queuing the cast job. We also force a caster-target here to bypass the
+        /// targeting UI when testing.
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
         {
-            Log.Message("[Inspiration] OrderForceTarget called - executing immediately without targeting");
-            
-            // Cast immediately on caster without showing targeting UI
-            if (CasterPawn != null)
+            // Force self-cast to bypass targeting UI
+            if (ability != null && CasterPawn != null)
             {
                 ability.QueueCastingJob(CasterPawn, CasterPawn);
             }
         }
 
-        /// <summary>
-        /// Override to always return available (no target validation needed)
-        /// </summary>
-        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
-        {
-            // Always return true - this is a self-cast ability
-            return true;
-        }
-
         protected override bool TryCastShot()
         {
-            Log.Message("[Inspiration] TryCastShot called");
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
                 {
-                    Log.Warning("[Inspiration] Failed: No valid map");
+                    if (Prefs.DevMode) Log.Warning("[Inspiration] Failed: No valid map");
                     Messages.Message("Inspiration failed: No valid map.", MessageTypeDefOf.RejectInput, false);
                     return false;
                 }
-
-                Log.Message($"[Inspiration] Executing on map {CasterPawn.Map}");
 
                 // Get all player-owned pawns on the map
                 List<Pawn> playerPawns = GetPlayerPawnsOnMap();
 
                 if (playerPawns.Count == 0)
                 {
-                    Log.Message("[Inspiration] No colonists found");
                     Messages.Message("Inspiration: No colonists found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast (cooldown applies)
                 }
@@ -90,7 +88,6 @@ namespace ProjectOvermind
                 // Play sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                Log.Message($"[Inspiration] Buffed {buffedCount} pawns on map");
                 return true;
             }
             catch (Exception ex)
@@ -160,11 +157,6 @@ namespace ProjectOvermind
                         disappearsComp.ticksToDisappear = BuffDurationTicks;
                     }
                     
-                    if (Prefs.DevMode)
-                    {
-                        Log.Message($"[Inspiration] Refreshed buff on {pawn.LabelShort}");
-                    }
-                    
                     return true;
                 }
 
@@ -178,20 +170,11 @@ namespace ProjectOvermind
                     FleckMaker.Static(pawn.DrawPos, pawn.Map, FleckDefOf.PsycastAreaEffect, 2f);
                 }
 
-                if (Prefs.DevMode)
-                {
-                    float sensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
-                    Log.Message($"[Inspiration] Applied buff to {pawn.LabelShort} (sensitivity: {sensitivity:F2}x)");
-                }
-
                 return true;
             }
             catch (Exception ex)
             {
-                if (Prefs.DevMode)
-                {
-                    Log.Error($"[Inspiration] Error applying buff to {pawn?.LabelShort}: {ex}");
-                }
+                Log.Error($"[Inspiration] Error applying buff to {pawn?.LabelShort}: {ex}");
                 return false;
             }
         }

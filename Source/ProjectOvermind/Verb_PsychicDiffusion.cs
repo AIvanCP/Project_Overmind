@@ -25,7 +25,7 @@ namespace ProjectOvermind
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
         {
-            Log.Message("[Psychic Diffusion] OrderForceTarget called - executing immediately without targeting");
+            
             
             // Cast immediately on caster without showing targeting UI
             if (CasterPawn != null)
@@ -45,7 +45,7 @@ namespace ProjectOvermind
 
         protected override bool TryCastShot()
         {
-            Log.Message("[Psychic Diffusion] TryCastShot called");
+            
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
@@ -55,7 +55,7 @@ namespace ProjectOvermind
                     return false;
                 }
 
-                Log.Message($"[Psychic Diffusion] Executing on map {CasterPawn.Map}");
+                
 
                 // Get all player-owned pawns on the map
                 List<Pawn> playerPawns = GetPlayerPawnsOnMap();
@@ -64,7 +64,7 @@ namespace ProjectOvermind
 
                 if (playerPawns.Count == 0 && hostilePawns.Count == 0)
                 {
-                    Log.Message("[Psychic Diffusion] No colonists or enemies found");
+                    
                     Messages.Message("Psychic Diffusion: No colonists or enemies found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast
                 }
@@ -115,7 +115,7 @@ namespace ProjectOvermind
                 // Sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                Log.Message($"[Psychic Diffusion] Buffed {buffedCount} colonists, debuffed {debuffedCount} enemies");
+                
                 return true;
             }
             catch (Exception ex)

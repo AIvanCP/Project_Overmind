@@ -35,8 +35,7 @@
     <showGizmoOnWorldView>false</showGizmoOnWorldView>
     <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
     <showPsycastEffects>true</showPsycastEffects>
-    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-    <jobDef>CastAbilityOnWorldTile</jobDef>
+  <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
   </AbilityDef>
 
 </Defs>

@@ -23,7 +23,7 @@ namespace ProjectOvermind
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
         {
-            Log.Message("[Cognitive Shield] OrderForceTarget called - executing immediately without targeting");
+            
             
             // Cast immediately on caster without showing targeting UI
             if (CasterPawn != null)
@@ -43,7 +43,7 @@ namespace ProjectOvermind
 
         protected override bool TryCastShot()
         {
-            Log.Message("[Cognitive Shield] TryCastShot called");
+            
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
@@ -53,14 +53,14 @@ namespace ProjectOvermind
                     return false;
                 }
 
-                Log.Message($"[Cognitive Shield] Executing on map {CasterPawn.Map}");
+                
 
                 // Get all player-owned pawns on the map
                 List<Pawn> playerPawns = GetPlayerPawnsOnMap();
 
                 if (playerPawns.Count == 0)
                 {
-                    Log.Message("[Cognitive Shield] No colonists found");
+                    
                     Messages.Message("Cognitive Shield: No colonists found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast
                 }
@@ -84,7 +84,7 @@ namespace ProjectOvermind
                 // Sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                Log.Message($"[Cognitive Shield] Buffed {buffedCount} colonists");
+                
                 return true;
             }
             catch (Exception ex)

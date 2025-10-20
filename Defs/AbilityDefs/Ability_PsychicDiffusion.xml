@@ -16,10 +16,12 @@
     </statBases>
     <verbProperties>
       <verbClass>ProjectOvermind.Verb_PsychicDiffusion</verbClass>
-      <warmupTime>4.0</warmupTime>
-      <range>0</range>
+
+  <warmupTime>4.0</warmupTime>
+  <!-- Use range -1 to indicate self-only cast and let Ability_GlobalSelfCast bypass targeting UI -->
+  <range>-1</range>
       <targetParams>
-        <canTargetSelf>false</canTargetSelf>
+        <canTargetSelf>true</canTargetSelf>
         <canTargetPawns>false</canTargetPawns>
         <canTargetBuildings>false</canTargetBuildings>
         <canTargetLocations>false</canTargetLocations>

@@ -17,16 +17,17 @@
 		<verbProperties>
 			<verbClass>ProjectOvermind.Verb_ISeeYou</verbClass>
 			<warmupTime>1.5</warmupTime>
-			<range>0</range>
+			<!-- Use range -1 to indicate self-only cast and let Ability_GlobalSelfCast bypass targeting UI -->
+			<range>-1</range>
 			<targetParams>
-				<canTargetSelf>false</canTargetSelf>
+				<canTargetSelf>true</canTargetSelf>
 				<canTargetPawns>false</canTargetPawns>
 				<canTargetBuildings>false</canTargetBuildings>
 				<canTargetLocations>false</canTargetLocations>
 			</targetParams>
-			
 		</verbProperties>
 		<cooldownTicksRange>7200</cooldownTicksRange> <!-- 120 seconds -->
+
 		<comps>
 			<li Class="CompProperties_AbilityFleckOnTarget">
 				<fleckDef>PsycastAreaEffect</fleckDef>

@@ -23,7 +23,7 @@ namespace ProjectOvermind
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
         {
-            Log.Message("[Hallucination] OrderForceTarget called - executing immediately without targeting");
+            
             
             // Cast immediately on caster without showing targeting UI
             if (CasterPawn != null)
@@ -43,7 +43,7 @@ namespace ProjectOvermind
 
         protected override bool TryCastShot()
         {
-            Log.Message("[Hallucination] TryCastShot called");
+            
             try
             {
                 if (CasterPawn == null || CasterPawn.Map == null)
@@ -53,14 +53,14 @@ namespace ProjectOvermind
                     return false;
                 }
 
-                Log.Message($"[Hallucination] Executing on map {CasterPawn.Map}");
+                
 
                 // Get all hostile pawns and animals on the map (not mechs)
                 List<Pawn> hostilePawns = GetHostilePawnsOnMap();
 
                 if (hostilePawns.Count == 0)
                 {
-                    Log.Message("[Hallucination] No hostile creatures found");
+                    
                     Messages.Message("Hallucination: No hostile creatures found on map.", MessageTypeDefOf.NeutralEvent, false);
                     return true; // Still counts as successful cast
                 }
@@ -90,7 +90,7 @@ namespace ProjectOvermind
                 // Play sound effect
                 SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(CasterPawn));
 
-                Log.Message($"[Hallucination] Debuffed {debuffedCount} hostile pawns on map");
+                
                 return true;
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace ProjectOvermind
                     
                     if (Prefs.DevMode)
                     {
-                        Log.Message($"[Hallucination] Refreshed debuff on {pawn.LabelShort}");
+                        
                     }
                     
                     return true;
@@ -182,7 +182,7 @@ namespace ProjectOvermind
 
                 if (Prefs.DevMode)
                 {
-                    Log.Message($"[Hallucination] Applied debuff to {pawn.LabelShort}");
+                    
                 }
 
                 return true;

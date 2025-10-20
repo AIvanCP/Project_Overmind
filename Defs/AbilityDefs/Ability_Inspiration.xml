@@ -16,10 +16,12 @@
     </statBases>
   <verbProperties>
     <verbClass>ProjectOvermind.Verb_Inspiration</verbClass>
-    <warmupTime>4.0</warmupTime>
-    <range>0</range>
+
+  <warmupTime>4.0</warmupTime>
+  <!-- Set range to -1 to indicate self-only cast and rely on Ability_GlobalSelfCast to bypass targeting UI -->
+  <range>-1</range>
     <targetParams>
-      <canTargetSelf>false</canTargetSelf>
+      <canTargetSelf>true</canTargetSelf>
       <canTargetPawns>false</canTargetPawns>
       <canTargetBuildings>false</canTargetBuildings>
       <canTargetLocations>false</canTargetLocations>
