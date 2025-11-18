@@ -9,10 +9,13 @@ namespace ProjectOvermind
 {
     /// <summary>
     /// MapComponent that manages "I See You" reveal sessions
-    /// Uses safe overlay system to avoid modifying other mods' invisibility implementations
+    /// Upgraded to detect anomalies (Sightstealer, CompAnomaly, etc.) while excluding player buildings/pawns and conduits
     /// </summary>
     public class MapComponent_ISeeYou : MapComponent
     {
+        // Debug flag - set to true only when troubleshooting
+        private const bool enableRevealDebug = false;
+
         private class RevealSession
         {
             public Pawn caster;
@@ -62,7 +65,7 @@ namespace ProjectOvermind
                 // Find and reveal hidden entities
                 int hostileCount = FindAndRevealHiddenEntities();
 
-                if (Prefs.DevMode)
+                if (enableRevealDebug)
                 {
                     Log.Message($"[I See You] Started reveal session: {activeSession.revealedEntities.Count} entities revealed ({hostileCount} hostile) for {durationTicks} ticks.");
                 }
@@ -77,8 +80,9 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Find all hidden entities on the map and mark them as revealed
-        /// Uses safe detection methods that don't modify other mods' code
+        /// Find all hidden anomaly entities on the map and mark them as revealed
+        /// Filters for: pawns with anomaly comps, creatures with hiding mechanics
+        /// Excludes: player buildings/pawns, conduits, utility objects
         /// </summary>
         /// <returns>Number of hostile entities detected</returns>
         private int FindAndRevealHiddenEntities()
@@ -90,40 +94,37 @@ namespace ProjectOvermind
                 if (map == null || activeSession == null)
                     return 0;
 
-                // Check all pawns and things on the map
-                List<Thing> allThings = new List<Thing>();
-                allThings.AddRange(map.mapPawns.AllPawnsSpawned.Cast<Thing>());
+                // Strategy: scan only pawns (no buildings/conduits)
+                List<Pawn> allPawns = map.mapPawns.AllPawnsSpawned.ToList();
                 
-                // Also check for things that might be hidden (non-pawn entities)
-                foreach (IntVec3 cell in map.AllCells)
-                {
-                    List<Thing> thingsAtCell = map.thingGrid.ThingsListAtFast(cell);
-                    if (thingsAtCell != null)
-                    {
-                        allThings.AddRange(thingsAtCell);
-                    }
-                }
+                if (allPawns == null || allPawns.Count == 0)
+                    return 0;
 
-                foreach (Thing thing in allThings.Distinct())
+                foreach (Pawn pawn in allPawns)
                 {
-                    if (thing == null || thing.Destroyed)
+                    if (pawn == null || pawn.Destroyed)
                         continue;
 
-                    // Skip friendly pawns (player faction)
-                    if (thing is Pawn pawn && pawn.Faction == Faction.OfPlayer)
+                    // FILTER 1: Skip player faction pawns
+                    if (IsPlayerThing(pawn))
                         continue;
 
-                    // Check if thing is hidden using safe detection
-                    if (IsThingHidden(thing))
+                    // FILTER 2: Check if pawn is a revealable anomaly/hidden creature
+                    if (IsRevealableAnomaly(pawn))
                     {
-                        RevealEntity(thing);
+                        RevealEntity(pawn);
                         
                         // Count hostile entities
-                        if (thing is Pawn p && p.HostileTo(Faction.OfPlayer))
+                        if (pawn.HostileTo(Faction.OfPlayer))
                         {
                             hostileCount++;
                         }
                     }
+                }
+
+                if (enableRevealDebug)
+                {
+                    Log.Message($"[I See You] Scan complete: {hostileCount} hostile anomalies detected.");
                 }
             }
             catch (Exception ex)
@@ -135,142 +136,107 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Safe detection of hidden entities - checks common patterns without modifying other mods
+        /// Check if a pawn is a revealable anomaly or hidden creature
+        /// Targets: Sightstealer, CompAnomaly, CompHider, scripted invisibility
         /// </summary>
-        private bool IsThingHidden(Thing thing)
+        private bool IsRevealableAnomaly(Pawn pawn)
         {
             try
             {
-                if (thing == null)
+                if (pawn == null)
                     return false;
 
-                // Check 1: Hediffs with "hidden", "invisible", "stealth", "concealed" in defName
-                if (thing is Pawn pawn)
+                // Check 1: CompAnomaly (Anomaly DLC entities)
+                // Use reflection to check for CompAnomaly since it might not be available without DLC
+                ThingComp anomalyComp = pawn.AllComps?.FirstOrDefault(c => c.GetType().Name == "CompAnomaly");
+                if (anomalyComp != null)
                 {
-                    if (pawn.health?.hediffSet?.hediffs != null)
-                    {
-                        foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
-                        {
-                            if (hediff?.def?.defName == null)
-                                continue;
-
-                            string defNameLower = hediff.def.defName.ToLower();
-                            if (defNameLower.Contains("hidden") || 
-                                defNameLower.Contains("invisible") || 
-                                defNameLower.Contains("stealth") ||
-                                defNameLower.Contains("concealed") ||
-                                defNameLower.Contains("cloaked"))
-                            {
-                                if (Prefs.DevMode)
-                                {
-                                    Log.Message($"[I See You] Detected hidden hediff: {hediff.def.defName} on {pawn.LabelShort}");
-                                }
-                                return true;
-                            }
-                        }
-                    }
+                    if (enableRevealDebug)
+                        Log.Message($"[I See You] Detected CompAnomaly on {pawn.LabelShort}");
+                    return true;
                 }
 
-                // Check 2: Thing comps with "hidden", "invisible", "stealth" in type name
-                if (thing is ThingWithComps thingWithComps && thingWithComps.AllComps != null)
+                // Check 2: CompSightstealer (specific Anomaly DLC enemy)
+                ThingComp sightstealerComp = pawn.AllComps?.FirstOrDefault(c => c.GetType().Name.Contains("Sightstealer"));
+                if (sightstealerComp != null)
                 {
-                    foreach (ThingComp comp in thingWithComps.AllComps)
+                    if (enableRevealDebug)
+                        Log.Message($"[I See You] Detected Sightstealer on {pawn.LabelShort}");
+                    return true;
+                }
+
+                // Check 3: CompHider or custom hiding comps
+                ThingComp hiderComp = pawn.AllComps?.FirstOrDefault(c => 
+                    c.GetType().Name.Contains("Hider") || 
+                    c.GetType().Name.Contains("Invisible") ||
+                    c.GetType().Name.Contains("Stealth"));
+                if (hiderComp != null)
+                {
+                    if (enableRevealDebug)
+                        Log.Message($"[I See You] Detected hiding comp {hiderComp.GetType().Name} on {pawn.LabelShort}");
+                    return true;
+                }
+
+                // Check 4: Hediffs with "hidden", "invisible", "stealth", "concealed" in defName
+                if (pawn.health?.hediffSet?.hediffs != null)
+                {
+                    foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
                     {
-                        if (comp == null)
+                        if (hediff?.def?.defName == null)
                             continue;
 
-                        string typeName = comp.GetType().Name.ToLower();
-                        if (typeName.Contains("hidden") || 
-                            typeName.Contains("invisible") || 
-                            typeName.Contains("stealth") ||
-                            typeName.Contains("concealed") ||
-                            typeName.Contains("cloaked"))
+                        string defNameLower = hediff.def.defName.ToLower();
+                        if (defNameLower.Contains("hidden") || 
+                            defNameLower.Contains("invisible") || 
+                            defNameLower.Contains("stealth") ||
+                            defNameLower.Contains("concealed") ||
+                            defNameLower.Contains("cloaked"))
                         {
-                            if (Prefs.DevMode)
-                            {
-                                Log.Message($"[I See You] Detected hidden comp: {comp.GetType().Name} on {thing.Label}");
-                            }
+                            if (enableRevealDebug)
+                                Log.Message($"[I See You] Detected hidden hediff: {hediff.def.defName} on {pawn.LabelShort}");
+                            return true;
+                        }
+
+                        // Anomaly-specific hediffs
+                        if (defNameLower.Contains("revenant") || 
+                            defNameLower.Contains("ghoul") ||
+                            defNameLower.Contains("shambler") ||
+                            defNameLower.Contains("anomaly"))
+                        {
+                            if (enableRevealDebug)
+                                Log.Message($"[I See You] Detected anomaly hediff: {hediff.def.defName} on {pawn.LabelShort}");
                             return true;
                         }
                     }
                 }
 
-                // Check 3: Thing def tags
-                if (thing.def?.defName != null)
+                // Check 5: Mental states (Unobserved, lurking, etc.)
+                if (pawn.MentalStateDef != null)
                 {
-                    string defNameLower = thing.def.defName.ToLower();
-                    if (defNameLower.Contains("hidden") || 
-                        defNameLower.Contains("invisible") || 
-                        defNameLower.Contains("stealth"))
+                    string mentalStateDefName = pawn.MentalStateDef.defName.ToLower();
+                    if (mentalStateDefName.Contains("unobserved") || 
+                        mentalStateDefName.Contains("hidden") ||
+                        mentalStateDefName.Contains("lurking"))
                     {
-                        if (Prefs.DevMode)
-                        {
-                            Log.Message($"[I See You] Detected hidden thing def: {thing.def.defName}");
-                        }
+                        if (enableRevealDebug)
+                            Log.Message($"[I See You] Detected hidden mental state: {pawn.LabelShort}");
                         return true;
                     }
                 }
 
-                // Check 4: Vanilla Anomaly DLC entities (Ghoul, Revenant, Shambler, etc.)
-                // These often have special reveal mechanics or scripted invisibility
-                if (thing is Pawn p && p.RaceProps?.intelligence == Intelligence.Humanlike)
+                // Check 6: Pawn kind (Shambler, Lurker, Creeper, Stalker)
+                if (pawn.kindDef?.defName != null)
                 {
-                    // Check for anomaly-specific hediffs or states
-                    if (p.health?.hediffSet?.hediffs != null)
+                    string kindDefName = pawn.kindDef.defName.ToLower();
+                    if (kindDefName.Contains("shambler") || 
+                        kindDefName.Contains("lurker") ||
+                        kindDefName.Contains("creeper") ||
+                        kindDefName.Contains("stalker") ||
+                        kindDefName.Contains("sightstealer"))
                     {
-                        foreach (Hediff h in p.health.hediffSet.hediffs)
-                        {
-                            if (h?.def?.defName != null && 
-                                (h.def.defName.Contains("Revenant") || 
-                                 h.def.defName.Contains("Ghoul") ||
-                                 h.def.defName.Contains("Shambler") ||
-                                 h.def.defName.Contains("Anomaly")))
-                            {
-                                if (Prefs.DevMode)
-                                {
-                                    Log.Message($"[I See You] Detected anomaly entity: {p.LabelShort}");
-                                }
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                // Check 5: Scripted invisibility - check for pawns with special rendering flags
-                // Some entities use RenderFlags or DrawPos manipulation for invisibility
-                if (thing is Pawn pawn2)
-                {
-                    // Check if pawn has "Unobserved" or similar mental states
-                    if (pawn2.MentalStateDef != null)
-                    {
-                        string mentalStateDefName = pawn2.MentalStateDef.defName.ToLower();
-                        if (mentalStateDefName.Contains("unobserved") || 
-                            mentalStateDefName.Contains("hidden") ||
-                            mentalStateDefName.Contains("lurking"))
-                        {
-                            if (Prefs.DevMode)
-                            {
-                                Log.Message($"[I See You] Detected hidden mental state: {pawn2.LabelShort}");
-                            }
-                            return true;
-                        }
-                    }
-
-                    // Check for scripted invisibility via faction or special pawn kinds
-                    if (pawn2.kindDef?.defName != null)
-                    {
-                        string kindDefName = pawn2.kindDef.defName.ToLower();
-                        if (kindDefName.Contains("shambler") || 
-                            kindDefName.Contains("lurker") ||
-                            kindDefName.Contains("creeper") ||
-                            kindDefName.Contains("stalker"))
-                        {
-                            if (Prefs.DevMode)
-                            {
-                                Log.Message($"[I See You] Detected stealth pawn kind: {pawn2.LabelShort}");
-                            }
-                            return true;
-                        }
+                        if (enableRevealDebug)
+                            Log.Message($"[I See You] Detected stealth pawn kind: {pawn.LabelShort}");
+                        return true;
                     }
                 }
 
@@ -278,10 +244,68 @@ namespace ProjectOvermind
             }
             catch (Exception ex)
             {
-                if (Prefs.DevMode)
+                if (enableRevealDebug)
+                    Log.Warning($"[I See You] Error checking if pawn is revealable anomaly: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if a thing belongs to the player (building or pawn)
+        /// </summary>
+        private bool IsPlayerThing(Thing thing)
+        {
+            if (thing == null)
+                return false;
+
+            // Player faction check
+            if (thing.Faction == Faction.OfPlayer)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Check if a thing is a hidden utility object (conduit, power comp, optimization object)
+        /// These should NEVER be revealed
+        /// </summary>
+        private bool IsHiddenUtility(Thing thing)
+        {
+            if (thing == null || thing.def == null)
+                return false;
+
+            try
+            {
+                // Filter 1: Buildings with low altitude (conduits, underground)
+                if (thing.def.category == ThingCategory.Building && 
+                    (thing.def.altitudeLayer == AltitudeLayer.Item || 
+                     thing.def.altitudeLayer == AltitudeLayer.LowPlant))
                 {
-                    Log.Warning($"[I See You] Error checking if thing is hidden: {ex.Message}");
+                    return true;
                 }
+
+                // Filter 2: DefName contains "Conduit"
+                if (thing.def.defName.Contains("Conduit"))
+                {
+                    return true;
+                }
+
+                // Filter 3: Hidden/underground buildings
+                if (thing.def.building != null && thing.def.building.isInert)
+                {
+                    return true;
+                }
+
+                // Filter 4: Power transmission components
+                if (thing.TryGetComp<CompPowerTransmitter>() != null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
                 return false;
             }
         }
@@ -316,7 +340,7 @@ namespace ProjectOvermind
                 // Flash cell to highlight
                 map.debugDrawer.FlashCell(thing.Position, 0.8f, "reveal", 50);
 
-                if (Prefs.DevMode)
+                if (enableRevealDebug)
                 {
                     Log.Message($"[I See You] Revealed: {thing.Label} at {thing.Position}");
                 }
@@ -434,7 +458,7 @@ namespace ProjectOvermind
                     );
                 }
 
-                if (Prefs.DevMode)
+                if (enableRevealDebug)
                 {
                     Log.Message("[I See You] Reveal session ended.");
                 }

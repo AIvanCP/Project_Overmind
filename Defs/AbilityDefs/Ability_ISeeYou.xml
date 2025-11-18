@@ -17,7 +17,6 @@
 		<verbProperties>
 			<verbClass>ProjectOvermind.Verb_ISeeYou</verbClass>
 			<warmupTime>1.5</warmupTime>
-			<!-- Use range -1 to indicate self-only cast and let Ability_GlobalSelfCast bypass targeting UI -->
 			<range>-1</range>
 			<targetParams>
 				<canTargetSelf>true</canTargetSelf>
