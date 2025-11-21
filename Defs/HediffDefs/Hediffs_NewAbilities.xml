@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Soul Refill Buff Hediff -->
+  <HediffDef>
+    <defName>ProjectOvermind_SoulRefillBuff</defName>
+    <label>soul refill</label>
+    <description>Psychic energy sustains this person's vital needs, gradually restoring food, rest, mood, and other needs over time. The effect scales with Psychic Sensitivity.</description>
+    <hediffClass>ProjectOvermind.Hediff_SoulRefill</hediffClass>
+    <defaultLabelColor>(0.6, 0.9, 1.0)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>1.0</initialSeverity>
+    <maxSeverity>1.0</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>7200</disappearsAfterTicks> <!-- 120 seconds -->
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>active</label>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- Aura Clean Buff Hediff -->
+  <HediffDef>
+    <defName>ProjectOvermind_AuraCleanBuff</defName>
+    <label>aura clean</label>
+    <description>A psychic cleaning aura surrounds this person, automatically removing filth and debris in the area. The aura's radius and effectiveness scale with Psychic Sensitivity.</description>
+    <hediffClass>ProjectOvermind.Hediff_AuraClean</hediffClass>
+    <defaultLabelColor>(0.9, 1.0, 0.6)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>1.0</initialSeverity>
+    <maxSeverity>1.0</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2700</disappearsAfterTicks> <!-- 45 seconds -->
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>active</label>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.02</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

@@ -162,11 +162,9 @@ namespace ProjectOvermind
         /// </summary>
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
         {
-            foreach (StatDrawEntry stat in base.SpecialDisplayStats(req))
-            {
-                yield return stat;
-            }
-
+            // Don't call base.SpecialDisplayStats - it can cause NullReferenceException
+            // when iterating over stat modifiers during tooltip generation
+            
             if (pawn == null) yield break;
 
             float sensitivity = GetCachedSensitivity();

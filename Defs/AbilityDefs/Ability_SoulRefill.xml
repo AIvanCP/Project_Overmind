@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Soul Refill: Persistent resource refill ability -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_SoulRefill</defName>
+    <label>soul refill</label>
+    <description>Channel psychic energy to sustain all colonists on the map, gradually restoring vital needs over time. While active, continuously regenerates food, rest, mood, and other needs at a rate scaled by Psychic Sensitivity.\n\nBase: +1% per second to all needs\nScaling: +0.1% per 0.1 Psychic Sensitivity\n\nTier Bonuses:\n• Sensitivity ≥3.0: +20% recreation gain\n• Sensitivity ≥5.0: +15% immunity gain\n• Sensitivity ≥8.0: -30% rest need drain, +1% extra regeneration\n\nLasts 120 seconds. The effect continues even if the caster dies.</description>
+    <iconPath>UI/Icons/Psycasts/SoulRefill</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>3</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.30</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.15</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_SoulRefill</verbClass>
+      <warmupTime>2.5</warmupTime>
+      <range>-1</range>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>false</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+    <cooldownTicksRange>24000</cooldownTicksRange> <!-- 400 seconds / ~6.7 minutes -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+  </AbilityDef>
+
+  <!-- Aura Clean: Auto-area filth cleaner -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_AuraClean</defName>
+    <label>aura clean</label>
+    <description>Create a psychic cleaning aura around all colonists on the map that automatically removes filth and debris. Each colonist gets their own aura, with radius and cleaning rate scale with Psychic Sensitivity.\n\nBase: 3-tile radius, removes 1 filth/1.5s\nScaling: +0.05 radius and +0.1 filth/tick per 0.1 Sensitivity (max radius 6)\n\nTier Bonuses:\n• Sensitivity ≥3.0: +1 tile radius, removes medium blood/stains\n• Sensitivity ≥5.0: +1 tile radius, removes vomit/animal filth\n• Sensitivity ≥8.0: +1.5 tile radius, double cleaning rate, +10% immunity +5% move speed\n\nLasts 45 seconds. Does not remove toxic or polluted tiles by default.</description>
+    <iconPath>UI/Icons/Psycasts/AuraClean</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>2</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.20</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.10</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_AuraClean</verbClass>
+      <warmupTime>1.5</warmupTime>
+      <range>-1</range>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>false</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+    <cooldownTicksRange>10800</cooldownTicksRange> <!-- 180 seconds / 3 minutes -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+  </AbilityDef>
+
+</Defs>
+
+

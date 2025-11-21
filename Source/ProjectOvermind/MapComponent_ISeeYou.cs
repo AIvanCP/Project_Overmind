@@ -27,6 +27,13 @@ namespace ProjectOvermind
         {
             public Thing thing;
             public Mote exclamationMote;
+            // Store original hiding state for restoration
+            public List<ThingComp> hidingComps = new List<ThingComp>();
+            public List<Hediff> hidingHediffs = new List<Hediff>();
+            public Dictionary<ThingComp, object> originalCompStates = new Dictionary<ThingComp, object>();
+            // Track damage during reveal
+            public bool wasDamaged = false;
+            public float initialHealth = 0f;
         }
 
         private RevealSession activeSession;
@@ -133,6 +140,38 @@ namespace ProjectOvermind
             }
             
             return hostileCount;
+        }
+
+        /// <summary>
+        /// Check if a revealed entity has taken damage
+        /// </summary>
+        private void CheckForDamage(RevealedEntity revealed)
+        {
+            try
+            {
+                if (revealed == null || revealed.thing == null || revealed.wasDamaged)
+                    return;
+
+                Pawn pawn = revealed.thing as Pawn;
+                if (pawn == null || pawn.health == null)
+                    return;
+
+                // Check if health decreased
+                float currentHealth = pawn.health.summaryHealth.SummaryHealthPercent;
+                if (currentHealth < revealed.initialHealth - 0.01f) // Small threshold to account for rounding
+                {
+                    revealed.wasDamaged = true;
+                    
+                    if (enableRevealDebug)
+                    {
+                        Log.Message($"[I See You] {pawn.LabelShort} was damaged during reveal - will remain visible");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[I See You] Error checking damage: {ex}");
+            }
         }
 
         /// <summary>
@@ -331,11 +370,22 @@ namespace ProjectOvermind
                 Mote mote = moteText;
 
                 // Add to revealed list
-                activeSession.revealedEntities.Add(new RevealedEntity
+                RevealedEntity revealedEntity = new RevealedEntity
                 {
                     thing = thing,
                     exclamationMote = mote
-                });
+                };
+                
+                // Store initial health for damage tracking
+                if (thing is Pawn pawn && pawn.health != null)
+                {
+                    revealedEntity.initialHealth = pawn.health.summaryHealth.SummaryHealthPercent;
+                }
+                
+                activeSession.revealedEntities.Add(revealedEntity);
+
+                // Force reveal - disable hiding mechanisms
+                ForceReveal(thing, revealedEntity);
 
                 // Flash cell to highlight
                 map.debugDrawer.FlashCell(thing.Position, 0.8f, "reveal", 50);
@@ -348,6 +398,184 @@ namespace ProjectOvermind
             catch (Exception ex)
             {
                 Log.Error($"[I See You] Error revealing entity: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Force reveal a hidden entity by disabling its hiding components/hediffs
+        /// Uses reflection for mod compatibility - safely disables hiding mechanisms
+        /// </summary>
+        private void ForceReveal(Thing thing, RevealedEntity revealedEntity)
+        {
+            try
+            {
+                if (thing == null || !(thing is Pawn pawn))
+                    return;
+
+                // Find and disable hiding components
+                if (pawn.AllComps != null)
+                {
+                    foreach (ThingComp comp in pawn.AllComps)
+                    {
+                        if (comp == null)
+                            continue;
+
+                        string typeName = comp.GetType().Name;
+                        
+                        // Check if this is a hiding/invisibility comp
+                        if (typeName.Contains("Hider") || 
+                            typeName.Contains("Invisible") || 
+                            typeName.Contains("Stealth") ||
+                            typeName.Contains("Sightstealer") ||
+                            typeName.Contains("Concealed"))
+                        {
+                            // Store this comp for restoration
+                            revealedEntity.hidingComps.Add(comp);
+
+                            // Try to disable using reflection
+                            TryDisableHidingComp(comp, revealedEntity);
+
+                            if (enableRevealDebug)
+                            {
+                                Log.Message($"[I See You] Disabled hiding comp: {typeName} on {pawn.LabelShort}");
+                            }
+                        }
+                    }
+                }
+
+                // Find and remove hiding hediffs temporarily
+                if (pawn.health?.hediffSet?.hediffs != null)
+                {
+                    List<Hediff> hediffsToRemove = new List<Hediff>();
+                    
+                    foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+                    {
+                        if (hediff?.def?.defName == null)
+                            continue;
+
+                        string defNameLower = hediff.def.defName.ToLower();
+                        
+                        // Check if this is a hiding hediff
+                        if (defNameLower.Contains("hidden") || 
+                            defNameLower.Contains("invisible") || 
+                            defNameLower.Contains("stealth") ||
+                            defNameLower.Contains("concealed") ||
+                            defNameLower.Contains("cloaked"))
+                        {
+                            hediffsToRemove.Add(hediff);
+                            revealedEntity.hidingHediffs.Add(hediff);
+
+                            if (enableRevealDebug)
+                            {
+                                Log.Message($"[I See You] Removing hiding hediff: {hediff.def.defName} from {pawn.LabelShort}");
+                            }
+                        }
+                    }
+
+                    // Remove hiding hediffs
+                    foreach (Hediff hediff in hediffsToRemove)
+                    {
+                        pawn.health.RemoveHediff(hediff);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[I See You] Error in ForceReveal: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Try to disable a hiding component using reflection
+        /// Looks for common fields/properties: isHidden, hidden, enabled, active
+        /// </summary>
+        private void TryDisableHidingComp(ThingComp comp, RevealedEntity revealedEntity)
+        {
+            try
+            {
+                var compType = comp.GetType();
+
+                // Common field/property names for hiding state
+                string[] hidingFieldNames = { "isHidden", "hidden", "enabled", "active", "invisible" };
+
+                foreach (string fieldName in hidingFieldNames)
+                {
+                    // Try field
+                    var field = compType.GetField(fieldName, 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.NonPublic | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (field != null && field.FieldType == typeof(bool))
+                    {
+                        // Store original value
+                        object originalValue = field.GetValue(comp);
+                        revealedEntity.originalCompStates[comp] = originalValue;
+
+                        // Disable (set to false or true depending on field name)
+                        bool newValue = (fieldName == "enabled" || fieldName == "active") ? false : false;
+                        field.SetValue(comp, newValue);
+
+                        if (enableRevealDebug)
+                        {
+                            Log.Message($"[I See You] Set {fieldName} = {newValue} on {comp.GetType().Name}");
+                        }
+                        return;
+                    }
+
+                    // Try property
+                    var property = compType.GetProperty(fieldName, 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.NonPublic | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (property != null && property.PropertyType == typeof(bool) && property.CanWrite)
+                    {
+                        // Store original value
+                        object originalValue = property.GetValue(comp);
+                        revealedEntity.originalCompStates[comp] = originalValue;
+
+                        // Disable
+                        bool newValue = (fieldName == "enabled" || fieldName == "active") ? false : false;
+                        property.SetValue(comp, newValue);
+
+                        if (enableRevealDebug)
+                        {
+                            Log.Message($"[I See You] Set {fieldName} = {newValue} on {comp.GetType().Name}");
+                        }
+                        return;
+                    }
+                }
+
+                // Try calling Disable/Reveal methods if they exist
+                var disableMethod = compType.GetMethod("Disable", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (disableMethod != null && disableMethod.GetParameters().Length == 0)
+                {
+                    disableMethod.Invoke(comp, null);
+                    if (enableRevealDebug)
+                    {
+                        Log.Message($"[I See You] Called Disable() on {comp.GetType().Name}");
+                    }
+                    return;
+                }
+
+                var revealMethod = compType.GetMethod("Reveal", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (revealMethod != null && revealMethod.GetParameters().Length == 0)
+                {
+                    revealMethod.Invoke(comp, null);
+                    if (enableRevealDebug)
+                    {
+                        Log.Message($"[I See You] Called Reveal() on {comp.GetType().Name}");
+                    }
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (enableRevealDebug)
+                {
+                    Log.Warning($"[I See You] Could not disable hiding comp {comp.GetType().Name}: {ex.Message}");
+                }
             }
         }
 
@@ -414,6 +642,9 @@ namespace ProjectOvermind
                         continue;
                     }
 
+                    // Check if entity was damaged
+                    CheckForDamage(revealed);
+
                     // Periodically spawn new exclamation motes (since they fade quickly)
                     if (Find.TickManager.TicksGame % 120 == 0) // Every 2 seconds
                     {
@@ -428,6 +659,136 @@ namespace ProjectOvermind
         }
 
         /// <summary>
+        /// Restore original hiding state for a revealed entity
+        /// </summary>
+        private void RestoreHidden(RevealedEntity revealed)
+        {
+            try
+            {
+                if (revealed == null || revealed.thing == null)
+                    return;
+
+                Pawn pawn = revealed.thing as Pawn;
+                if (pawn == null)
+                    return;
+
+                // Do NOT restore hiding if pawn was damaged during reveal
+                // This keeps attacked enemies visible
+                if (revealed.wasDamaged)
+                {
+                    if (enableRevealDebug)
+                    {
+                        Log.Message($"[I See You] Skipping restoration for {pawn.LabelShort} - was damaged during reveal");
+                    }
+                    return;
+                }
+
+                // Restore hiding component states
+                foreach (ThingComp comp in revealed.hidingComps)
+                {
+                    if (comp == null)
+                        continue;
+
+                    // Try to restore original state
+                    if (revealed.originalCompStates.ContainsKey(comp))
+                    {
+                        object originalValue = revealed.originalCompStates[comp];
+                        TryRestoreHidingComp(comp, originalValue);
+                    }
+                    else
+                    {
+                        // Try to re-enable using common methods
+                        var compType = comp.GetType();
+                        var enableMethod = compType.GetMethod("Enable", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                        if (enableMethod != null && enableMethod.GetParameters().Length == 0)
+                        {
+                            enableMethod.Invoke(comp, null);
+                        }
+                    }
+                }
+
+                // Re-add hiding hediffs
+                if (pawn.health != null && revealed.hidingHediffs != null)
+                {
+                    foreach (Hediff hediff in revealed.hidingHediffs)
+                    {
+                        if (hediff?.def != null)
+                        {
+                            // Re-add the hediff
+                            pawn.health.AddHediff(hediff.def);
+                            
+                            if (enableRevealDebug)
+                            {
+                                Log.Message($"[I See You] Restored hiding hediff: {hediff.def.defName} to {pawn.LabelShort}");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[I See You] Error restoring hidden state: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Try to restore a hiding component's original state
+        /// </summary>
+        private void TryRestoreHidingComp(ThingComp comp, object originalValue)
+        {
+            try
+            {
+                if (!(originalValue is bool boolValue))
+                    return;
+
+                var compType = comp.GetType();
+                string[] hidingFieldNames = { "isHidden", "hidden", "enabled", "active", "invisible" };
+
+                foreach (string fieldName in hidingFieldNames)
+                {
+                    // Try field
+                    var field = compType.GetField(fieldName, 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.NonPublic | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (field != null && field.FieldType == typeof(bool))
+                    {
+                        field.SetValue(comp, boolValue);
+                        if (enableRevealDebug)
+                        {
+                            Log.Message($"[I See You] Restored {fieldName} = {boolValue} on {comp.GetType().Name}");
+                        }
+                        return;
+                    }
+
+                    // Try property
+                    var property = compType.GetProperty(fieldName, 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.NonPublic | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (property != null && property.PropertyType == typeof(bool) && property.CanWrite)
+                    {
+                        property.SetValue(comp, boolValue);
+                        if (enableRevealDebug)
+                        {
+                            Log.Message($"[I See You] Restored {fieldName} = {boolValue} on {comp.GetType().Name}");
+                        }
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (enableRevealDebug)
+                {
+                    Log.Warning($"[I See You] Could not restore hiding comp: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
         /// End the reveal session
         /// </summary>
         private void EndReveal(bool showMessage)
@@ -436,6 +797,15 @@ namespace ProjectOvermind
             {
                 if (activeSession == null)
                     return;
+
+                // Restore hiding state for all revealed entities
+                if (activeSession.revealedEntities != null)
+                {
+                    foreach (RevealedEntity revealed in activeSession.revealedEntities)
+                    {
+                        RestoreHidden(revealed);
+                    }
+                }
 
                 // Clean up motes
                 if (activeSession.revealedEntities != null)

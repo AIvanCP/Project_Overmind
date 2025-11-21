@@ -71,7 +71,9 @@ namespace ProjectOvermind
                                    ability.def.defName == "ProjectOvermind_Hallucination" ||
                                    ability.def.defName == "ProjectOvermind_CognitiveShield" ||
                                    ability.def.defName == "ProjectOvermind_PsychicDiffusion" ||
-                                   ability.def.defName == "ProjectOvermind_ISeeYou";
+                                   ability.def.defName == "ProjectOvermind_ISeeYou" ||
+                                   ability.def.defName == "ProjectOvermind_SoulRefill" ||
+                                   ability.def.defName == "ProjectOvermind_AuraClean";
 
             if (!isGlobalSelfCast)
             {

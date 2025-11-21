@@ -150,6 +150,66 @@ A RimWorld mod that adds new psionic abilities inspired by Warframe's mind contr
   - Perfect for defending against large raids
   - *"Let them fear what isn't there."*
 
+### Soul Refill Psycast
+
+- **Description**: Channel psychic energy to sustain all colonists on the map
+- **Target**: Self (map-wide buff to all player pawns)
+- **Range**: Self only (affects entire map)
+- **Cast Time**: 2.5 seconds
+- **Cooldown**: 400 seconds (~6.7 minutes)
+- **Duration**: 120 seconds
+- **Psyfocus Cost**: 0.30
+- **Heat Cost**: 0.15
+- **Required Psycast Level**: 3
+- **Special**: Persistent need regeneration ability
+  - **Affects ALL player-owned pawns on the map**
+  - **Base effects**: +1% per second to all needs (food, rest, mood, recreation, etc.)
+  - **Scaling**: +0.1% per 0.1 Psychic Sensitivity
+  - **Examples**:
+    - Sensitivity 1.0 → +2% per second
+    - Sensitivity 2.0 → +3% per second
+    - Sensitivity 5.0 → +6% per second
+  - **Threshold Perks**:
+    - **≥3.0**: +20% recreation gain
+    - **≥5.0**: +15% immunity gain for all active diseases
+    - **≥8.0**: -30% rest need drain, +1% extra regeneration
+  - **Automatically regenerates ALL needs** including mod-added needs (Hygiene, Bladder, Comfort, etc.)
+  - Works with any mod that adds needs - no hardcoded list
+  - Effect continues even if caster is downed
+  - Perfect for sustaining pawns during long operations or extended work shifts
+  - *"The mind sustains the body."*
+
+### Aura Clean Psycast
+
+- **Description**: Create a psychic cleaning aura around all colonists on the map
+- **Target**: Self (map-wide buff to all player pawns)
+- **Range**: Self only (affects entire map)
+- **Cast Time**: 1.5 seconds
+- **Cooldown**: 180 seconds (3 minutes)
+- **Duration**: 45 seconds
+- **Psyfocus Cost**: 0.20
+- **Heat Cost**: 0.10
+- **Required Psycast Level**: 2
+- **Special**: Area cleaning ability with intelligent filth filtering
+  - **Affects ALL player-owned pawns on the map - each gets their own aura**
+  - **Base effects**: 3-tile radius, removes 1 filth per 1.5 seconds
+  - **Radius scaling**: +0.05 per 0.1 Sensitivity (max 12 tiles)
+  - **Examples**:
+    - Sensitivity 1.0 → 3.5 tile radius
+    - Sensitivity 3.0 → 4.5 tile radius
+    - Sensitivity 5.0 → 5.5 tile radius
+    - Sensitivity 8.0 → 7.0 tile radius
+  - **Threshold Perks**:
+    - **≥3.0**: +1 tile radius, can clean blood and stains
+    - **≥5.0**: +1 tile radius, can clean vomit and animal filth
+    - **≥8.0**: +1.5 tile radius, double cleaning rate, +10% immunity +5% move speed
+  - Only cleans filth types appropriate for tier level (base: dirt/rubble)
+  - Does NOT clean toxic or polluted tiles by default
+  - **Safe cleaning**: Automatically cancels pawn cleaning jobs to prevent conflicts
+  - Performance-optimized with configurable filth limit per interval
+  - Perfect for keeping workshops, hospitals, and dining areas clean
+  - *"Cleanliness is clarity of mind."*
+
 ### Spatial Anchor Psycast
 - **Description**: Create a gravitational anomaly that slows and pulls hostile pawns
 - **Target**: Ground location
@@ -248,14 +308,14 @@ Available from Orbital Bulk Goods and Exotic Goods traders (rare)
 - Mind Spike Psytrainer: 1,800 silver (level 3)
 - Mind Read Psytrainer: 1,600 silver (level 3)
 - Feast of Mind Psytrainer: 1,500 silver (level 3)
+- Soul Refill Psytrainer: 1,400 silver (level 4)
+- Aura Clean Psytrainer: 1,100 silver (level 3)
 - Inspiration Psytrainer: 2,000 silver (level 4)
+- Spatial Anchor Psytrainer: 1,800 silver (level 4)
 - I See You Psytrainer: 2,200 silver (level 5)
 - Hallucination Psytrainer: 2,400 silver (level 5)
-- Spatial Anchor Psytrainer: 1,800 silver (level 4)
 - Cognitive Shield Psytrainer: 2,200 silver (level 5)
 - Psychic Diffusion Psytrainer: 2,600 silver (level 6)
-- I See You Psytrainer: 2,200 silver (level 5)
-- Hallucination Psytrainer: 2,400 silver (level 5)
 
 ### Quest Rewards
 Can appear as a reward in some quests
