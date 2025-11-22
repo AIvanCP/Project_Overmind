@@ -157,93 +157,79 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Override to provide custom stat display in health tab tooltip
-        /// Prevents NullReferenceException when hovering over hediff
+        /// Override tooltip generation to prevent NullReferenceException
+        /// Vanilla HediffStatsUtility can't handle our dynamic stat modifications properly
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    float sensitivity = GetCachedSensitivity();
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    
+                    // Base effects
+                    sb.AppendLine($"Mood: +{BaseMoodBonus:F0}");
+                    
+                    float moveSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+                    float moveSpeedBonus = BaseMoveSpeed + moveSpeedScaling;
+                    sb.AppendLine($"Movement Speed: +{(moveSpeedBonus * 100f):F1}%");
+                    
+                    float workSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+                    float workSpeedBonus = BaseWorkSpeed + workSpeedScaling;
+                    if (sensitivity >= Threshold5)
+                    {
+                        float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        workSpeedBonus += BaseWorkSpeedThreshold5 + thresholdBonus;
+                    }
+                    sb.AppendLine($"Work Speed: +{(workSpeedBonus * 100f):F1}%");
+                    
+                    // Threshold bonuses
+                    if (sensitivity >= Threshold3)
+                    {
+                        float thresholdBonus = Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        float healPower = BaseHealPowerBonus + thresholdBonus;
+                        sb.AppendLine($"Medical Tend Quality: +{(healPower * 100f):F1}%");
+                    }
+                    
+                    if (sensitivity >= Threshold5)
+                    {
+                        float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        float damageReduction = BaseIncomingDamageReduction + thresholdBonus;
+                        sb.AppendLine($"Damage Reduction: -{(damageReduction * 100f):F1}%");
+                    }
+                    
+                    if (sensitivity >= Threshold8)
+                    {
+                        float thresholdBonus = Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        float healAmount = BaseMiniHealAmount * (1f + thresholdBonus);
+                        sb.AppendLine($"Regeneration Pulse: {healAmount:F1} HP every 5s");
+                    }
+                    
+                    sb.AppendLine($"Healing Spread: {(BaseHealingSpread * 100f):F0}%");
+                    sb.AppendLine($"\nPsychic Sensitivity: {sensitivity:F2}");
+                    
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[ProjectOvermind] Error generating Psychic Diffusion tooltip: {ex.Message}");
+                    return "Psychic Diffusion buff";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Don't provide SpecialDisplayStats - we handle tooltip via TipStringExtra
+        /// This prevents vanilla HediffStatsUtility from causing NullReferenceException
         /// </summary>
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
         {
-            // Don't call base.SpecialDisplayStats - it can cause NullReferenceException
-            // when iterating over stat modifiers during tooltip generation
-            
-            if (pawn == null) yield break;
-
-            float sensitivity = GetCachedSensitivity();
-
-            // Movement Speed Bonus
-            float moveSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
-            float moveSpeedBonus = BaseMoveSpeed + moveSpeedScaling;
-            yield return new StatDrawEntry(
-                StatCategoryDefOf.Basics,
-                "Movement Speed",
-                $"+{(moveSpeedBonus * 100f):F1}%",
-                "Psychic diffusion enhances movement speed based on psychic sensitivity.",
-                5100
-            );
-
-            // Work Speed Bonus
-            float workSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
-            float workSpeedBonus = BaseWorkSpeed + workSpeedScaling;
-            if (sensitivity >= Threshold5)
-            {
-                float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
-                workSpeedBonus += BaseWorkSpeedThreshold5 + thresholdBonus;
-            }
-            yield return new StatDrawEntry(
-                StatCategoryDefOf.Basics,
-                "Work Speed",
-                $"+{(workSpeedBonus * 100f):F1}%",
-                "Psychic diffusion boosts work efficiency. Extra bonus at sensitivity ≥5.0.",
-                5099
-            );
-
-            // Threshold-based bonuses
-            if (sensitivity >= Threshold3)
-            {
-                float thresholdBonus = Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus;
-                float healPower = BaseHealPowerBonus + thresholdBonus;
-                yield return new StatDrawEntry(
-                    StatCategoryDefOf.Basics,
-                    "Heal Power",
-                    $"+{(healPower * 100f):F1}%",
-                    "Enhanced medical treatment quality. Active at sensitivity ≥3.0.",
-                    5098
-                );
-            }
-
-            if (sensitivity >= Threshold5)
-            {
-                float thresholdBonus = Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus;
-                float damageReduction = BaseIncomingDamageReduction + thresholdBonus;
-                yield return new StatDrawEntry(
-                    StatCategoryDefOf.Basics,
-                    "Damage Reduction",
-                    $"-{(damageReduction * 100f):F1}%",
-                    "Reduced incoming damage. Active at sensitivity ≥5.0.",
-                    5097
-                );
-            }
-
-            if (sensitivity >= Threshold8)
-            {
-                float thresholdBonus = Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus;
-                float healAmount = BaseMiniHealAmount * (1f + thresholdBonus);
-                yield return new StatDrawEntry(
-                    StatCategoryDefOf.Basics,
-                    "Regeneration Pulse",
-                    $"{healAmount:F1} HP/5s",
-                    "Periodic healing pulse for nearby allies. Active at sensitivity ≥8.0.",
-                    5096
-                );
-            }
-
-            // Healing spread info
-            yield return new StatDrawEntry(
-                StatCategoryDefOf.Basics,
-                "Healing Spread",
-                $"{(BaseHealingSpread * 100f):F0}%",
-                "Portion of healing effects that spread to nearby allies.",
-                5095
-            );
+            // Return empty - all display handled in TipStringExtra
+            yield break;
         }
 
         public override void ExposeData()
