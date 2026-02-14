@@ -29,13 +29,13 @@ namespace ProjectOvermind
             // MoveSpeed: Base +10%, scales +1% per 0.1 sensitivity
             if (parentStat == StatDefOf.MoveSpeed)
             {
-                float scaling = sensitivity * (Hediff_PsychicDiffusion.ScalingPerPoint / 0.1f);
+                float scaling = Hediff_PsychicDiffusion.ScalingPerPoint * sensitivity;
                 bonus = Hediff_PsychicDiffusion.BaseMoveSpeed + scaling;
             }
             // WorkSpeedGlobal: Base +10%, scales +1% per 0.1 sensitivity, threshold ≥5.0 adds +20%
             else if (parentStat == StatDefOf.WorkSpeedGlobal)
             {
-                float scaling = sensitivity * (Hediff_PsychicDiffusion.ScalingPerPoint / 0.1f);
+                float scaling = Hediff_PsychicDiffusion.ScalingPerPoint * sensitivity;
                 bonus = Hediff_PsychicDiffusion.BaseWorkSpeed + scaling;
 
                 // Threshold ≥5.0
@@ -80,12 +80,12 @@ namespace ProjectOvermind
 
             if (parentStat == StatDefOf.MoveSpeed)
             {
-                float scaling = sensitivity * (Hediff_PsychicDiffusion.ScalingPerPoint / 0.1f);
+                float scaling = Hediff_PsychicDiffusion.ScalingPerPoint * sensitivity;
                 bonus = Hediff_PsychicDiffusion.BaseMoveSpeed + scaling;
             }
             else if (parentStat == StatDefOf.WorkSpeedGlobal)
             {
-                float scaling = sensitivity * (Hediff_PsychicDiffusion.ScalingPerPoint / 0.1f);
+                float scaling = Hediff_PsychicDiffusion.ScalingPerPoint * sensitivity;
                 bonus = Hediff_PsychicDiffusion.BaseWorkSpeed + scaling;
 
                 if (sensitivity >= Hediff_PsychicDiffusion.Threshold5)

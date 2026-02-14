@@ -174,11 +174,11 @@ namespace ProjectOvermind
                     // Base effects
                     sb.AppendLine($"Mood: +{BaseMoodBonus:F0}");
                     
-                    float moveSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+                    float moveSpeedScaling = ScalingPerPoint * sensitivity;
                     float moveSpeedBonus = BaseMoveSpeed + moveSpeedScaling;
                     sb.AppendLine($"Movement Speed: +{(moveSpeedBonus * 100f):F1}%");
                     
-                    float workSpeedScaling = sensitivity * (ScalingPerPoint / 0.1f);
+                    float workSpeedScaling = ScalingPerPoint * sensitivity;
                     float workSpeedBonus = BaseWorkSpeed + workSpeedScaling;
                     if (sensitivity >= Threshold5)
                     {
