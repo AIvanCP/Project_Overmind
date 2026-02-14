@@ -853,12 +853,16 @@ namespace ProjectOvermind
             {
                 if (Scribe.mode == LoadSaveMode.Saving && activeSession != null)
                 {
-                    // Save active session data
+                    // Save active session data (only if caster still exists)
                     Pawn caster = activeSession.caster;
                     int expiryTick = activeSession.expiryTick;
                     
-                    Scribe_References.Look(ref caster, "ISeeYou_caster");
-                    Scribe_Values.Look(ref expiryTick, "ISeeYou_expiryTick");
+                    // Only save if caster is not null and not destroyed
+                    if (caster != null && !caster.Destroyed)
+                    {
+                        Scribe_References.Look(ref caster, "ISeeYou_caster");
+                        Scribe_Values.Look(ref expiryTick, "ISeeYou_expiryTick");
+                    }
                 }
                 else if (Scribe.mode == LoadSaveMode.LoadingVars)
                 {

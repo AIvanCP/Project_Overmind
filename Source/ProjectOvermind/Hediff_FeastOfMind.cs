@@ -83,10 +83,8 @@ namespace ProjectOvermind
                 // Calculate eating speed bonus: base + (sensitivity * 0.1), no cap
                 float eatingSpeedBonus = BaseEatingSpeed + (ScalingPerPoint * cachedSensitivity);
                 
-                // Set severity to encode the hunger reduction factor for XML stage use
-                // Severity will be used by XML hungerRateFactor
-                // We'll store hunger reduction value in severity
-                Severity = hungerReduction;
+                // Don't set severity - we'll override CurStage.hungerRateFactor dynamically
+                // Severity = 1.0f; // Keep at default
 
                 if (Prefs.DevMode)
                 {
@@ -267,30 +265,32 @@ namespace ProjectOvermind
             }
         }
 
-        // Override CurStage to provide dynamic stage with calculated hungerRateFactor
+        /// <summary>
+        /// Override CurStage to dynamically set hungerRateFactor based on psychic sensitivity
+        /// This is the ONLY way to modify hunger rate in RimWorld (no StatPart for this)
+        /// </summary>
         public override HediffStage CurStage
         {
             get
             {
-                if (pawn == null || def.stages == null || def.stages.Count == 0)
-                    return base.CurStage;
-
-                // Get base stage from XML
-                HediffStage stage = base.CurStage ?? def.stages[0];
+                HediffStage stage = base.CurStage;
+                if (stage != null && pawn != null)
+                {
+                    // Calculate hunger reduction dynamically
+                    float sensitivity = GetCachedSensitivity();
+                    float hungerReduction = Mathf.Clamp(
+                        BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                        BaseHungerReduction,
+                        MaxHungerReduction
+                    );
+                    
+                    // CRITICAL: Modify the stage's hungerRateFactor directly
+                    // This is safe because we're modifying a property, not creating a new object
+                    // hungerRateFactor: 1.0 = normal hunger, 0.0 = no hunger
+                    stage.hungerRateFactor = 1f - hungerReduction;
+                }
                 
-                // Calculate dynamic hunger factor using cached sensitivity
-                float sensitivity = GetCachedSensitivity();
-                float hungerReduction = Mathf.Clamp(
-                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
-                    BaseHungerReduction,
-                    MaxHungerReduction
-                );
-                
-                // Create dynamic stage copy with calculated hunger factor
-                HediffStage dynamicStage = new HediffStage();
-                dynamicStage.hungerRateFactor = 1f - hungerReduction;
-                
-                return dynamicStage;
+                return stage;
             }
         }
     }

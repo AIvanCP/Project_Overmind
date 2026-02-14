@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_SoulRefill</defName>
     <label>soul refill</label>
-    <description>Channel psychic energy to sustain all colonists on the map, gradually restoring vital needs over time. While active, continuously regenerates food, rest, mood, and other needs at a rate scaled by Psychic Sensitivity.\n\nBase: +1% per second to all needs\nScaling: +0.1% per 0.1 Psychic Sensitivity\n\nTier Bonuses:\n• Sensitivity ≥3.0: +20% recreation gain\n• Sensitivity ≥5.0: +15% immunity gain\n• Sensitivity ≥8.0: -30% rest need drain, +1% extra regeneration\n\nLasts 120 seconds. The effect continues even if the caster dies.</description>
+    <description>Restore all needs (food, rest, mood) for all colonists over 120 seconds. Scales with each pawn's psychic sensitivity.\n\n"The soul sustained."</description>
     <iconPath>UI/Icons/Psycasts/SoulRefill</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>3</level>

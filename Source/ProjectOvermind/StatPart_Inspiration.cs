@@ -110,7 +110,20 @@ namespace ProjectOvermind
             }
 
             if (bonus > 0)
-                val += bonus;
+            {
+                // Use multiplication for factor-based stats (WorkSpeed, Learning, MoveSpeed)
+                // Use addition for offset-based stats (other skills/speeds)
+                if (parentStat == StatDefOf.WorkSpeedGlobal || 
+                    parentStat == StatDefOf.GlobalLearningFactor ||
+                    parentStat == StatDefOf.MoveSpeed)
+                {
+                    val *= (1f + bonus);
+                }
+                else
+                {
+                    val += bonus;
+                }
+            }
         }
 
         public override string ExplanationPart(StatRequest req)

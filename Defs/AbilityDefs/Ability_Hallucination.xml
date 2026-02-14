@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_Hallucination</defName>
     <label>hallucination</label>
-    <description>Unleash a map-wide psychic wave that induces terrifying hallucinations in all hostile creatures. All enemies suffer severe accuracy and movement penalties, and periodically experience panic attacks where they attack empty spaces or move erratically.\n\nAffects all hostile pawns and animals (but not mechanoids) on the current map for 40 seconds.\n\nThis psycast does not damage targets directly and does not affect faction goodwill — it merely disorients them psychically.</description>
+    <description>Induce hallucinations in all hostile creatures for 40 seconds. -40% accuracy, -15% movement, causes panic and confusion. Does not affect mechanoids.\n\n"See what isn't there."</description>
     <iconPath>UI/Icons/Psycasts/Hallucination</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>5</level>

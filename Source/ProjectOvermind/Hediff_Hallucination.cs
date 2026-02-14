@@ -71,18 +71,17 @@ namespace ProjectOvermind
                 if (pawn.MentalStateDef != null || pawn.InMentalState)
                     return;
 
-                // 50/50 chance: attack empty tile or move erratically
+                // 50/50 chance: panic stance or move erratically
                 if (Rand.Bool)
                 {
-                    // Attack empty tile (simulate hallucination)
-                    IntVec3 randomCell = pawn.Position + IntVec3Utility.RandomHorizontalOffset(3f);
+                    // Panic stance (simulate confusion/fear without attacking nothing)
+                    // Use WaitCombat instead of AttackMelee to avoid null target crashes
+                    IntVec3 randomCell = pawn.Position + IntVec3Utility.RandomHorizontalOffset(2f);
                     if (randomCell.InBounds(pawn.Map) && randomCell.Walkable(pawn.Map))
                     {
-                        // Force melee attack at empty cell
-                        Job panicJob = JobMaker.MakeJob(JobDefOf.AttackMelee, randomCell);
-                        panicJob.expiryInterval = 60; // Short duration
-                        panicJob.canBashDoors = false;
-                        panicJob.canBashFences = false;
+                        // Force confused wait/combat stance
+                        Job panicJob = JobMaker.MakeJob(JobDefOf.Wait_Combat, 80); // ~1.3 seconds
+                        panicJob.expiryInterval = 80;
                         
                         if (pawn.jobs != null)
                         {
@@ -91,7 +90,7 @@ namespace ProjectOvermind
 
                         if (Prefs.DevMode)
                         {
-                            Log.Message($"[Hallucination] {pawn.LabelShort} panic attacks empty cell");
+                            Log.Message($"[Hallucination] {pawn.LabelShort} panic stance (confused)");
                         }
                     }
                 }

@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_PsychicDiffusion</defName>
     <label>psychic diffusion</label>
-    <description>Release a map-wide psychic wave that enhances all allied pawns while disrupting all hostile creatures. Creates a global psychic network that buffs colonists and debuffs enemies.\n\nALLY BUFFS (all colonists on map):\n• +10% movement speed (scales: +1% per 0.1 sensitivity)\n• +10% work speed (scales: +1% per 0.1 sensitivity)\n• +5 mood bonus\n• 30% of healing spreads to allies within 5 tiles\n\nScaling thresholds (based on each colonist's psychic sensitivity):\n• ≥3.0: +10% heal power, buff spread radius +2 tiles (base, scales +1% per 0.2)\n• ≥5.0: +20% work speed, -20% incoming damage (base, scales +1% per 0.2)\n• ≥8.0: Mini-heal pulse (5 HP every 5 seconds), 100% buff transfer rate (base, scales +1% per 0.2)\n\nENEMY DEBUFFS (all hostile pawns/animals on map):\n• -30% shooting accuracy\n• -25% melee hit chance\n• -20% movement speed\n• -15% consciousness\n\nThe psychic network lasts 20 seconds and affects the entire map.\n\n"Together, we are stronger than the sum of our parts."</description>
+    <description>Create a psychic network buffing all colonists and debuffing enemies for 20 seconds. Colonists gain work speed, movement, +5 mood. Enemies lose accuracy and movement. Scales with psychic sensitivity.\n\n"Together, we are stronger."</description>
     <iconPath>UI/Icons/Psycasts/PsychicDiffusion</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>6</level>

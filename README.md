@@ -1,6 +1,6 @@
 # Project Overmind - Mindshift Abilities
 
-A RimWorld mod that adds new psionic abilities inspired by Warframe's mind control mechanics.
+A RimWorld mod that adds new psionic abilities.
 
 ## Features
 

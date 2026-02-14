@@ -94,7 +94,7 @@
 	<HediffDef>
 		<defName>ProjectOvermind_InspirationAura</defName>
 		<label>inspiration</label>
-		<description>Empowered by psychic inspiration. Base: +50% work speed, +60% learning, +10% move speed, +15% quality. Scales +1% per 0.1 sensitivity. Threshold perks: ≥3.0 farming &amp; production, ≥5.0 combat &amp; resources, ≥8.0 advanced crafting &amp; surgery.</description>
+		<description>Psychic inspiration enhances productivity and skills. Values shown scale with psychic sensitivity.</description>
 		<hediffClass>ProjectOvermind.Hediff_InspirationAura</hediffClass>
 		<defaultLabelColor>(0.5, 0.8, 1.0)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>
@@ -147,7 +147,7 @@
 	<HediffDef>
 		<defName>ProjectOvermind_FeastOfMind</defName>
 		<label>feast of mind</label>
-		<description>Psychic energy sustains this pawn, reducing hunger and boosting eating speed. Base at 0 sensitivity: 10% hunger reduction + 25% eating speed. Each 0.1 sensitivity adds +1%. Hunger capped at 99% reduction. Thresholds: ≥3.0 learning, ≥5.0 damage reduction, ≥8.0 less tiredness.</description>
+		<description>Psychic sustenance reduces hunger and enhances eating. Values shown scale with psychic sensitivity.</description>
 		<hediffClass>ProjectOvermind.Hediff_FeastOfMind</hediffClass>
 		<defaultLabelColor>(0.3, 1.0, 0.7)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>
@@ -161,8 +161,7 @@
 		<stages>
 			<li>
 				<minSeverity>0</minSeverity>
-				<!-- Severity stores hunger reduction value (0.10 to 0.99) -->
-				<!-- hungerRateFactor = 1.0 - severity (e.g., severity 0.20 = 80% hunger rate) -->
+				<hungerRateFactor>0.8</hungerRateFactor> <!-- Will be overridden dynamically in C# based on sensitivity -->
 				<!-- Eating speed bonus applied via StatPart_FeastOfMind -->
 			</li>
 		</stages>
@@ -203,7 +202,7 @@
 	<HediffDef>
 		<defName>ProjectOvermind_CognitiveShield</defName>
 		<label>cognitive shield</label>
-		<description>Protected by a powerful mental barrier. Base: +25% psychic sensitivity, -30% mental damage, -20% stun chance, +15% mental break threshold. Scales with sensitivity: ≥3.0 damage reduction &amp; consciousness, ≥5.0 mental immunity, ≥8.0 reflect &amp; healing.</description>
+		<description>Mental barrier providing enhanced psychic sensitivity and damage resistance. Values shown scale with psychic sensitivity.</description>
 		<hediffClass>ProjectOvermind.Hediff_CognitiveShield</hediffClass>
 		<defaultLabelColor>(0.7, 0.9, 1.0)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>
@@ -236,7 +235,7 @@
 	<HediffDef>
 		<defName>ProjectOvermind_PsychicDiffusion</defName>
 		<label>psychic diffusion</label>
-		<description>Connected to a psychic diffusion network. Base: +10% move speed, +10% work speed, +5 mood. Scales +1% per 0.1 sensitivity. Threshold perks: ≥3.0 healing, ≥5.0 work &amp; defense, ≥8.0 regeneration pulse.</description>
+		<description>Connected to psychic network. Enhanced movement, work speed, and mood. Values shown scale with psychic sensitivity.</description>
 		<hediffClass>ProjectOvermind.Hediff_PsychicDiffusion</hediffClass>
 		<defaultLabelColor>(0.6, 1.0, 0.9)</defaultLabelColor>
 		<scenarioCanAdd>false</scenarioCanAdd>

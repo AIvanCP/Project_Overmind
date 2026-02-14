@@ -5,7 +5,7 @@
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_FeastOfMind</defName>
 		<label>feast of mind</label>
-		<description>Channel psychic energy to reduce a target's hunger rate and increase their eating speed. The target's hunger will deplete 50% slower (scaled by psychic sensitivity), and they will eat 50% faster. Perfect for sustaining pawns during long crafting sessions or operations.\n\nDuration: 90 seconds\nTarget: Self or friendly pawn\nScales with target's psychic sensitivity</description>
+		<description>Reduce hunger rate and boost eating speed for 90 seconds. Scales with target's psychic sensitivity.\n\n"Nourishment from within."</description>
 		<iconPath>UI/Icons/Psycasts/FeastOfMind</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>

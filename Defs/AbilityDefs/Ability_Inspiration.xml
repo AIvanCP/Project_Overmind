@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_Inspiration</defName>
     <label>inspiration</label>
-    <description>Channel psychic energy to inspire all colonists on the map, dramatically boosting their productivity and learning capabilities. All player-owned pawns gain massively increased work speed, learning speed, crafting quality, and movement speed for 60 seconds.\n\nThe buff's strength scales with each pawn's Psychic Sensitivity (higher sensitivity = stronger effect).\n\nThis psycast does not affect faction relations and continues even if the caster dies during the duration.</description>
+    <description>Inspire all colonists with psychic energy for 60 seconds. Massive boost to work speed, learning, quality, and movement. Strength scales with each pawn's psychic sensitivity.\n\n"The spark of genius, shared."</description>
     <iconPath>UI/Icons/Psycasts/Inspiration</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>4</level>
