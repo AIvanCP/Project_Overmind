@@ -57,4 +57,29 @@
     </stages>
   </HediffDef>
 
+  <!-- Mind Core Buff Hediff -->
+  <HediffDef>
+    <defName>ProjectOvermind_MindCore</defName>
+    <label>mind core</label>
+    <description>This pawn's psycast capabilities are greatly enhanced. Psyfocus regenerates passively, max psychic entropy is increased, and all psycasts cost less psyfocus and have shorter cooldowns. All effects scale with the caster's Psychic Sensitivity.</description>
+    <hediffClass>ProjectOvermind.Hediff_MindCore</hediffClass>
+    <defaultLabelColor>(0.7, 0.5, 1.0)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>1.0</initialSeverity>
+    <maxSeverity>1.0</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>7500</disappearsAfterTicks> <!-- 3 hours base, will be overridden by code -->
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>active</label>
+        <statOffsets>
+          <!-- Max entropy increase handled by StatPart_MindCore instead of here to allow dynamic scaling -->
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
 </Defs>

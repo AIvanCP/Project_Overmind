@@ -300,6 +300,45 @@ A RimWorld mod that adds new psionic abilities.
   - Does NOT stack - refreshes duration if recast
   - *"Together, we are stronger than the sum of our parts."*
 
+### Mind Core Psycast
+- **Description**: Empower a pawn's psycast capabilities with comprehensive performance enhancements
+- **Target**: Any friendly pawn (same faction, can target self)
+- **Range**: 15 tiles
+- **Cast Time**: 2.5 seconds
+- **Cooldown**: 300 seconds (5 minutes)
+- **Duration**: 3 in-game hours (base) + 0.5 hour per 0.1 Psychic Sensitivity
+  - Example: Sensitivity 1.0 → 8 hours duration
+  - Example: Sensitivity 3.0 → 18 hours duration
+  - Example: Sensitivity 5.0 → 28 hours duration
+- **Psyfocus Cost**: 0.35
+- **Heat Cost**: 0.25
+- **Required Psycast Level**: 5
+- **Special**: Cross-mod compatible psycast enhancement framework
+  - **Effects (all scale with CASTER's psychic sensitivity)**:
+    - **Passive Psyfocus Regeneration**: 1% per second (base at 1.0 sensitivity)
+      - Scaling: +0.5% per 0.1 sensitivity
+      - Example: Sensitivity 3.0 → 2.5% per second
+    - **Max Psychic Entropy Increase**: +30 (base at 1.0 sensitivity)
+      - Scaling: +3 per 0.1 sensitivity
+      - Example: Sensitivity 3.0 → +120 max entropy
+    - **Psycast Cost Reduction**: 30% cost reduction (base at 1.0 sensitivity)
+      - Scaling: +3% per 0.1 sensitivity
+      - Capped at 70% reduction (minimum 30% cost)
+      - Example: Sensitivity 3.0 → 60% reduction (pay only 40%)
+    - **Cooldown Reduction**: 25% faster cooldowns (base at 1.0 sensitivity)
+      - Scaling: +2.5% per 0.1 sensitivity
+      - Capped at 60% reduction (minimum 40% cooldown)
+      - Example: Sensitivity 3.0 → 50% reduction (50% faster)
+  - **Cross-Mod Compatibility**: Works with ALL psycasts
+    - Vanilla psycasts
+    - Vanilla Psycasts Expanded
+    - Any mod using standard Ability/CompAbilityEffect system
+  - Uses Harmony patches to modify cost/cooldown dynamically
+  - Does NOT permanently alter ability definitions
+  - Buff shows duration timer and current effects in tooltip
+  - Can be refreshed on same target (resets duration)
+  - *"Unlock the mind's true potential."*
+
 ## Requirements
 
 - RimWorld 1.5 or 1.6
@@ -336,6 +375,7 @@ Available from Orbital Bulk Goods and Exotic Goods traders (rare)
 - Hallucination Psytrainer: 2,400 silver (level 5)
 - Cognitive Shield Psytrainer: 2,200 silver (level 5)
 - Psychic Diffusion Psytrainer: 2,600 silver (level 6)
+- Mind Core Psytrainer: 1,800 silver (level 5)
 
 ### Quest Rewards
 Can appear as a reward in some quests
@@ -388,7 +428,31 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.7.2 (Current - Feature Expansion & UX)
+### Version 1.8.0 (Current - Mind Core Ability)
+- **🆕 NEW ABILITY: Mind Core**
+  - Targetable buff that enhances all psycast performance
+  - Provides passive psyfocus regeneration (1% per second base, scalable)
+  - Increases max psychic entropy (+30 base, scalable)
+  - Reduces psyfocus cost of all psycasts (30% reduction base, scalable, capped at 70%)
+  - Reduces cooldown of all psycasts (25% reduction base, scalable, capped at 60%)
+  - All effects scale with CASTER's psychic sensitivity
+  - Duration: 3 hours base + 0.5 hour per 0.1 sensitivity
+  - **Cross-Mod Compatible**: Works with ALL psycasts (vanilla, VPE, and any mod using standard ability system)
+  - Uses Harmony patches to modify cost/cooldown dynamically without altering ability definitions
+  - Buff tooltip shows duration timer and current effect values
+  - Can target self or friendly pawns (same faction only)
+  - Level 5 psycast, 5-minute cooldown
+  - Added psytrainer to exotic goods traders (rare)
+
+- **✅ VERIFICATION: I See You sound effect**
+  - Confirmed alert sound implementation is correct
+  - Sound plays when hostile hidden entities are detected
+  - Fallback to vanilla sound if custom sound not found
+  - Sound file: Sounds/ISeeYou/alert.ogg
+
+- **Build Status:** Ready for testing
+
+### Version 1.7.2 (Feature Expansion & UX)
 - **🎯 ENHANCEMENT: Mind Spike now affects animals**
   - Works on all hostile animals (vanilla and modded)
   - Excludes only mechanoids

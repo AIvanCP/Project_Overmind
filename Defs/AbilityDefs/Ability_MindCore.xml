@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Mind Core: Targetable buff that enhances psycast performance -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_MindCore</defName>
+    <label>mind core</label>
+    <description>Empower a pawn's psycast capabilities. Grants psyfocus regeneration, increased max entropy, reduced psycast costs, and faster cooldowns. Duration scales with caster sensitivity.</description>
+    <iconPath>UI/Icons/Psycasts/MindCore</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>5</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.35</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.25</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_MindCore</verbClass>
+      <warmupTime>2.5</warmupTime>
+      <range>15.9</range>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetAnimals>false</canTargetAnimals>
+        <canTargetMechs>false</canTargetMechs>
+        <canTargetBuildings>false</canTargetBuildings>
+        <onlyTargetColonists>true</onlyTargetColonists>
+      </targetParams>
+    </verbProperties>
+    <cooldownTicksRange>18000</cooldownTicksRange> <!-- 300 seconds / 5 minutes -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+    <jobDef>CastAbilityOnThing</jobDef>
+  </AbilityDef>
+
+</Defs>
