@@ -13,7 +13,6 @@ namespace ProjectOvermind
     /// </summary>
     public class Verb_ISeeYou : Verb_CastAbility
     {
-        private const int RevealDurationTicks = 3600; // 60 seconds
 
         /// <summary>
         /// Override to prevent targeting UI and cast immediately on self
@@ -53,12 +52,12 @@ namespace ProjectOvermind
 
                 
 
-                // Start reveal effect and get hostile count
+                // Start reveal effect and get hostile count (duration scaled by caster sensitivity)
                 int hostileCount = 0;
                 MapComponent_ISeeYou component = CasterPawn.Map.GetComponent<MapComponent_ISeeYou>();
                 if (component != null)
                 {
-                    hostileCount = component.StartReveal(CasterPawn, RevealDurationTicks);
+                    hostileCount = component.StartReveal(CasterPawn, DurationHelper.CalculateDuration(CasterPawn));
                     
                 }
                 else

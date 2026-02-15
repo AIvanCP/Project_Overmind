@@ -49,25 +49,26 @@
 		<jobDef>CastAbilityOnThing</jobDef>
 	</AbilityDef>
 
-	<!-- Mind Spike Psycast -->
+	<!-- Mind Spike Psycast - AREA EFFECT -->
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_MindSpike</defName>
 		<label>mind spike</label>
-		<description>Temporarily seize the mind of an enemy pawn, forcing them to attack their own allies for a short duration before becoming disoriented. If the target dies under Mind Spike, the psychic energy jumps to the nearest valid enemy within 6 tiles.\n\n"The mind is a weapon — sharpen it well."</description>
+		<description>Unleash a psychic spike that seizes the minds of all hostile humanlike pawns in a radius, forcing them to attack their allies. Area of effect and duration scale with psychic sensitivity. If a controlled pawn dies, the effect chains to nearby enemies.\n\nRadius: 3 tiles base, +0.3 per 0.1 sensitivity\n\n"The mind is a weapon — sharpen it well."</description>
 		<iconPath>UI/Icons/Psycasts/MindSpike</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>
 		<statBases>
 			<Ability_Duration>1</Ability_Duration>
-			<Ability_PsyfocusCost>0.15</Ability_PsyfocusCost>
-			<Ability_EntropyGain>0.08</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.20</Ability_PsyfocusCost>
+			<Ability_EntropyGain>0.12</Ability_EntropyGain>
 		</statBases>
 		<verbProperties>
 			<verbClass>ProjectOvermind.Verb_MindSpike</verbClass>
 			<warmupTime>1.5</warmupTime>
-			<range>12</range>
+			<range>20</range>
 			<targetParams>
 				<canTargetPawns>true</canTargetPawns>
+				<canTargetLocations>true</canTargetLocations>
 				<canTargetSelf>false</canTargetSelf>
 				<canTargetBuildings>false</canTargetBuildings>
 				<canTargetAnimals>false</canTargetAnimals>
@@ -75,7 +76,7 @@
 				<canTargetMechs>false</canTargetMechs>
 			</targetParams>
 		</verbProperties>
-		<cooldownTicksRange>2700</cooldownTicksRange> <!-- 45 seconds -->
+		<cooldownTicksRange>3600</cooldownTicksRange> <!-- 60 seconds -->
 	<comps>
 		<li Class="CompProperties_AbilityFleckOnTarget">
 			<fleckDef>PsycastPsychicEffect</fleckDef>
@@ -83,11 +84,10 @@
 	</comps>
 	<sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
 	<showGizmoOnWorldView>false</showGizmoOnWorldView>
-	<!-- Confirmation dialog removed - ability casts immediately -->
 	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 		<showPsycastEffects>true</showPsycastEffects>
 		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-		<jobDef>CastAbilityOnThing</jobDef>
+		<jobDef>CastAbilityOnThingOrPosition</jobDef>
 	</AbilityDef>
 
 </Defs>

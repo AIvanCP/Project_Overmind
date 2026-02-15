@@ -48,8 +48,8 @@ namespace ProjectOvermind
                 return false;
             }
 
-            // Duration: 45 seconds = 2700 ticks
-            int durationTicks = 2700;
+            // Calculate duration based on caster sensitivity
+            int durationTicks = DurationHelper.CalculateDuration(CasterPawn);
             int buffedCount = 0;
 
             // Get all player-owned pawns on the map

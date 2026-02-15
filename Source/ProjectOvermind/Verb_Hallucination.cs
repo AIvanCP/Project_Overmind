@@ -14,7 +14,6 @@ namespace ProjectOvermind
     /// </summary>
     public class Verb_Hallucination : Verb_CastAbility
     {
-        private const int DebuffDurationTicks = 2400; // 40 seconds
         private static readonly HediffDef HallucinationHediffDef = HediffDef.Named("ProjectOvermind_Hallucination");
 
         /// <summary>
@@ -155,11 +154,11 @@ namespace ProjectOvermind
                 Hediff existingDebuff = pawn.health.hediffSet.GetFirstHediffOfDef(HallucinationHediffDef);
                 if (existingDebuff != null)
                 {
-                    // Refresh duration by accessing the disappears comp
+                    // Refresh duration by accessing the disappears comp (scaled by caster sensitivity)
                     HediffComp_Disappears disappearsComp = existingDebuff.TryGetComp<HediffComp_Disappears>();
                     if (disappearsComp != null)
                     {
-                        disappearsComp.ticksToDisappear = DebuffDurationTicks;
+                        disappearsComp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                     
                     if (Prefs.DevMode)

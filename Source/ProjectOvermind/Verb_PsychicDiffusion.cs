@@ -15,7 +15,6 @@ namespace ProjectOvermind
     /// </summary>
     public class Verb_PsychicDiffusion : Verb_CastAbility
     {
-        private const int BuffDurationTicks = 1200; // 20 seconds
         private static readonly HediffDef PsychicDiffusionBuffHediffDef = HediffDef.Named("ProjectOvermind_PsychicDiffusion");
         private static readonly HediffDef PsychicDiffusionDebuffHediffDef = HediffDef.Named("ProjectOvermind_PsychicDiffusionDebuff");
 
@@ -159,11 +158,11 @@ namespace ProjectOvermind
 
                 if (existingBuff != null)
                 {
-                    // Refresh duration instead of stacking
+                    // Refresh duration instead of stacking (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingBuff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
-                        comp.ticksToDisappear = BuffDurationTicks;
+                        comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                 }
                 else
@@ -221,11 +220,11 @@ namespace ProjectOvermind
 
                 if (existingDebuff != null)
                 {
-                    // Refresh duration instead of stacking
+                    // Refresh duration instead of stacking (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingDebuff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
-                        comp.ticksToDisappear = BuffDurationTicks;
+                        comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                 }
                 else

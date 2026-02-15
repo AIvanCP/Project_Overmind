@@ -8,7 +8,6 @@ namespace ProjectOvermind
 {
     public class Verb_FeastOfMind : Verb_CastAbility
     {
-        private const int BuffDurationTicks = 5400; // 90 seconds
         private static HediffDef FeastOfMindHediffDef => HediffDef.Named("ProjectOvermind_FeastOfMind");
 
         protected override bool TryCastShot()
@@ -113,11 +112,11 @@ namespace ProjectOvermind
                 
                 if (existingHediff != null)
                 {
-                    // Refresh duration instead of stacking
+                    // Refresh duration instead of stacking (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingHediff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
-                        comp.ticksToDisappear = BuffDurationTicks;
+                        comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                 }
                 else

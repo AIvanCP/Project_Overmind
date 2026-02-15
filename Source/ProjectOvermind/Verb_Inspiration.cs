@@ -17,7 +17,6 @@ namespace ProjectOvermind
     /// </summary>
     public class Verb_Inspiration : Verb_CastAbility
     {
-        private const int BuffDurationTicks = 3600; // 60 seconds
         private static readonly HediffDef InspirationHediffDef = HediffDef.Named("ProjectOvermind_InspirationAura");
 
         /// <summary>
@@ -150,11 +149,11 @@ namespace ProjectOvermind
                 Hediff existingBuff = pawn.health.hediffSet.GetFirstHediffOfDef(InspirationHediffDef);
                 if (existingBuff != null)
                 {
-                    // Refresh duration by accessing the disappears comp
+                    // Refresh duration by accessing the disappears comp (scaled by caster sensitivity)
                     HediffComp_Disappears disappearsComp = existingBuff.TryGetComp<HediffComp_Disappears>();
                     if (disappearsComp != null)
                     {
-                        disappearsComp.ticksToDisappear = BuffDurationTicks;
+                        disappearsComp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                     
                     return true;

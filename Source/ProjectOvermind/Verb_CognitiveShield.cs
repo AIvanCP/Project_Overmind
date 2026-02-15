@@ -14,7 +14,6 @@ namespace ProjectOvermind
     /// </summary>
     public class Verb_CognitiveShield : Verb_CastAbility
     {
-        private const int BuffDurationTicks = 1500; // 25 seconds
         private static readonly HediffDef CognitiveShieldHediffDef = HediffDef.Named("ProjectOvermind_CognitiveShield");
 
         /// <summary>
@@ -128,11 +127,11 @@ namespace ProjectOvermind
 
                 if (existingBuff != null)
                 {
-                    // Refresh duration instead of stacking
+                    // Refresh duration instead of stacking (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingBuff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
-                        comp.ticksToDisappear = BuffDurationTicks;
+                        comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
                     }
                 }
                 else
