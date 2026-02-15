@@ -116,7 +116,7 @@ namespace ProjectOvermind
                     HediffComp_Disappears comp = existingHediff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
-                        comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
+                        comp.ticksToDisappear = DurationHelper.CalculateFeastDuration(CasterPawn);
                     }
                 }
                 else

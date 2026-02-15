@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_SpatialAnchor</defName>
     <label>spatial anchor</label>
-    <description>Create a 10-tile gravitational anchor for 20 seconds. Enemies suffer -40% movement, -20% dodge, and get pulled toward center.\n\n"Gravity bends to will."</description>
+    <description>Create gravitational anchor slowing enemies in 10-tile radius. Casting range scales with sensitivity.</description>
     <iconPath>UI/Icons/Psycasts/SpatialAnchor</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>4</level>

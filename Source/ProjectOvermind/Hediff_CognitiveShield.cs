@@ -12,23 +12,28 @@ namespace ProjectOvermind
     /// </summary>
     public class Hediff_CognitiveShield : HediffWithComps
     {
-        // Cache for psychic sensitivity to prevent stack overflow
-        private float cachedSensitivity = 1f;
-        private int lastCacheTick = -9999;
-        private const int CacheRefreshInterval = 300; // Refresh every 5 seconds (safe)
+        // Store CASTER's sensitivity (not recipient's)
+        private float casterSensitivity = 1f;
 
         /// <summary>
-        /// Public property for StatParts to access cached sensitivity safely
+        /// Public property for StatParts to access caster's sensitivity safely
         /// </summary>
-        public float CachedPsychicSensitivity => cachedSensitivity;
+        public float CachedPsychicSensitivity => casterSensitivity;
 
         /// <summary>
-        /// SAFE: Returns only cached value, NEVER calls GetStatValue to prevent recursion
+        /// Initialize hediff with caster's sensitivity
+        /// </summary>
+        public void SetCasterSensitivity(float sensitivity)
+        {
+            casterSensitivity = sensitivity;
+        }
+
+        /// <summary>
+        /// Returns caster's sensitivity (not recipient's)
         /// </summary>
         private float GetCachedSensitivity()
         {
-            if (pawn == null) return 1f;
-            return cachedSensitivity;
+            return casterSensitivity;
         }
 
         // Base effects (always active)
@@ -59,29 +64,11 @@ namespace ProjectOvermind
         public override void PostAdd(DamageInfo? dinfo)
         {
             base.PostAdd(dinfo);
-            
-            if (pawn != null)
-            {
-                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
-                lastCacheTick = Find.TickManager.TicksGame;
-                Log.Message($"[Overmind] Cognitive Shield applied to {pawn.LabelShort} (sensitivity: {cachedSensitivity:F2})");
-            }
         }
 
         public override void Tick()
         {
             base.Tick();
-
-            // SAFE: Refresh cache every 5 seconds (not during stat calculation)
-            if (pawn != null)
-            {
-                int currentTick = Find.TickManager.TicksGame;
-                if (currentTick - lastCacheTick >= CacheRefreshInterval)
-                {
-                    cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
-                    lastCacheTick = currentTick;
-                }
-            }
 
             // Handle mental immunity at threshold 5.0
             if (pawn != null && GetCachedSensitivity() >= Threshold5)
@@ -129,6 +116,7 @@ namespace ProjectOvermind
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref casterSensitivity, "casterSensitivity", 1f);
         }
     }
 }

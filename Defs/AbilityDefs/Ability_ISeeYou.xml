@@ -5,7 +5,7 @@
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_ISeeYou</defName>
 		<label>I see you</label>
-		<description>Unleash a psychic pulse that pierces all concealment on the map. Hidden creatures, invisible entities, and stealthed anomalies become visible and targetable for 60 seconds. If the caster dies or leaves the map, the effect ends immediately.\n\n"Nothing stays hidden from the mind's eye."\n\nWorks with vanilla and modded invisibility systems through safe overlay detection.</description>
+		<description>Reveal all hidden entities on the map. Duration scales with caster sensitivity. Alert plays when hostiles detected.</description>
 		<iconPath>UI/Icons/Psycasts/ISeeYou</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>5</level>

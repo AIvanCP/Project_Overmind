@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_Hallucination</defName>
     <label>hallucination</label>
-    <description>Induce hallucinations in all hostile creatures for 40 seconds. -40% accuracy, -15% movement, causes panic and confusion. Does not affect mechanoids.\n\n"See what isn't there."</description>
+    <description>Inflict all hostiles with terrifying illusions. Reduces accuracy and movement, causes panic. Duration scales with caster sensitivity.</description>
     <iconPath>UI/Icons/Psycasts/Hallucination</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>5</level>

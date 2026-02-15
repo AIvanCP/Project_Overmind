@@ -6,8 +6,9 @@ A RimWorld mod that adds new psionic abilities.
 
 ### Translocate Target Psycast
 - **Description**: Instantly relocate any pawn (ally or enemy) to a new location
-- **Target**: Any living pawn (not mechanoids or downed pawns)
-- **Range**: 15 tiles for target selection, 10 tiles for destination
+- **Target**: Any living pawn (ally or enemy, humanlike or animal)
+- **Range**: 15 tiles (base) + scales with sensitivity (base + 0.5 per 0.1)
+- **Destination Range**: 10 tiles (base) + scales with sensitivity (from target)
 - **Cast Time**: 1 second
 - **Cooldown**: 15 seconds
 - **Psyfocus Cost**: 0.10
@@ -16,11 +17,13 @@ A RimWorld mod that adds new psionic abilities.
 - **Special**: Non-violent ability with no damage or relationship penalties
   - Applies "Spatial Daze" debuff (5 seconds) causing brief disorientation
   - Works on both friendly and hostile pawns (including animals)
+  - Cannot affect mechanoids or downed pawns
+  - Range scales with caster's psychic sensitivity
 
 ### Mind Spike Psycast
 - **Description**: Unleash psychic dominance in an area, seizing all enemy minds within range
 - **Target**: Ground location (area effect)
-- **Range**: 20 tiles
+- **Range**: 20 tiles (base) + scales with sensitivity
 - **Cast Time**: 1.5 seconds
 - **Cooldown**: 45 seconds
 - **Duration**: 12 in-game hours (base) + 1 hour per 0.1 Psychic Sensitivity
@@ -29,7 +32,7 @@ A RimWorld mod that adds new psionic abilities.
 - **Heat Cost**: 0.12
 - **Required Psycast Level**: 3
 - **Special**: Tactical area mind control ability
-  - **Area Effect**: Affects all valid enemies within radius
+  - **Area Effect**: Affects all valid enemies and hostile animals within radius
   - **Base Radius**: 3 tiles + 0.3 tiles per 0.1 Sensitivity
     - Sensitivity 1.0 → 6 tile radius
     - Sensitivity 3.0 → 12 tile radius
@@ -38,7 +41,7 @@ A RimWorld mod that adds new psionic abilities.
   - Forces enemies into berserk state targeting their allies
   - After effect ends, applies "Disoriented" debuff (-50% move speed, -20% aim for 5s)
   - If target dies while controlled, chains to nearest enemy within 6 tiles (once per cast)
-  - Only affects humanlike pawns (no mechanoids or animals)
+  - Works on humanlike pawns AND animals (excludes mechanoids)
   - *"The mind is a weapon — sharpen it well."*
 
 ### Mind Read Psycast
@@ -66,8 +69,8 @@ A RimWorld mod that adds new psionic abilities.
 - **Range**: 5 tiles
 - **Cast Time**: 1 second
 - **Cooldown**: 60 seconds
-- **Duration**: 12 in-game hours (base) + 1 hour per 0.1 Psychic Sensitivity
-  - Example: Sensitivity 3.0 → 42 hours duration
+- **Duration**: 6 in-game hours (base) + 0.5 hour per 0.1 Psychic Sensitivity
+  - Example: Sensitivity 3.0 → 21 hours duration
 - **Psyfocus Cost**: 0.15
 - **Heat Cost**: 0.25
 - **Required Psycast Level**: 3
@@ -227,7 +230,7 @@ A RimWorld mod that adds new psionic abilities.
 ### Spatial Anchor Psycast
 - **Description**: Create a gravitational anomaly that slows and pulls hostile pawns
 - **Target**: Ground location
-- **Range**: 15 tiles
+- **Range**: 10 tiles (base) + scales with sensitivity
 - **Cast Time**: 1 second
 - **Cooldown**: 90 seconds
 - **Duration**: 20 seconds
@@ -235,7 +238,8 @@ A RimWorld mod that adds new psionic abilities.
 - **Heat Cost**: 0.25
 - **Required Psycast Level**: 4
 - **Special**: Area control ability
-  - Creates invisible anchor with 10-tile radius
+  - Creates invisible anchor with 10-tile effect radius
+  - Casting range scales with psychic sensitivity (base + 0.5 per 0.1)
   - Applies "Gravitic Pull" debuff to enemies in radius
   - -40% movement speed, -20% dodge chance
   - 10% chance per second to pull enemy 1 tile toward center
@@ -384,7 +388,68 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.7.0 (Current - Major Enhancement Update)
+### Version 1.7.2 (Current - Feature Expansion & UX)
+- **🎯 ENHANCEMENT: Mind Spike now affects animals**
+  - Works on all hostile animals (vanilla and modded)
+  - Excludes only mechanoids
+  - Controlled animals attack their pack members
+  
+- **📏 ENHANCEMENT: Scalable ranges added**
+  - Translocate Target: Both initial range (15 base) and destination range (10 base) scale with sensitivity
+  - Spatial Anchor: Casting range (10 base) scales with sensitivity  
+  - Formula: BaseRange + (Sensitivity / 0.1) × 0.5 tiles
+  - Example at 3.0 sensitivity: +15 tiles = 25/40/25 total range
+  
+- **📝 UX: All ability descriptions simplified**
+  - Shortened hover tooltips for better readability
+  - Removed flavor text, kept core mechanics
+  - All descriptions now 1-2 lines maximum
+  
+- **✅ VERIFICATION: Hallucination duration confirmed scaling**
+  - Uses DurationHelper.CalculateDuration() correctly
+  - 12 hours base + 1 hour per 0.1 sensitivity
+  
+- **Build Status:** 0 errors, 25 warnings (unreachable debug code)
+
+### Version 1.7.1 (Critical Bug Fixes)
+- **🔧 CRITICAL FIX: Diffusion & Cognitive Shield buff distribution**
+  - Fixed buffs using recipient's sensitivity instead of caster's sensitivity
+  - Added `SetCasterSensitivity()` method to store caster's stats
+  - Now all buffed pawns receive benefits scaled by the CASTER's psychic sensitivity
+  - Example: Caster with 5.0 sensitivity buffs ALL allies with 5.0-level effects
+  
+- **🔧 CRITICAL FIX: Mind Spike control duration too short**
+  - Fixed hediff not applying dynamic duration on creation
+  - Control duration now properly scales: 12 hours base + 1 hour per 0.1 caster sensitivity
+  - Example: 3.0 sensitivity → 42 hours of mind control
+  
+- **🎯 ENHANCEMENT: Mind Spike targeting visibility**
+  - Added `HighlightFieldRadiusAroundTarget()` override
+  - Radius circle now shows continuously while targeting
+  - Players can see affected area before committing to cast location
+  
+- **⚖️ BALANCE: Feast of Mind duration reduced**
+  - Changed from 12 hours base to 6 hours base
+  - Scaling: 6 hours + 0.5 hour per 0.1 sensitivity
+  - More balanced for food sustenance ability
+  - Example: 3.0 sensitivity → 21 hours duration
+  
+- **✅ VERIFICATION: Aura Clean threshold perks confirmed working**
+  - Tier 1 (≥3.0): +1 radius, cleans blood/stains
+  - Tier 2 (≥5.0): +1 radius, cleans vomit/animal filth
+  - Tier 3 (≥8.0): +1.5 radius, double cleaning rate, immunity boost
+  
+- **📊 Duration Calculation Reference:**
+  - Formula: `BaseTicks + (Sensitivity / 0.1) * TicksPerStep`
+  - Standard abilities: 30,000 + (Sen / 0.1) * 2,500 ticks
+  - Feast of Mind: 15,000 + (Sen / 0.1) * 1,250 ticks
+  - Examples at 1000% sensitivity (10.0):
+    * Standard: 30,000 + 100 * 2,500 = 280,000 ticks (~112 hours)
+    * Feast: 15,000 + 100 * 1,250 = 140,000 ticks (~56 hours)
+
+- **Build Status:** Compiles successfully with 0 errors, 25 warnings (unreachable debug code)
+
+### Version 1.7.0 (Major Enhancement Update)
 - **🎯 MAJOR FEATURE: Dynamic Duration Scaling**
   - ALL buff/debuff abilities now scale duration with caster's Psychic Sensitivity
   - Base duration: 12 in-game hours (30,000 ticks)

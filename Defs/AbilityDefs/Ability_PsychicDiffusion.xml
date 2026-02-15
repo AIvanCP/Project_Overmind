@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_PsychicDiffusion</defName>
     <label>psychic diffusion</label>
-    <description>Create a psychic network buffing all colonists and debuffing enemies for 20 seconds. Colonists gain work speed, movement, +5 mood. Enemies lose accuracy and movement. Scales with psychic sensitivity.\n\n"Together, we are stronger."</description>
+    <description>Buff all colonists and debuff all enemies. Duration scales with caster sensitivity. Threshold perks at 3.0/5.0/8.0.</description>
     <iconPath>UI/Icons/Psycasts/PsychicDiffusion</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>6</level>

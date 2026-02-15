@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_SoulRefill</defName>
     <label>soul refill</label>
-    <description>Restore all needs (food, rest, mood) for all colonists over 120 seconds. Scales with each pawn's psychic sensitivity.\n\n"The soul sustained."</description>
+    <description>Regenerate all needs for all colonists. Rate and duration scale with caster sensitivity. Threshold perks at 3.0/5.0/8.0.</description>
     <iconPath>UI/Icons/Psycasts/SoulRefill</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>3</level>
@@ -42,7 +42,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_AuraClean</defName>
     <label>aura clean</label>
-    <description>Create a psychic cleaning aura around all colonists on the map that automatically removes filth and debris. Each colonist gets their own aura, with radius and cleaning rate scale with Psychic Sensitivity.\n\nBase: 3-tile radius, removes 1 filth/1.5s\nScaling: +0.05 radius and +0.1 filth/tick per 0.1 Sensitivity (max radius 6)\n\nTier Bonuses:\n• Sensitivity ≥3.0: +1 tile radius, removes medium blood/stains\n• Sensitivity ≥5.0: +1 tile radius, removes vomit/animal filth\n• Sensitivity ≥8.0: +1.5 tile radius, double cleaning rate, +10% immunity +5% move speed\n\nLasts 45 seconds. Does not remove toxic or polluted tiles by default.</description>
+    <description>Create cleaning aura around all colonists. Radius and rate scale with sensitivity. Duration scales with caster. Threshold perks at 3.0/5.0/8.0.</description>
     <iconPath>UI/Icons/Psycasts/AuraClean</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>2</level>

@@ -136,8 +136,12 @@ namespace ProjectOvermind
                 }
                 else
                 {
-                    // Add new buff
+                    // Add new buff with caster's sensitivity
                     Hediff newBuff = HediffMaker.MakeHediff(CognitiveShieldHediffDef, pawn);
+                    if (newBuff is Hediff_CognitiveShield cogShield)
+                    {
+                        cogShield.SetCasterSensitivity(CasterPawn.GetStatValue(StatDefOf.PsychicSensitivity));
+                    }
                     pawn.health.AddHediff(newBuff);
                 }
 

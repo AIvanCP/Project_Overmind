@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_MindRead</defName>
     <label>mind read</label>
-    <description>Probe the target pawn's mind to reveal their complete mental and physical profile. You will learn all traits, skills, passions, current mood, health summary, and any hidden storyteller intentions (such as betrayal plans for guests or quest pawns).\n\nThis psycast does not affect faction goodwill and can target any humanlike pawn within range.\n\nPawns with the Psychically Dull trait have a 50% chance to resist this intrusion.</description>
+    <description>Probe a pawn's mind to reveal all traits, skills, mood, health, and hidden quest intentions. No relationship penalty.</description>
     <iconPath>UI/Icons/Psycasts/MindRead</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>3</level>

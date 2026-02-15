@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_Inspiration</defName>
     <label>inspiration</label>
-    <description>Inspire all colonists with psychic energy for 60 seconds. Massive boost to work speed, learning, quality, and movement. Strength scales with each pawn's psychic sensitivity.\n\n"The spark of genius, shared."</description>
+    <description>Buff all colonists with huge work speed, learning, quality, and movement bonuses. Duration scales with caster sensitivity.</description>
     <iconPath>UI/Icons/Psycasts/Inspiration</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>4</level>

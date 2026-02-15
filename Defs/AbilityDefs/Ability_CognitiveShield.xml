@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_CognitiveShield</defName>
     <label>cognitive shield</label>
-    <description>Protect all colonists with a mental barrier. +25% psychic sensitivity, mental damage resistance, and reduced stun chance for 25 seconds. Scales with each pawn's sensitivity.\n\n"The mind, fortified."</description>
+    <description>Shield all colonists from mental damage and breaks. Duration scales with caster sensitivity. Mental immunity at 5.0+.</description>
     <iconPath>UI/Icons/Psycasts/CognitiveShield</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>5</level>

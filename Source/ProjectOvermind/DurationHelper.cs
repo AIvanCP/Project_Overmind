@@ -39,6 +39,25 @@ namespace ProjectOvermind
         }
         
         /// <summary>
+        /// Calculate Feast of Mind duration (shorter base: 6 hours)
+        /// Base: 6 hours, +0.5 hour per 0.1 sensitivity
+        /// </summary>
+        /// <param name="caster">Pawn casting the ability</param>
+        /// <returns>Duration in ticks</returns>
+        public static int CalculateFeastDuration(Pawn caster)
+        {
+            if (caster == null)
+                return TicksPerHour * 6; // 15,000 ticks (6 hours)
+            
+            float sensitivity = caster.GetStatValue(StatDefOf.PsychicSensitivity);
+            
+            // Calculate bonus ticks: (sensitivity / 0.1) * 1250 (0.5 hour per step)
+            int bonusTicks = (int)((sensitivity / SensitivityStep) * (TicksPerStep / 2));
+            
+            return (TicksPerHour * 6) + bonusTicks;
+        }
+        
+        /// <summary>
         /// Calculate radius for area abilities based on caster's psychic sensitivity
         /// </summary>
         /// <param name="caster">Pawn casting the ability</param>

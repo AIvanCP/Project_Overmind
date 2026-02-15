@@ -34,6 +34,19 @@ namespace ProjectOvermind
         }
 
         /// <summary>
+        /// Show radius field around target location
+        /// </summary>
+        public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
+        {
+            needLOSToCenter = false;
+            if (CasterPawn != null)
+            {
+                return DurationHelper.CalculateRadius(CasterPawn, BaseRadius, RadiusPerStep);
+            }
+            return BaseRadius;
+        }
+
+        /// <summary>
         /// Calculate are effect cells for targeting overlay
         /// </summary>
         public override void OrderForceTarget(LocalTargetInfo target)
@@ -142,8 +155,11 @@ namespace ProjectOvermind
                 if (!target.HostileTo(CasterPawn))
                     return false;
 
-                // Must be humanlike (no mechanoids or animals)
-                if (!target.RaceProps.Humanlike)
+                // Allow humanlike OR animals (no mechanoids)
+                if (target.RaceProps.IsMechanoid)
+                    return false;
+
+                if (!target.RaceProps.Humanlike && !target.RaceProps.Animal)
                     return false;
 
                 // Must have consciousness
@@ -186,6 +202,13 @@ namespace ProjectOvermind
                     hediff.casterPawn = caster;
                     hediff.hasChained = isChain;
                     target.health.AddHediff(hediff);
+                    
+                    // Set dynamic duration based on caster sensitivity
+                    HediffComp_Disappears comp = hediff.TryGetComp<HediffComp_Disappears>();
+                    if (comp != null)
+                    {
+                        comp.ticksToDisappear = DurationHelper.CalculateDuration(caster);
+                    }
                 }
 
                 // Visual effects

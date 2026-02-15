@@ -12,7 +12,7 @@
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_TranslocateTarget</defName>
 		<label>translocate target</label>
-		<description>Instantly relocate a selected pawn to a new location. The target experiences a brief spatial daze upon arrival. Works on allies and enemies alike, but cannot affect mechanoids or downed pawns.\n\nThis ability does not cause harm or mood penalties, making it ideal for tactical repositioning without collateral damage.</description>
+		<description>Teleport a pawn to a new location. Causes brief spatial daze. Range scales with sensitivity.</description>
 		<iconPath>UI/Icons/Psycasts/TranslocateTarget</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>
@@ -53,7 +53,7 @@
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_MindSpike</defName>
 		<label>mind spike</label>
-		<description>Unleash a psychic spike that seizes the minds of all hostile humanlike pawns in a radius, forcing them to attack their allies. Area of effect and duration scale with psychic sensitivity. If a controlled pawn dies, the effect chains to nearby enemies.\n\nRadius: 3 tiles base, +0.3 per 0.1 sensitivity\n\n"The mind is a weapon — sharpen it well."</description>
+		<description>Seize minds in an area, forcing enemies and animals to attack their allies. Radius and duration scale with sensitivity. Chains on death.</description>
 		<iconPath>UI/Icons/Psycasts/MindSpike</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>

@@ -5,7 +5,7 @@
 	<AbilityDef ParentName="PsycastBase">
 		<defName>ProjectOvermind_FeastOfMind</defName>
 		<label>feast of mind</label>
-		<description>Reduce hunger rate and boost eating speed for 90 seconds. Scales with target's psychic sensitivity.\n\n"Nourishment from within."</description>
+		<description>Reduce hunger and boost eating speed. Duration scales with sensitivity (6h base).</description>
 		<iconPath>UI/Icons/Psycasts/FeastOfMind</iconPath>
 		<category>ProjectOvermind_MindshiftAbilities</category>
 		<level>3</level>

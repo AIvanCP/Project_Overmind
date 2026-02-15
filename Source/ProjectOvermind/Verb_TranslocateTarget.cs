@@ -16,7 +16,37 @@ namespace ProjectOvermind
     public class Verb_TranslocateTarget : Verb_CastAbility
     {
         private Pawn selectedTarget;
-        private const float MaxDestinationRange = 10f;
+        // Base ranges scale with caster sensitivity
+        private const float BaseTargetRange = 15f;      // Base range for selecting target
+        private const float BaseDestinationRange = 10f; // Base range for destination from target
+        private const float RangePerStep = 0.5f;        // +0.5 tiles per 0.1 sensitivity
+
+        /// <summary>
+        /// Calculate effective target selection range based on caster's sensitivity
+        /// </summary>
+        public override float EffectiveRange
+        {
+            get
+            {
+                if (CasterPawn != null)
+                {
+                    return DurationHelper.CalculateRadius(CasterPawn, BaseTargetRange, RangePerStep);
+                }
+                return BaseTargetRange;
+            }
+        }
+
+        /// <summary>
+        /// Calculate effective destination range based on caster's sensitivity
+        /// </summary>
+        private float GetDestinationRange()
+        {
+            if (CasterPawn != null)
+            {
+                return DurationHelper.CalculateRadius(CasterPawn, BaseDestinationRange, RangePerStep);
+            }
+            return BaseDestinationRange;
+        }
 
         protected override bool TryCastShot()
         {
@@ -119,7 +149,7 @@ namespace ProjectOvermind
                     Map map = targ.Map ?? CasterPawn.Map;
 
                     // Check if destination is within range of the target
-                    if (selectedTarget != null && selectedTarget.Position.DistanceTo(cell) > MaxDestinationRange)
+                    if (selectedTarget != null && selectedTarget.Position.DistanceTo(cell) > GetDestinationRange())
                     {
                         return false;
                     }

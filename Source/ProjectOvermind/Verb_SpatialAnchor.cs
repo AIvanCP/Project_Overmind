@@ -16,6 +16,23 @@ namespace ProjectOvermind
     {
         private const int AnchorDurationTicks = 1200; // 20 seconds
         private const float AnchorRadius = 10f;
+        private const float BaseTargetRange = 10f; // Base casting range
+        private const float RangePerStep = 0.5f;   // +0.5 tiles per 0.1 sensitivity
+
+        /// <summary>
+        /// Calculate effective casting range based on caster's sensitivity
+        /// </summary>
+        public override float EffectiveRange
+        {
+            get
+            {
+                if (CasterPawn != null)
+                {
+                    return DurationHelper.CalculateRadius(CasterPawn, BaseTargetRange, RangePerStep);
+                }
+                return BaseTargetRange;
+            }
+        }
 
         /// <summary>
         /// CRITICAL FIX: Override DrawHighlight to show radius preview during targeting phase.
