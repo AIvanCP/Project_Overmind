@@ -41,6 +41,28 @@ namespace ProjectOvermind
                 }
                 val += bonus;
             }
+            // Threshold bonus: Learning (≥3.0)
+            else if (parentStat == StatDefOf.GlobalLearningFactor && feastHediff != null)
+            {
+                float sensitivity = feastHediff.CachedPsychicSensitivity;
+                if (sensitivity >= Hediff_FeastOfMind.ThresholdLearning)
+                {
+                    float learningBonus = Hediff_FeastOfMind.BaseLearningBonus + 
+                        Mathf.Floor((sensitivity - Hediff_FeastOfMind.ThresholdLearning) / Hediff_FeastOfMind.ThresholdScalingStep) * Hediff_FeastOfMind.ThresholdScalingBonus;
+                    val *= (1f + learningBonus);
+                }
+            }
+            // Threshold bonus: Damage Reduction (≥5.0)
+            else if (parentStat == StatDefOf.IncomingDamageFactor && feastHediff != null)
+            {
+                float sensitivity = feastHediff.CachedPsychicSensitivity;
+                if (sensitivity >= Hediff_FeastOfMind.ThresholdDamageReduction)
+                {
+                    float damageReduction = Hediff_FeastOfMind.BaseDamageReduction + 
+                        Mathf.Floor((sensitivity - Hediff_FeastOfMind.ThresholdDamageReduction) / Hediff_FeastOfMind.ThresholdScalingStep) * Hediff_FeastOfMind.ThresholdScalingBonus;
+                    val *= (1f - damageReduction);
+                }
+            }
         }
 
         public override string ExplanationPart(StatRequest req)
@@ -57,6 +79,26 @@ namespace ProjectOvermind
                 float bonus = cachedEatingSpeed.TryGetValue(pawn, out float val) ? val : CalculateEatingSpeedBonus(pawn);
                 if (bonus > 0)
                     return $"Feast of Mind: +{bonus * 100:F0}%";
+            }
+            else if (parentStat == StatDefOf.GlobalLearningFactor)
+            {
+                float sensitivity = feastHediff.CachedPsychicSensitivity;
+                if (sensitivity >= Hediff_FeastOfMind.ThresholdLearning)
+                {
+                    float learningBonus = Hediff_FeastOfMind.BaseLearningBonus + 
+                        Mathf.Floor((sensitivity - Hediff_FeastOfMind.ThresholdLearning) / Hediff_FeastOfMind.ThresholdScalingStep) * Hediff_FeastOfMind.ThresholdScalingBonus;
+                    return $"Feast of Mind: +{learningBonus * 100:F1}%";
+                }
+            }
+            else if (parentStat == StatDefOf.IncomingDamageFactor)
+            {
+                float sensitivity = feastHediff.CachedPsychicSensitivity;
+                if (sensitivity >= Hediff_FeastOfMind.ThresholdDamageReduction)
+                {
+                    float damageReduction = Hediff_FeastOfMind.BaseDamageReduction + 
+                        Mathf.Floor((sensitivity - Hediff_FeastOfMind.ThresholdDamageReduction) / Hediff_FeastOfMind.ThresholdScalingStep) * Hediff_FeastOfMind.ThresholdScalingBonus;
+                    return $"Feast of Mind: x{(1f - damageReduction):F2}";
+                }
             }
 
             return null;

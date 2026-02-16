@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_MindCore</defName>
     <label>mind core</label>
-    <description>Empower a pawn's psycast capabilities. Grants psyfocus regeneration, increased max entropy, reduced psycast costs, and faster cooldowns. Duration scales with caster sensitivity.</description>
+    <description>Empower a pawn's psycast capabilities with comprehensive enhancements. Grants passive psyfocus regeneration, increased max entropy, reduced psycast costs, and faster cooldowns. Works with ALL abilities including Vanilla Psycasts Expanded mods. Also boosts meditation and neural supercharger gains. Duration and potency scale with caster sensitivity.</description>
     <iconPath>UI/Icons/Psycasts/MindCore</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>5</level>

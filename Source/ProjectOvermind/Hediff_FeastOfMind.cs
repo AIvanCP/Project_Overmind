@@ -244,24 +244,81 @@ namespace ProjectOvermind
             }
         }
 
+        /// <summary>
+        /// Show buff details in tooltip
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    StringBuilder sb = new StringBuilder();
+                    float sensitivity = GetCachedSensitivity();
+
+                    // Show caster sensitivity
+                    sb.AppendLine($"Caster Sensitivity: {sensitivity:F1}");
+                    sb.AppendLine();
+
+                    // Hunger reduction
+                    float hungerReduction = Mathf.Clamp(
+                        BaseHungerReduction + (ScalingPerPoint * sensitivity),
+                        BaseHungerReduction,
+                        MaxHungerReduction
+                    );
+                    sb.AppendLine($"Hunger Reduction: {hungerReduction * 100:F0}%");
+
+                    // Eating speed
+                    float eatingSpeed = BaseEatingSpeed + (ScalingPerPoint * sensitivity);
+                    sb.AppendLine($"Eating Speed: +{eatingSpeed * 100:F0}%");
+
+                    // Threshold perks
+                    if (sensitivity >= ThresholdLearning)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥3.0):");
+                        float learningBonus = BaseLearningBonus + Mathf.Floor((sensitivity - ThresholdLearning) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Global Learning: +{learningBonus * 100:F0}%");
+                    }
+
+                    if (sensitivity >= ThresholdDamageReduction)
+                    {
+                        if (sensitivity < ThresholdLearning) sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥5.0):");
+                        float damageReduction = BaseDamageReduction + Mathf.Floor((sensitivity - ThresholdDamageReduction) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Damage Reduction: {damageReduction * 100:F0}%");
+                    }
+
+                    if (sensitivity >= ThresholdTirednessReduction)
+                    {
+                        if (sensitivity < ThresholdLearning && sensitivity < ThresholdDamageReduction) sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥8.0):");
+                        float tirednessReduction = BaseTirednessReduction + Mathf.Floor((sensitivity - ThresholdTirednessReduction) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Rest Need Reduction: {tirednessReduction * 100:F0}%");
+                    }
+
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[FeastOfMind] Error in TipStringExtra: {ex}");
+                    return base.TipStringExtra;
+                }
+            }
+        }
+
         public override string LabelInBrackets
         {
             get
             {
-                if (pawn == null)
-                    return "unknown";
-                    
-                float sensitivity = GetCachedSensitivity();
-                
-                // Calculate actual hunger reduction
-                float hungerReduction = Mathf.Clamp(
-                    BaseHungerReduction + (ScalingPerPoint * sensitivity),
-                    BaseHungerReduction,
-                    MaxHungerReduction
-                );
-                
-                // Show hunger reduction percentage
-                return $"{hungerReduction * 100:F0}% hunger reduction";
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
             }
         }
 

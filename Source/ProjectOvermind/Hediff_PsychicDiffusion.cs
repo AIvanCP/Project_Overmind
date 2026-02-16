@@ -161,6 +161,10 @@ namespace ProjectOvermind
                     float sensitivity = GetCachedSensitivity();
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
                     
+                    // Show caster sensitivity
+                    sb.AppendLine($"Caster Sensitivity: {sensitivity:F1}");
+                    sb.AppendLine();
+                    
                     // Base effects
                     sb.AppendLine($"Mood: +{BaseMoodBonus:F0}");
                     

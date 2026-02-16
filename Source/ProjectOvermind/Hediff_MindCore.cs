@@ -150,7 +150,7 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Show buff details in tooltip (with timer)
+        /// Show buff details in tooltip with duration and all effects
         /// </summary>
         public override string TipStringExtra
         {
@@ -162,19 +162,20 @@ namespace ProjectOvermind
                 {
                     StringBuilder sb = new StringBuilder();
 
-                    // Duration remaining
-                    HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
-                    if (comp != null && comp.ticksToDisappear > 0)
-                    {
-                        sb.AppendLine($"Duration: {DurationHelper.GetDurationString(comp.ticksToDisappear)}");
-                    }
-
-                    // Effects
+                    // Show caster sensitivity
+                    sb.AppendLine($"Caster Sensitivity: {casterSensitivity:F1}");
                     sb.AppendLine();
-                    sb.AppendLine($"Psyfocus Regen: +{GetPsyfocusRegenPerSecond():P1}/sec");
+
+                    // Effects with actual values
+                    sb.AppendLine($"Psyfocus Regen: +{GetPsyfocusRegenPerSecond():P1}/sec (passive)");
+                    sb.AppendLine($"Psyfocus Gain: +15% (meditation/neural supercharger)");
                     sb.AppendLine($"Max Entropy: +{GetMaxEntropyIncrease():F0}");
-                    sb.AppendLine($"Psycast Cost: {GetPsyfocusCostMultiplier():P0}");
-                    sb.AppendLine($"Cooldown Time: {GetCooldownMultiplier():P0}");
+                    
+                    // Show cost and cooldown as reductions
+                    float costReduction = (1f - GetPsyfocusCostMultiplier()) * 100f;
+                    float cooldownReduction = (1f - GetCooldownMultiplier()) * 100f;
+                    sb.AppendLine($"Psycast Cost: -{costReduction:F0}% (all abilities including VPE)");
+                    sb.AppendLine($"Cooldown Time: -{cooldownReduction:F0}% (all abilities including VPE)");
 
                     return sb.ToString().TrimEnd();
                 }
@@ -187,16 +188,18 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Show sensitivity in brackets
+        /// Show duration remaining in brackets
         /// </summary>
         public override string LabelInBrackets
         {
             get
             {
-                if (pawn == null)
-                    return "unknown";
-
-                return $"s={casterSensitivity:F1}";
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
             }
         }
 

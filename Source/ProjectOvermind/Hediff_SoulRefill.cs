@@ -225,6 +225,85 @@ namespace ProjectOvermind
                 Log.ErrorOnce($"[ProjectOvermind] Error regenerating mod needs: {ex}", "SoulRefill_ModNeeds".GetHashCode());
             }
         }
+
+        /// <summary>
+        /// Show duration in brackets
+        /// </summary>
+        public override string LabelInBrackets
+        {
+            get
+            {
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Show buff details in tooltip
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    
+                    // Show current sensitivity
+                    sb.AppendLine($"Psychic Sensitivity: {cachedSensitivity:F1}");
+                    sb.AppendLine();
+
+                    // Base regeneration
+                    float baseRegen = BaseRegenPercent;
+                    float sensitivityBonus = cachedSensitivity * SensitivityScaling * 60f; // Convert to per-second
+                    float totalRegenPerSecond = baseRegen + sensitivityBonus;
+                    
+                    if (cachedSensitivity >= Tier3Sensitivity)
+                    {
+                        totalRegenPerSecond += 0.01f; // Tier 3 bonus
+                    }
+
+                    sb.AppendLine("Need Regeneration:");
+                    sb.AppendLine($"• Food, Rest, Mood: {totalRegenPerSecond * 100:F1}% per second");
+
+                    // Tier bonuses
+                    if (cachedSensitivity >= Tier1Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 1 Bonus (≥3.0):");
+                        sb.AppendLine($"• Recreation: +20% regen ({totalRegenPerSecond * 1.2f * 100:F1}% per second)");
+                    }
+
+                    if (cachedSensitivity >= Tier2Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 2 Bonus (≥5.0):");
+                        sb.AppendLine("• Immunity Gain: +15%");
+                    }
+
+                    if (cachedSensitivity >= Tier3Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 3 Bonus (≥8.0):");
+                        sb.AppendLine("• Rest Need Drain: -30%");
+                        sb.AppendLine("• All Need Regen: +1%");
+                    }
+
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[SoulRefill] Error in TipStringExtra: {ex}");
+                    return base.TipStringExtra;
+                }
+            }
+        }
         
         /// <summary>
         /// Save/load state.

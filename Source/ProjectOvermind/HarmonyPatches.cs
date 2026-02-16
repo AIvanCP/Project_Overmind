@@ -94,17 +94,16 @@ namespace ProjectOvermind
 
     /// <summary>
     /// Patch Pawn_PsychicEntropyTracker.TryAddEntropy to reduce psyfocus cost for pawns with Mind Core buff
-    /// Postfix: Refund a portion of the psyfocus spent based on Mind Core multiplier
+    /// Prefix: Modify entropy amount BEFORE it's added (better VPE compatibility)
     /// </summary>
     [HarmonyPatch(typeof(Pawn_PsychicEntropyTracker), "TryAddEntropy")]
     public static class PsychicEntropyTracker_TryAddEntropy_Patch
     {
-        static void Postfix(Pawn_PsychicEntropyTracker __instance, float entropy, Pawn pawn, bool overLimit, ref bool __result)
+        static void Prefix(Pawn_PsychicEntropyTracker __instance, ref float entropy, Pawn pawn)
         {
             try
             {
-                // Only process if entropy was successfully added
-                if (!__result || pawn == null)
+                if (pawn == null || entropy <= 0f)
                     return;
 
                 // Check if pawn has Mind Core buff
@@ -120,28 +119,151 @@ namespace ProjectOvermind
                 if (mindCore == null)
                     return;
 
-                // Calculate psyfocus refund
-                // Multiplier is e.g., 0.7 = pay 70%, so refund 30%
+                // Get cost multiplier (e.g., 0.7 = 70% cost)
                 float multiplier = mindCore.GetPsyfocusCostMultiplier();
-                float refundPercent = 1f - multiplier; // e.g., 1.0 - 0.7 = 0.3 (30%)
                 
-                // Refund psyfocus (entropy reduces psyfocus)
-                // We need to restore some of the psyfocus that was spent
-                float psyfocusToRestore = entropy * refundPercent;
-                
-                if (psyfocusToRestore > 0.001f)
-                {
-                    __instance.OffsetPsyfocusDirectly(psyfocusToRestore);
+                // Reduce entropy cost BEFORE it's added
+                float originalEntropy = entropy;
+                entropy *= multiplier;
 
-                    if (Prefs.DevMode)
-                    {
-                        Log.Message($"[Mind Core] Reduced psyfocus cost by {refundPercent:P0} for {pawn.LabelShort} (refunded {psyfocusToRestore:F2})");
-                    }
+                if (Prefs.DevMode)
+                {
+                    float reduction = (1f - multiplier) * 100f;
+                    Log.Message($"[Mind Core] Reduced psyfocus cost by {reduction:F0}% for {pawn.LabelShort} ({originalEntropy:F2} → {entropy:F2})");
                 }
             }
             catch (Exception ex)
             {
                 Log.Error($"[Mind Core] Error in TryAddEntropy patch: {ex}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Additional patch for VPE compatibility - patches the ability's GetEntropyUsedByCurrentPawn method
+    /// This ensures VPE abilities also get cost reduction
+    /// </summary>
+    [HarmonyPatch(typeof(Ability), "GetEntropyUsedByPawn")]
+    public static class Ability_GetEntropyUsedByPawn_Patch
+    {
+        static void Postfix(Ability __instance, Pawn caster, ref float __result)
+        {
+            try
+            {
+                if (caster == null || __result <= 0f)
+                    return;
+
+                // Check if pawn has Mind Core buff
+                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
+                if (mindCoreDef == null)
+                    return;
+
+                Hediff hediff = caster.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
+                if (hediff == null)
+                    return;
+
+                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
+                if (mindCore == null)
+                    return;
+
+                // Apply cost multiplier to the result
+                float multiplier = mindCore.GetPsyfocusCostMultiplier();
+                float originalCost = __result;
+                __result *= multiplier;
+
+                if (Prefs.DevMode)
+                {
+                    float reduction = (1f - multiplier) * 100f;
+                    Log.Message($"[Mind Core] GetEntropyUsedByPawn reduced by {reduction:F0}% for {caster.LabelShort}: {originalCost:F2} → {__result:F2}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[Mind Core] Error in GetEntropyUsedByPawn patch: {ex}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Patch Ability.EntropyUsed property to show reduced cost in UI (VPE compatibility)
+    /// This makes the gizmo tooltip display the correct reduced cost
+    /// </summary>
+    [HarmonyPatch(typeof(Ability))]
+    [HarmonyPatch("EntropyUsed", MethodType.Getter)]
+    public static class Ability_EntropyUsed_Patch
+    {
+        static void Postfix(Ability __instance, ref float __result)
+        {
+            try
+            {
+                Pawn pawn = __instance?.pawn;
+                if (pawn == null || __result <= 0f)
+                    return;
+
+                // Check if pawn has Mind Core buff
+                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
+                if (mindCoreDef == null)
+                    return;
+
+                Hediff hediff = pawn.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
+                if (hediff == null)
+                    return;
+
+                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
+                if (mindCore == null)
+                    return;
+
+                // Apply cost multiplier
+                float multiplier = mindCore.GetPsyfocusCostMultiplier();
+                __result *= multiplier;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[Mind Core] Error in EntropyUsed patch: {ex}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Patch psyfocus recovery to boost it with Mind Core
+    /// This enhances the natural psyfocus regeneration
+    /// </summary>
+    [HarmonyPatch(typeof(Pawn_PsychicEntropyTracker), "GainPsyfocus")]
+    public static class PsychicEntropyTracker_GainPsyfocus_Patch
+    {
+        static void Prefix(ref float amount, Pawn ___pawn)
+        {
+            try
+            {
+                if (___pawn == null || amount <= 0f)
+                    return;
+
+                // Check if pawn has Mind Core buff
+                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
+                if (mindCoreDef == null)
+                    return;
+
+                Hediff hediff = ___pawn.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
+                if (hediff == null)
+                    return;
+
+                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
+                if (mindCore == null)
+                    return;
+
+                // Boost psyfocus gain (this is separate from the passive tick regen)
+                // Apply a moderate 15% boost to meditation/neural supercharger gains
+                float originalAmount = amount;
+                amount *= 1.15f;
+
+                if (Prefs.DevMode && (originalAmount > 0.01f)) // Only log significant gains
+                {
+                    Log.Message($"[Mind Core] Boosted psyfocus gain for {___pawn.LabelShort}: {originalAmount:F3} → {amount:F3}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[Mind Core] Error in GainPsyfocus patch: {ex}");
             }
         }
     }

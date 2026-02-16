@@ -113,6 +113,94 @@ namespace ProjectOvermind
             }
         }
 
+        /// <summary>
+        /// Show duration in brackets
+        /// </summary>
+        public override string LabelInBrackets
+        {
+            get
+            {
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Show buff details in tooltip
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    float sensitivity = GetCachedSensitivity();
+
+                    // Show caster sensitivity
+                    sb.AppendLine($"Caster Sensitivity: {sensitivity:F1}");
+                    sb.AppendLine();
+
+                    // Base effects
+                    sb.AppendLine("Base Effects:");
+                    float psyBonus = BasePsychicSensitivityBonus + (ScalingPerPoint * sensitivity);
+                    sb.AppendLine($"• Psychic Sensitivity: +{psyBonus * 100:F0}%");
+                    
+                    float mentalDmg = BaseMentalDamageReduction + (ScalingPerPoint * sensitivity);
+                    sb.AppendLine($"• Mental Damage Reduction: {mentalDmg * 100:F0}%");
+                    
+                    float stunRed = BaseStunReduction + (ScalingPerPoint * sensitivity);
+                    sb.AppendLine($"• Stun Reduction: {stunRed * 100:F0}%");
+                    
+                    float breakThreshold = BaseMentalBreakThresholdBonus + (ScalingPerPoint * sensitivity);
+                    sb.AppendLine($"• Mental Break Threshold: +{breakThreshold * 100:F0}%");
+
+                    // Threshold perks
+                    if (sensitivity >= Threshold3)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥3.0):");
+                        float dmgReduction = BaseIncomingDamageReduction + Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Incoming Damage Reduction: {dmgReduction * 100:F0}%");
+                        
+                        float consciousness = BaseConsciousnessBonus + Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Consciousness: +{consciousness * 100:F0}%");
+                    }
+
+                    if (sensitivity >= Threshold5)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥5.0):");
+                        sb.AppendLine($"• Mental Break Immunity: 100%");
+                    }
+
+                    if (sensitivity >= Threshold8)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥8.0):");
+                        float reflectChance = BaseReflectChance + Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Reflect Damage Chance: {reflectChance * 100:F0}%");
+                        
+                        float healRate = BaseHealRateBonus + Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus;
+                        sb.AppendLine($"• Healing Rate: +{healRate * 100:F0}%");
+                    }
+
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[CognitiveShield] Error in TipStringExtra: {ex}");
+                    return base.TipStringExtra;
+                }
+            }
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

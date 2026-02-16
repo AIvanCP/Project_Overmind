@@ -200,18 +200,80 @@ namespace ProjectOvermind
             return false;
         }
 
+        /// <summary>
+        /// Show buff details in tooltip
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    StringBuilder sb = new StringBuilder();
+                    float sensitivity = GetCachedSensitivity();
+
+                    // Show caster sensitivity
+                    sb.AppendLine($"Caster Sensitivity: {sensitivity:F1}");
+                    sb.AppendLine();
+
+                    // Base bonuses
+                    float workSpeed = BaseWorkSpeed + (ScalingPerPoint * sensitivity);
+                    float learning = BaseLearning + (ScalingPerPoint * sensitivity);
+                    float moveSpeed = BaseMoveSpeed + (ScalingPerPoint * sensitivity);
+                    float quality = BaseQuality + (ScalingPerPoint * sensitivity);
+
+                    sb.AppendLine($"Work Speed: +{workSpeed * 100:F0}%");
+                    sb.AppendLine($"Learning: +{learning * 100:F0}%");
+                    sb.AppendLine($"Movement: +{moveSpeed * 100:F0}%");
+                    sb.AppendLine($"Crafting Quality: +{quality * 100:F0}%");
+
+                    // Threshold perks
+                    if (sensitivity >= Threshold3)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥3.0):");
+                        sb.AppendLine($"• Plant Work: +{(BasePlantWorkSpeed + Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                        sb.AppendLine($"• Harvest Yield: +{(BaseHarvestYield + Mathf.Floor((sensitivity - Threshold3) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                    }
+
+                    if (sensitivity >= Threshold5)
+                    {
+                        if (sensitivity < Threshold3) sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥5.0):");
+                        sb.AppendLine($"• Hunting Stealth: +{(BaseHuntingStealth + Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                        sb.AppendLine($"• Mining Speed: +{(BaseMiningSpeed + Mathf.Floor((sensitivity - Threshold5) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                    }
+
+                    if (sensitivity >= Threshold8)
+                    {
+                        if (sensitivity < Threshold3 && sensitivity < Threshold5) sb.AppendLine();
+                        sb.AppendLine("Threshold Perks (≥8.0):");
+                        sb.AppendLine($"• Smithing Speed: +{(BaseSmithingSpeed + Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                        sb.AppendLine($"• Construction: +{(BaseConstructionSpeed + Mathf.Floor((sensitivity - Threshold8) / ThresholdScalingStep) * ThresholdScalingBonus) * 100:F0}%");
+                    }
+
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[Inspiration] Error in TipStringExtra: {ex}");
+                    return base.TipStringExtra;
+                }
+            }
+        }
+
         public override string LabelInBrackets
         {
             get
             {
-                if (pawn == null)
-                    return "unknown";
-                    
-                float sensitivity = GetCachedSensitivity();
-                float workSpeed = BaseWorkSpeed + (ScalingPerPoint * sensitivity);
-                
-                // Show main work speed bonus
-                return $"+{workSpeed * 100:F0}% work speed";
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
             }
         }
     }

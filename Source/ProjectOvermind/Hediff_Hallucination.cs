@@ -164,5 +164,21 @@ namespace ProjectOvermind
                 }
             }
         }
+
+        /// <summary>
+        /// Show duration in brackets
+        /// </summary>
+        public override string LabelInBrackets
+        {
+            get
+            {
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
+            }
+        }
     }
 }

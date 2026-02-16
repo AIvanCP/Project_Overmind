@@ -61,7 +61,7 @@
   <HediffDef>
     <defName>ProjectOvermind_MindCore</defName>
     <label>mind core</label>
-    <description>This pawn's psycast capabilities are greatly enhanced. Psyfocus regenerates passively, max psychic entropy is increased, and all psycasts cost less psyfocus and have shorter cooldowns. All effects scale with the caster's Psychic Sensitivity.</description>
+    <description>This pawn's psycast capabilities are greatly enhanced. Psyfocus regenerates passively, max psychic entropy is increased, and all psycasts (including VPE mod abilities) cost less psyfocus and have shorter cooldowns. Meditation and neural supercharger gains are also boosted. All effects scale with the caster's Psychic Sensitivity.</description>
     <hediffClass>ProjectOvermind.Hediff_MindCore</hediffClass>
     <defaultLabelColor>(0.7, 0.5, 1.0)</defaultLabelColor>
     <isBad>false</isBad>

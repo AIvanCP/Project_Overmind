@@ -274,6 +274,84 @@ namespace ProjectOvermind
             
             return false;
         }
+
+        /// <summary>
+        /// Show duration in brackets
+        /// </summary>
+        public override string LabelInBrackets
+        {
+            get
+            {
+                HediffComp_Disappears comp = this.TryGetComp<HediffComp_Disappears>();
+                if (comp != null && comp.ticksToDisappear > 0)
+                {
+                    return DurationHelper.GetDurationString(comp.ticksToDisappear);
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Show buff details in tooltip
+        /// </summary>
+        public override string TipStringExtra
+        {
+            get
+            {
+                if (pawn == null) return base.TipStringExtra;
+
+                try
+                {
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    
+                    // Show current sensitivity
+                    sb.AppendLine($"Psychic Sensitivity: {cachedSensitivity:F1}");
+                    sb.AppendLine();
+
+                    // Cleaning radius
+                    float radius = GetEffectiveRadius();
+                    sb.AppendLine($"Cleaning Radius: {radius:F1} tiles");
+
+                    // Cleaning rate
+                    int rate = GetEffectiveCleanRate();
+                    sb.AppendLine($"Filth Cleaned: {rate} per {TickInterval / 60f:F1}s");
+
+                    // Tier bonuses
+                    if (cachedSensitivity >= Tier1Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 1 Bonus (≥3.0):");
+                        sb.AppendLine("• Radius: +1 tile");
+                        sb.AppendLine("• Can clean blood and stains");
+                    }
+
+                    if (cachedSensitivity >= Tier2Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 2 Bonus (≥5.0):");
+                        sb.AppendLine("• Radius: +1 tile");
+                        sb.AppendLine("• Can clean vomit and animal filth");
+                    }
+
+                    if (cachedSensitivity >= Tier3Sensitivity)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine("Tier 3 Bonus (≥8.0):");
+                        sb.AppendLine("• Radius: +1.5 tiles");
+                        sb.AppendLine("• Cleaning Rate: x2");
+                        sb.AppendLine("• Can clean almost all filth");
+                        sb.AppendLine("• Minor immunity boost while cleaning");
+                    }
+
+                    return sb.ToString().TrimEnd();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"[AuraClean] Error in TipStringExtra: {ex}");
+                    return base.TipStringExtra;
+                }
+            }
+        }
         
         /// <summary>
         /// Save/load state.
