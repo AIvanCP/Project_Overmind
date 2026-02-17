@@ -45,6 +45,15 @@ namespace ProjectOvermind
         public float CachedPsychicSensitivity => cachedSensitivity;
 
         /// <summary>
+        /// Initialize hediff with caster's sensitivity (called from Verb)
+        /// </summary>
+        public void SetCasterSensitivity(float sensitivity)
+        {
+            cachedSensitivity = sensitivity;
+            lastCacheTick = Find.TickManager.TicksGame;
+        }
+
+        /// <summary>
         /// SAFE: Returns only cached value, NEVER calls GetStatValue to prevent recursion
         /// Cache is refreshed only in PostAdd and Tick (safe contexts)
         /// </summary>
@@ -69,9 +78,8 @@ namespace ProjectOvermind
                     return;
                 }
 
-                // Get psychic sensitivity and cache it
-                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
-                lastCacheTick = Find.TickManager.TicksGame;
+                // Note: Caster sensitivity now set via SetCasterSensitivity() called from Verb
+                // We use CASTER's sensitivity, not recipient's
                 
                 // Calculate hunger reduction: base + (sensitivity * 0.1), capped at 99%
                 float hungerReduction = Mathf.Clamp(
@@ -90,7 +98,7 @@ namespace ProjectOvermind
                 {
                     StringBuilder log = new StringBuilder();
                     log.AppendLine($"[FeastOfMind] PostAdd for {pawn.LabelShort}:");
-                    log.AppendLine($"  - Psychic Sensitivity: {cachedSensitivity:F2} ({cachedSensitivity * 100:F0}%)");
+                    log.AppendLine($"  - Caster Psychic Sensitivity: {cachedSensitivity:F2} ({cachedSensitivity * 100:F0}%)");
                     log.AppendLine($"  - Hunger Reduction: {hungerReduction * 100:F0}% (hunger rate: {(1f - hungerReduction) * 100:F0}%)");
                     log.AppendLine($"  - Eating Speed Bonus: +{eatingSpeedBonus * 100:F0}%");
                     
@@ -135,23 +143,16 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// SAFE cache refresh: Only called from Tick (safe context), never during stat calculation
-        /// Refreshes cached psychic sensitivity every 5 seconds
+        /// Tick method - NO LONGER refreshes cache automatically
+        /// Caster sensitivity is set once when buff is applied/refreshed
         /// </summary>
         public override void Tick()
         {
             base.Tick();
 
-            if (pawn == null)
-                return;
-
-            // Refresh cache every 5 seconds (300 ticks)
-            int currentTick = Find.TickManager.TicksGame;
-            if (currentTick - lastCacheTick >= CacheRefreshInterval)
-            {
-                cachedSensitivity = pawn.GetStatValue(StatDefOf.PsychicSensitivity);
-                lastCacheTick = currentTick;
-            }
+            // Note: We do NOT refresh cachedSensitivity here
+            // The caster's sensitivity is cached when the buff is applied
+            // and should remain constant for the duration of the buff
         }
 
         public override void PostTick()

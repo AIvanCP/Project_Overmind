@@ -112,18 +112,28 @@ namespace ProjectOvermind
                 
                 if (existingHediff != null)
                 {
-                    // Refresh duration instead of stacking (scaled by caster sensitivity)
+                    // Refresh duration AND update caster sensitivity (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingHediff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
                         comp.ticksToDisappear = DurationHelper.CalculateFeastDuration(CasterPawn);
                     }
+                    // Update caster sensitivity in case it changed
+                    if (existingHediff is Hediff_FeastOfMind feastHediff)
+                    {
+                        feastHediff.SetCasterSensitivity(CasterPawn.GetStatValue(StatDefOf.PsychicSensitivity));
+                    }
                 }
                 else
                 {
-                    // Add new hediff
+                    // Add new hediff with caster's sensitivity
                     Hediff hediff = HediffMaker.MakeHediff(FeastOfMindHediffDef, pawn);
                     pawn.health.AddHediff(hediff);
+                    // Set caster sensitivity AFTER adding hediff (after PostAdd runs)
+                    if (hediff is Hediff_FeastOfMind feastHediff)
+                    {
+                        feastHediff.SetCasterSensitivity(CasterPawn.GetStatValue(StatDefOf.PsychicSensitivity));
+                    }
                 }
 
                 // Spawn visual effect at pawn location

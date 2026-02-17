@@ -428,7 +428,41 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.8.0 (Current - Mind Core Ability)
+### Version 1.8.2 (Current - Critical Fixes & Consistency)
+- **🐛 FIXED: Duration Display**
+  - Added LabelInBrackets to: Psychic Diffusion, Mind Spike Controlled, Spatial Daze, Gravitic Pull
+  - All hediffs now show time remaining in brackets on health tab (e.g., "4d 23h")
+  
+- **🔧 FIXED: Stat Detail Tab Display**
+  - Standardized ALL buffs to use **CASTER's** psychic sensitivity (not recipient's)
+  - Cognitive Shield, Psychic Diffusion, and Feast of Mind now consistently check caster power
+  - **IMPORTANT**: Damage reduction shows ONLY if caster meets threshold requirements:
+    - Cognitive Shield: caster sensitivity ≥ 3.0
+    - Psychic Diffusion: caster sensitivity ≥ 5.0
+    - Feast of Mind: caster sensitivity ≥ 5.0
+  - Buff tooltips now display "Caster Sensitivity: X.X" for clarity
+
+- **📚 DOCUMENTATION: Mind Core Clarification**
+  - Created `IMPORTANT_MIND_CORE_CLARIFICATION.md`
+  - **Mind Core DOES affect**: Psycast costs (-30%), cooldowns (-20%), meditation gains (+15%)
+  - **Mind Core DOES NOT affect**: Buff durations from OTHER abilities (e.g., VPE - Arknights 2h buff)
+  - Duration of buffs is hardcoded in each ability's XML, not controlled by psycast system
+  - Added testing guide with dev mode log examples
+
+- **📚 DOCUMENTATION: Testing Guide**
+  - Created `STAT_DETAIL_TAB_TESTING_GUIDE.md`
+  - Comprehensive threshold table and troubleshooting steps
+  - Explains why buffs may not show damage reduction in detail tab
+  - Includes example scenarios with different caster sensitivity levels
+
+- **⚙️ TECHNICAL:**
+  - Feast of Mind now caches caster sensitivity when buff applied (consistent with other buffs)
+  - Updated all Verb classes to refresh caster sensitivity when hediff duration refreshed
+  - All VPE Harmony patches verified functional (5 patches active)
+
+- **Build Status:** 0 errors, 25 warnings (debug code only)
+
+### Version 1.8.0 (Mind Core Ability)
 - **🆕 NEW ABILITY: Mind Core**
   - Targetable buff that enhances all psycast performance
   - Provides passive psyfocus regeneration (1% per second base, scalable)

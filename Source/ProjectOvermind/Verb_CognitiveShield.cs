@@ -127,11 +127,16 @@ namespace ProjectOvermind
 
                 if (existingBuff != null)
                 {
-                    // Refresh duration instead of stacking (scaled by caster sensitivity)
+                    // Refresh duration AND update caster sensitivity (scaled by caster sensitivity)
                     HediffComp_Disappears comp = existingBuff.TryGetComp<HediffComp_Disappears>();
                     if (comp != null)
                     {
                         comp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
+                    }
+                    // Update caster sensitivity in case it changed
+                    if (existingBuff is Hediff_CognitiveShield cogShield)
+                    {
+                        cogShield.SetCasterSensitivity(CasterPawn.GetStatValue(StatDefOf.PsychicSensitivity));
                     }
                 }
                 else
