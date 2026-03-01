@@ -339,6 +339,31 @@ A RimWorld mod that adds new psionic abilities.
   - Can be refreshed on same target (resets duration)
   - *"Unlock the mind's true potential."*
 
+### Overmind Adaptation Psycast
+- **Description**: Psychically reshape all colonists' biology to master any terrain and environment
+- **Target**: Self (global effect — applies to ALL colonists on map)
+- **Cast Time**: 5.0 seconds
+- **Cooldown**: 300 seconds (5 minutes)
+- **Duration**: 12 in-game hours (base) + 1 hour per 0.1 Psychic Sensitivity
+  - Example: Sensitivity 1.0 → 13h duration
+  - Example: Sensitivity 5.0 → 17h duration
+- **Psyfocus Cost**: 0.55
+- **Heat Cost**: 0.35
+- **Required Psycast Level**: 5
+- **Special**: Terrain mastery + environmental immunity (all effects scale with CASTER's sensitivity)
+  - **Terrain Movement**: `terrainIgnore = clamp01(0.25 + sensitivity × 0.10)`
+    - Sensitivity 1.0 → 35% terrain cost reduction
+    - Sensitivity 5.0 → 75% terrain cost reduction
+    - Sensitivity 9.0 → 100% (full terrain immunity)
+  - **Environmental Immunity Tiers (based on caster sensitivity)**:
+    - **≥ 3.0** – Immune to Toxic Environment and Gas/Chemical exposure
+    - **≥ 5.0** – Immune to Vacuum suffocation (Odyssey DLC safe, null-checked)
+    - **≥ 8.0** – Immune to Heatstroke & Hypothermia; airborne diseases suppressed
+  - Implemented via safe Harmony Postfix patches (never returns false, never skips original)
+  - Fully compatible with DMC mod and any other movement patches
+  - Shows active tier and remaining duration in buff tooltip
+  - *"Where others see hostile terrain, the Overmind sees a path."*
+
 ## Requirements
 
 - RimWorld 1.5 or 1.6
@@ -376,6 +401,7 @@ Available from Orbital Bulk Goods and Exotic Goods traders (rare)
 - Cognitive Shield Psytrainer: 2,200 silver (level 5)
 - Psychic Diffusion Psytrainer: 2,600 silver (level 6)
 - Mind Core Psytrainer: 1,800 silver (level 5)
+- Overmind Adaptation Psytrainer: 2,800 silver (level 5)
 
 ### Quest Rewards
 Can appear as a reward in some quests
@@ -428,7 +454,38 @@ This mod is provided as-is for personal use. Feel free to modify for your own ga
 
 ## Changelog
 
-### Version 1.8.2 (Current - Critical Fixes & Consistency)
+### Version 1.9.0 (Current – New Ability + Bug Fix)
+- **🆕 NEW ABILITY: Overmind Adaptation (Level 5)**
+  - Global self-cast (like Inspiration) — applies to ALL colonists on map
+  - Grants terrain movement cost reduction that scales with caster sensitivity (25% base + 10% per 0.1 sense)
+  - Environmental immunity tiers based on caster's Psychic Sensitivity:
+    - **≥ 3.0**: Immune to toxic environment and gas exposure (ToxicBuildup suppressed each tick)
+    - **≥ 5.0**: Immune to vacuum/suffocation (Odyssey DLC safe — null-checked)
+    - **≥ 8.0**: Immune to Heatstroke & Hypothermia; airborne diseases suppressed
+  - Harmony Postfix on `CostToMoveIntoCell` (safe, never returns false, coexists with DMC mod)
+  - Postfix on `PreApplyDamage` for gas/vacuum direct damage absorption (never skips original)
+  - Psytrainer available from Exotic traders (2,800 silver market value)
+  - Duration scales with caster sensitivity (12h base + 1h per 0.1 sensitivity)
+
+- **🐛 FIXED: Hallucination showing 0h duration**
+  - When applying to new enemy pawns, `ticksToDisappear` was never set (only the refresh path set it)
+  - Fix: Set `HediffComp_Disappears.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn)` after `AddHediff`
+  - All enemy pawns now correctly show duration (e.g., "13h 20m")
+
+- **🔧 FIXED: RimWorld 1.6 Harmony TryAddEntropy crash**
+  - Parameter `entropy` renamed to `value` in RimWorld 1.6
+  - Patch now uses `ref float value` and accesses pawn via field injection
+  - Mind Core cost/cooldown reduction now works correctly in RimWorld 1.6
+
+- **⚙️ TECHNICAL:**
+  - Added `using Verse.AI` to HarmonyPatches.cs
+  - New Harmony patch classes: `OvermindAdaptation_MovementCost_Patch`, `OvermindAdaptation_DamagePrevention_Patch`
+  - All environmental immunity implemented WITHOUT skipping original methods
+  - All sensitivity thresholds check caster's stored sensitivity (not target pawn's)
+
+- **Build Status:** 0 errors, 25 warnings (debug code only)
+
+### Version 1.8.2 (Critical Fixes & Consistency)
 - **🐛 FIXED: Duration Display**
   - Added LabelInBrackets to: Psychic Diffusion, Mind Spike Controlled, Spatial Daze, Gravitic Pull
   - All hediffs now show time remaining in brackets on health tab (e.g., "4d 23h")

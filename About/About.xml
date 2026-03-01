@@ -7,7 +7,7 @@
 		<li>1.5</li>
 		<li>1.6</li>
 	</supportedVersions>
-	<description>Adds 7 unique psionic abilities to RimWorld inspired by various games and media. Features tactical teleportation, mind control, intelligence gathering, support buffs, detection, and powerful global effects.
+	<description>Adds 8 unique psionic abilities to RimWorld inspired by various games and media. Features tactical teleportation, mind control, intelligence gathering, support buffs, detection, powerful global effects, and environmental adaptation.
 
 Abilities:
 - Translocate Target (Lv3): Instantly relocate any pawn to a new position
@@ -17,8 +17,9 @@ Abilities:
 - Inspiration (Lv4): Global buff - massive productivity boost for all colonists
 - I See You (Lv5): Reveal all hidden/invisible entities on the map
 - Hallucination (Lv5): Global debuff - cause panic and combat penalties in enemies
+- Overmind Adaptation (Lv5): Global buff - grant all colonists terrain mastery and escalating environmental immunity (toxic/gas/vacuum/temperature) based on caster sensitivity
 
-Compatible with Vanilla Psycasts Expanded, Combat Extended, and other psycast mods. All abilities obtainable via Psytrainer from traders or quest rewards.
+Compatible with Vanilla Psycasts Expanded, Combat Extended, Biotech DLC, Odyssey DLC, and other psycast mods. All abilities obtainable via Psytrainer from traders or quest rewards.
 
 Requires: Royalty DLC (for psycasting framework)</description>
 	<modDependencies>

@@ -82,4 +82,30 @@
     </stages>
   </HediffDef>
 
+  <!-- Overmind Adaptation Buff Hediff -->
+  <HediffDef>
+    <defName>ProjectOvermind_OvermindAdaptation</defName>
+    <label>overmind adaptation</label>
+    <description>Psychic adaptation reshapes the body for extreme environments. Terrain is traversed with supernatural ease, and depending on the caster's power: toxic and gas exposure is neutralized (3.0+), vacuum suffocation is prevented (5.0+), and extreme temperatures no longer harm while biological needs slow (8.0+).</description>
+    <hediffClass>ProjectOvermind.Hediff_OvermindAdaptation</hediffClass>
+    <defaultLabelColor>(0.4, 0.85, 1.0)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>1.0</initialSeverity>
+    <maxSeverity>1.0</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30000</disappearsAfterTicks> <!-- 12h base, overridden by code -->
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>active</label>
+        <statOffsets>
+          <!-- Movement speed base offset handled via Harmony patch for terrain reduction -->
+          <!-- Environmental immunity handled by Hediff_OvermindAdaptation PostTick -->
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
 </Defs>

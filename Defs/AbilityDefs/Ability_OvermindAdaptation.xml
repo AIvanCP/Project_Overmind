@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Overmind Adaptation: Global terrain + environmental adaptation buff -->
+  <AbilityDef ParentName="PsycastBase">
+    <defName>ProjectOvermind_OvermindAdaptation</defName>
+    <label>overmind adaptation</label>
+    <description>Channel psychic energy to reshape all colonists' biology, granting extraordinary environmental resilience.\n\nAll allies on the map gain terrain mastery and movement speed bonuses. At higher psychic sensitivity the adaptation deepens, granting immunity to toxic environments and gas (3.0+), vacuum suffocation (5.0+), and extreme temperatures with reduced biological needs (8.0+).\n\nEffect strength scales with caster's Psychic Sensitivity. Duration scales with caster sensitivity.</description>
+    <iconPath>UI/Icons/Psycasts/OvermindAdaptation</iconPath>
+    <category>ProjectOvermind_MindshiftAbilities</category>
+    <level>5</level>
+    <statBases>
+      <Ability_Duration>1</Ability_Duration>
+      <Ability_PsyfocusCost>0.55</Ability_PsyfocusCost>
+      <Ability_EntropyGain>0.35</Ability_EntropyGain>
+    </statBases>
+    <verbProperties>
+      <verbClass>ProjectOvermind.Verb_OvermindAdaptation</verbClass>
+      <warmupTime>5.0</warmupTime>
+      <range>-1</range>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetLocations>false</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+    <cooldownTicksRange>18000</cooldownTicksRange> <!-- ~300 seconds / 5 minutes -->
+    <comps>
+      <li Class="CompProperties_AbilityFleckOnTarget">
+        <fleckDef>PsycastAreaEffect</fleckDef>
+      </li>
+    </comps>
+    <sendLetterOnCooldownComplete>false</sendLetterOnCooldownComplete>
+    <showGizmoOnWorldView>false</showGizmoOnWorldView>
+    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <showPsycastEffects>true</showPsycastEffects>
+    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+  </AbilityDef>
+
+</Defs>

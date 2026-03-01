@@ -74,6 +74,10 @@
 						<thingDef>ProjectOvermind_Psytrainer_MindCore</thingDef>
 						<countRange>0~1</countRange>
 					</li>
+					<li Class="StockGenerator_SingleDef">
+						<thingDef>ProjectOvermind_Psytrainer_OvermindAdaptation</thingDef>
+						<countRange>0~1</countRange>
+					</li>
 				</value>
 			</li>
 		</operations>

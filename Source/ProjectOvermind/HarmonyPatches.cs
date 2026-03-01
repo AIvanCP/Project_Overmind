@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using Verse;
+using Verse.AI;
 using UnityEngine;
 
 namespace ProjectOvermind
@@ -95,15 +97,21 @@ namespace ProjectOvermind
     /// <summary>
     /// Patch Pawn_PsychicEntropyTracker.TryAddEntropy to reduce psyfocus cost for pawns with Mind Core buff
     /// Prefix: Modify entropy amount BEFORE it's added (better VPE compatibility)
+    /// NOTE: RimWorld 1.6 renamed parameter from "entropy" to "value"
     /// </summary>
     [HarmonyPatch(typeof(Pawn_PsychicEntropyTracker), "TryAddEntropy")]
     public static class PsychicEntropyTracker_TryAddEntropy_Patch
     {
-        static void Prefix(Pawn_PsychicEntropyTracker __instance, ref float entropy, Pawn pawn)
+        static void Prefix(Pawn_PsychicEntropyTracker __instance, ref float value)
         {
             try
             {
-                if (pawn == null || entropy <= 0f)
+                // Get pawn from instance
+                var pawnField = typeof(Pawn_PsychicEntropyTracker).GetField("pawn", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                Pawn pawn = pawnField?.GetValue(__instance) as Pawn;
+
+                if (pawn == null || value <= 0f)
                     return;
 
                 // Check if pawn has Mind Core buff
@@ -123,13 +131,13 @@ namespace ProjectOvermind
                 float multiplier = mindCore.GetPsyfocusCostMultiplier();
                 
                 // Reduce entropy cost BEFORE it's added
-                float originalEntropy = entropy;
-                entropy *= multiplier;
+                float originalValue = value;
+                value *= multiplier;
 
                 if (Prefs.DevMode)
                 {
                     float reduction = (1f - multiplier) * 100f;
-                    Log.Message($"[Mind Core] Reduced psyfocus cost by {reduction:F0}% for {pawn.LabelShort} ({originalEntropy:F2} → {entropy:F2})");
+                    Log.Message($"[Mind Core] Reduced psyfocus cost by {reduction:F0}% for {pawn.LabelShort} ({originalValue:F2} → {value:F2})");
                 }
             }
             catch (Exception ex)
@@ -311,6 +319,154 @@ namespace ProjectOvermind
             catch (Exception ex)
             {
                 Log.Error($"[Mind Core] Error in StartCooldown patch: {ex}");
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Overmind Adaptation – terrain movement cost reduction (safe Postfix only)
+    // Compatible with DMC mod's movement patches (both use Postfix, stack safely)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [HarmonyPatch(typeof(Pawn_PathFollower), "CostToMoveIntoCell",
+        new[] { typeof(Pawn), typeof(IntVec3) })]
+    public static class OvermindAdaptation_MovementCost_Patch
+    {
+        // Cached HediffDef to avoid per-tick string lookups
+        private static HediffDef _adaptDef;
+
+        private static HediffDef AdaptDef
+        {
+            get
+            {
+                if (_adaptDef == null)
+                    _adaptDef = DefDatabase<HediffDef>.GetNamedSilentFail("ProjectOvermind_OvermindAdaptation");
+                return _adaptDef;
+            }
+        }
+
+        /// <summary>
+        /// Postfix: reduce terrain movement cost by TerrainIgnoreFraction.
+        /// Only modifies __result – never skips original. Safe with DMC and other mods.
+        /// RimWorld 1.6 returns float.
+        /// </summary>
+        public static void Postfix(Pawn pawn, IntVec3 c, ref float __result)
+        {
+            try
+            {
+                // Quick bail-outs (performance-sensitive, called every pathfinding tick)
+                if (pawn == null) return;
+                if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike) return;
+                if (pawn.health?.hediffSet == null) return;
+
+                HediffDef def = AdaptDef;
+                if (def == null) return;
+
+                Hediff_OvermindAdaptation hediff =
+                    pawn.health.hediffSet.GetFirstHediffOfDef(def) as Hediff_OvermindAdaptation;
+                if (hediff == null) return;
+
+                float ignore = hediff.TerrainIgnoreFraction; // 0..1
+                if (ignore <= 0f) return;
+
+                __result *= (1f - ignore);
+
+                // Clamp to minimum of 1 (1 tick minimum cost) to avoid zero/negative
+                if (__result < 1f) __result = 1f;
+            }
+            catch
+            {
+                // Swallow exceptions silently to never break pathfinding
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Overmind Adaptation – environmental damage absorption (Postfix on PreApplyDamage)
+    // Handles gas and vacuum direct damage. Temperature + disease handled in Hediff Tick.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [HarmonyPatch(typeof(Pawn_HealthTracker), "PreApplyDamage")]
+    public static class OvermindAdaptation_DamagePrevention_Patch
+    {
+        // Known environmental damage def names
+        // Using string sets with case-insensitive comparison for mod compat
+        private static readonly HashSet<string> ToxicGasDefs = new HashSet<string>(
+            StringComparer.OrdinalIgnoreCase)
+        {
+            "ToxicGas",      "GasToxic",       "ChemicalBurn",
+            "Smoke",         "GasSmoke",       "ToxicDamage",
+            "Toxic",         "GasDamage",      "GasPoison",
+        };
+
+        private static readonly HashSet<string> VacuumDefs = new HashSet<string>(
+            StringComparer.OrdinalIgnoreCase)
+        {
+            "Vacuum",        "VacuumDamage",   "Suffocation",
+            "VacuumExposure","AirDepleted",
+        };
+
+        private static HediffDef _adaptDef;
+
+        private static HediffDef AdaptDef
+        {
+            get
+            {
+                if (_adaptDef == null)
+                    _adaptDef = DefDatabase<HediffDef>.GetNamedSilentFail("ProjectOvermind_OvermindAdaptation");
+                return _adaptDef;
+            }
+        }
+
+        /// <summary>
+        /// Postfix: set absorbed = true for gas/vacuum damage on pawns with Overmind Adaptation
+        /// at the required sensitivity threshold.
+        /// Does NOT skip original method. Does NOT return false.
+        /// ___pawn uses Harmony's field injection to access private Pawn_HealthTracker.pawn field.
+        /// </summary>
+        public static void Postfix(Pawn_HealthTracker __instance, ref DamageInfo dinfo, ref bool absorbed, Pawn ___pawn)
+        {
+            try
+            {
+                // Already absorbed by something else, no need to re-process
+                if (absorbed) return;
+
+                Pawn pawn = ___pawn;
+                if (pawn == null || pawn.Dead) return;
+                if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike) return;
+                if (pawn.health?.hediffSet == null) return;
+
+                HediffDef def = AdaptDef;
+                if (def == null) return;
+
+                Hediff_OvermindAdaptation hediff =
+                    pawn.health.hediffSet.GetFirstHediffOfDef(def) as Hediff_OvermindAdaptation;
+                if (hediff == null) return;
+
+                float sens = hediff.CasterSensitivity;
+                string damageName = dinfo.Def?.defName;
+                if (string.IsNullOrEmpty(damageName)) return;
+
+                // Toxic / gas (threshold 3.0)
+                if (sens >= 3.0f && ToxicGasDefs.Contains(damageName))
+                {
+                    absorbed = true;
+                    if (Prefs.DevMode)
+                        Log.Message($"[OvermindAdaptation] Absorbed gas/toxic damage '{damageName}' on {pawn.LabelShort}");
+                    return;
+                }
+
+                // Vacuum / suffocation (threshold 5.0)
+                if (sens >= 5.0f && VacuumDefs.Contains(damageName))
+                {
+                    absorbed = true;
+                    if (Prefs.DevMode)
+                        Log.Message($"[OvermindAdaptation] Absorbed vacuum damage '{damageName}' on {pawn.LabelShort}");
+                }
+            }
+            catch
+            {
+                // Swallow silently – never crash health system
             }
         }
     }

@@ -173,6 +173,13 @@ namespace ProjectOvermind
                 Hediff newDebuff = HediffMaker.MakeHediff(HallucinationHediffDef, pawn);
                 pawn.health.AddHediff(newDebuff);
 
+                // Set duration AFTER adding (PostAdd may initialize comp first)
+                HediffComp_Disappears newDisappearsComp = newDebuff.TryGetComp<HediffComp_Disappears>();
+                if (newDisappearsComp != null)
+                {
+                    newDisappearsComp.ticksToDisappear = DurationHelper.CalculateDuration(CasterPawn);
+                }
+
                 // Spawn visual effect at pawn position
                 if (pawn.Spawned && pawn.Map != null)
                 {

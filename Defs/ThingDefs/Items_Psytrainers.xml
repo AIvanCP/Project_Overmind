@@ -716,4 +716,59 @@
 		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
 	</ThingDef>
 
+	<!-- Psytrainer for Overmind Adaptation -->
+	<ThingDef ParentName="ResourceBase">
+		<defName>ProjectOvermind_Psytrainer_OvermindAdaptation</defName>
+		<label>psytrainer (overmind adaptation)</label>
+		<description>A one-use psychic trainer device that teaches the user the Overmind Adaptation psycast — granting all colonists terrain mastery, environmental immunities, and extreme resilience that scales with the caster's psychic sensitivity.\n\nPsytrainers can be used by anyone with basic psycasting ability.</description>
+		<thingClass>ThingWithComps</thingClass>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<useHitPoints>true</useHitPoints>
+		<pathCost>14</pathCost>
+		<allowedArchonexusCount>2</allowedArchonexusCount>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<MarketValue>2800</MarketValue>
+			<Mass>0.2</Mass>
+			<Flammability>0.2</Flammability>
+			<DeteriorationRate>0.5</DeteriorationRate>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<graphicData>
+			<texPath>Things/Item/Special/Psytrainer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tradeTags>
+			<li>ExoticMisc</li>
+			<li>Psytrainer</li>
+		</tradeTags>
+		<techLevel>Archotech</techLevel>
+		<comps>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use psytrainer to learn overmind adaptation</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="ProjectOvermind.CompProperties_UseEffect_LearnAbility">
+				<abilityDef>ProjectOvermind_OvermindAdaptation</abilityDef>
+				<levelRequired>5</levelRequired>
+			</li>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>PsytrainerUse</soundOnUsed>
+			</li>
+			<li Class="CompProperties_UseEffectDestroySelf" />
+		</comps>
+		<tickerType>Never</tickerType>
+		<alwaysHaulable>true</alwaysHaulable>
+		<burnableByRecipe>true</burnableByRecipe>
+		<smeltable>false</smeltable>
+		<randomizeRotationOnSpawn>true</randomizeRotationOnSpawn>
+	</ThingDef>
+
 </Defs>
