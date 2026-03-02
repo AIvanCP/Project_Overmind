@@ -5,7 +5,7 @@
   <AbilityDef ParentName="PsycastBase">
     <defName>ProjectOvermind_OvermindAdaptation</defName>
     <label>overmind adaptation</label>
-    <description>Channel psychic energy to reshape all colonists' biology, granting extraordinary environmental resilience.\n\nAll allies on the map gain terrain mastery and movement speed bonuses. At higher psychic sensitivity the adaptation deepens, granting immunity to toxic environments and gas (3.0+), vacuum suffocation (5.0+), and extreme temperatures with reduced biological needs (8.0+).\n\nEffect strength scales with caster's Psychic Sensitivity. Duration scales with caster sensitivity.</description>
+    <description>Buff all colonists with terrain mastery and movement speed bonuses. At higher sensitivity, grants immunity to toxic gas (3.0+), vacuum suffocation (5.0+), and extreme temperatures with reduced biological needs (8.0+). Duration and effect strength scale with caster sensitivity.</description>
     <iconPath>UI/Icons/Psycasts/OvermindAdaptation</iconPath>
     <category>ProjectOvermind_MindshiftAbilities</category>
     <level>5</level>
