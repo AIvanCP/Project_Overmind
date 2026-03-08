@@ -18,11 +18,16 @@ namespace ProjectOvermind
             Hediff_MindCore hediff = GetMindCoreHediff(pawn);
             if (hediff == null) return;
 
-            // Only affects PsychicEntropyMax
             if (parentStat == StatDefOf.PsychicEntropyMax)
             {
                 float increase = hediff.GetMaxEntropyIncrease();
                 val += increase;
+            }
+            else if (parentStat == StatDefOf.Ability_PsyfocusCost)
+            {
+                // Multiply the cost by the Mind Core multiplier so it shows in the stat tab
+                // e.g. multiplier 0.5 → val becomes 50% of base (means 50% cost reduction)
+                val *= hediff.GetPsyfocusCostMultiplier();
             }
         }
 
@@ -37,6 +42,11 @@ namespace ProjectOvermind
             {
                 float increase = hediff.GetMaxEntropyIncrease();
                 return $"Mind Core: +{increase:F0}";
+            }
+            else if (parentStat == StatDefOf.Ability_PsyfocusCost)
+            {
+                float reduction = (1f - hediff.GetPsyfocusCostMultiplier()) * 100f;
+                return $"Mind Core: -{reduction:F0}% psyfocus cost";
             }
 
             return null;

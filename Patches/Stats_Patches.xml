@@ -435,4 +435,42 @@
 </operations>
 </Operation>
 
+<!-- Ability_PsyfocusCost – shows Mind Core cost reduction in Stats tab -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="Ability_PsyfocusCost"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="Ability_PsyfocusCost"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="Ability_PsyfocusCost"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_MindCore" /></value>
+</li>
+</operations>
+</Operation>
+
+<!-- ========================================
+     Overmind Adaptation StatPart Injections
+     ======================================== -->
+
+<!-- MoveSpeed – shows terrain/movement bonus from Overmind Adaptation in Stats tab -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_OvermindAdaptation" /></value>
+</li>
+</operations>
+</Operation>
+
 </Patch>

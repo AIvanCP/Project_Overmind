@@ -327,10 +327,21 @@ namespace ProjectOvermind
     // ─────────────────────────────────────────────────────────────────────────
     // Overmind Adaptation – terrain movement cost reduction (safe Postfix only)
     // Compatible with DMC mod's movement patches (both use Postfix, stack safely)
+    //
+    // IMPORTANT: We patch the INSTANCE method CostToMoveIntoCell(IntVec3 c), NOT
+    // the static overload CostToMoveIntoCell(Pawn, IntVec3). The static version
+    // is inlined by the JIT when called from SetupMoveIntoNextCell, making it
+    // impossible to Harmony-patch reliably. The instance method is the actual
+    // call target from SetupMoveIntoNextCell and is not inlined.
+    //
+    // The instance method calls the static internally, but we intercept AFTER
+    // the call returns so we see the final cost value.
+    //
+    // __instance = the Pawn_PathFollower; use field injection ___pawn to get pawn.
     // ─────────────────────────────────────────────────────────────────────────
 
     [HarmonyPatch(typeof(Pawn_PathFollower), "CostToMoveIntoCell",
-        new[] { typeof(Pawn), typeof(IntVec3) })]
+        new[] { typeof(IntVec3) })]
     public static class OvermindAdaptation_MovementCost_Patch
     {
         // Cached HediffDef to avoid per-tick string lookups
@@ -347,15 +358,17 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Postfix: reduce terrain movement cost by TerrainIgnoreFraction.
-        /// Only modifies __result – never skips original. Safe with DMC and other mods.
-        /// RimWorld 1.6 returns float.
+        /// Postfix on the INSTANCE CostToMoveIntoCell(IntVec3) — the method called by
+        /// SetupMoveIntoNextCell. Reduce terrain movement cost by TerrainIgnoreFraction.
+        /// ___pawn injects the private Pawn_PathFollower.pawn field via Harmony.
+        /// Only modifies __result — never skips original. Safe with DMC and other mods.
         /// </summary>
-        public static void Postfix(Pawn pawn, IntVec3 c, ref float __result)
+        public static void Postfix(Pawn_PathFollower __instance, Pawn ___pawn, ref float __result)
         {
             try
             {
                 // Quick bail-outs (performance-sensitive, called every pathfinding tick)
+                Pawn pawn = ___pawn;
                 if (pawn == null) return;
                 if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike) return;
                 if (pawn.health?.hediffSet == null) return;
