@@ -48,12 +48,27 @@ namespace ProjectOvermind
         }
 
         /// <summary>
-        /// Get psyfocus regeneration amount per second (scaled)
+        /// How many 0.1-steps of psychic sensitivity the caster has ABOVE 1.0.
+        /// Negative when the caster is below 1.0, which correctly weakens the buff.
+        ///
+        /// FIXED 2026-08-14. The old formula was (casterSensitivity / 0.1f), i.e. steps
+        /// measured from ZERO rather than from 1.0. That double-counted the base value:
+        /// every constant below is documented as "the value AT 1.0 sensitivity", but a
+        /// caster at exactly 1.0 was getting base + 10 extra steps on top. It also meant
+        /// the caps were reached at ~1.33 sensitivity, so every strong psychic caster
+        /// got identical numbers and the stat effectively stopped mattering.
+        /// </summary>
+        private float SensitivitySteps => (casterSensitivity - 1f) / 0.1f;
+
+        /// <summary>
+        /// Get psyfocus regeneration amount per second (scaled).
+        /// Applied once every 60 ticks, on the 0..1 psyfocus scale.
         /// </summary>
         public float GetPsyfocusRegenPerSecond()
         {
-            // Base regen + scaling
-            return BasePsyfocusRegenPerSecond + (casterSensitivity / 0.1f * PsyfocusRegenPerSensitivity);
+            float regen = BasePsyfocusRegenPerSecond + (SensitivitySteps * PsyfocusRegenPerSensitivity);
+            // Never let a low-sensitivity caster produce negative regen (psyfocus drain).
+            return Mathf.Max(0f, regen);
         }
 
         /// <summary>
@@ -61,8 +76,9 @@ namespace ProjectOvermind
         /// </summary>
         public float GetMaxEntropyIncrease()
         {
-            // Base increase + scaling
-            return BaseMaxEntropyIncrease + (casterSensitivity / 0.1f * MaxEntropyPerSensitivity);
+            float increase = BaseMaxEntropyIncrease + (SensitivitySteps * MaxEntropyPerSensitivity);
+            // A negative max-entropy bonus would be a penalty, which this buff never intends.
+            return Mathf.Max(0f, increase);
         }
 
         /// <summary>
@@ -71,8 +87,8 @@ namespace ProjectOvermind
         /// </summary>
         public float GetPsyfocusCostMultiplier()
         {
-            float reduction = BaseCostReduction + (casterSensitivity / 0.1f * CostReductionPerSensitivity);
-            reduction = Mathf.Min(reduction, MaxCostReduction); // Cap at 70% reduction
+            float reduction = BaseCostReduction + (SensitivitySteps * CostReductionPerSensitivity);
+            reduction = Mathf.Clamp(reduction, 0f, MaxCostReduction); // 0%..70% reduction
             return 1f - reduction; // Return multiplier (e.g., 0.7 = 70% cost, 30% reduction)
         }
 
@@ -82,8 +98,8 @@ namespace ProjectOvermind
         /// </summary>
         public float GetCooldownMultiplier()
         {
-            float reduction = BaseCooldownReduction + (casterSensitivity / 0.1f * CooldownReductionPerSensitivity);
-            reduction = Mathf.Min(reduction, MaxCooldownReduction); // Cap at 60% reduction
+            float reduction = BaseCooldownReduction + (SensitivitySteps * CooldownReductionPerSensitivity);
+            reduction = Mathf.Clamp(reduction, 0f, MaxCooldownReduction); // 0%..60% reduction
             return 1f - reduction; // Return multiplier (e.g., 0.75 = 75% cooldown, 25% reduction)
         }
 

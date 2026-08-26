@@ -39,6 +39,13 @@ namespace ProjectOvermind
         public const float BaseLearning = 0.60f; // +60% learning at s=0
         public const float BaseMoveSpeed = 0.10f; // +10% move speed at s=0
         public const float BaseQuality = 0.15f; // +15% quality at s=0
+
+        // Research and book writing. ResearchSpeedFactor is the only stat touched
+        // here, and that is deliberate: Vanilla Books Expanded lists it in the
+        // <statFactors> of its own VBE_WritingSpeed stat, so boosting this one
+        // speeds up writing books as well as research. Patching VBE_WritingSpeed
+        // directly on top of that would apply the same bonus twice.
+        public const float BaseResearchSpeed = 0.50f; // +50% research/writing at s=0
         
         // Scaling: each 0.1 sensitivity adds 1% - PUBLIC for StatPart access
         public const float ScalingPerPoint = 0.1f;

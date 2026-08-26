@@ -473,4 +473,29 @@
 </operations>
 </Operation>
 
+<!-- ========================================
+     Inspiration: research, and book writing with it
+     ======================================== -->
+
+<!-- ResearchSpeedFactor.
+     Vanilla Books Expanded lists this stat in the <statFactors> of its own
+     VBE_WritingSpeed, so injecting here speeds up writing books as well as
+     research - without referencing a stat that only exists when VBE is
+     installed, and without applying the bonus twice. -->
+<Operation Class="PatchOperationSequence">
+<operations>
+<li Class="PatchOperationConditional">
+<xpath>/Defs/StatDef[defName="ResearchSpeedFactor"]/parts</xpath>
+<nomatch Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ResearchSpeedFactor"]</xpath>
+<value><parts /></value>
+</nomatch>
+</li>
+<li Class="PatchOperationAdd">
+<xpath>/Defs/StatDef[defName="ResearchSpeedFactor"]/parts</xpath>
+<value><li Class="ProjectOvermind.StatPart_Inspiration" /></value>
+</li>
+</operations>
+</Operation>
+
 </Patch>

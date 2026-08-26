@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- ============================================================
+       Wire ProjectOvermind_MindControlled into the critical mental state
+       think tree.
+
+       Inserted FIRST (Order="First") so it is evaluated before vanilla's
+       Berserk branch and cannot be shadowed by another mod appending nodes.
+
+       Structure mirrors vanilla's own Berserk branch in
+       Core/Defs/ThinkTreeDefs/SubTrees_Misc.xml:
+
+           ThinkNode_ConditionalMentalState
+             ThinkNode_Priority
+               <our job giver>
+               JobGiver_WanderAnywhere   (fallback when no target is reachable)
+       ============================================================ -->
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThinkTreeDef[defName="MentalStateCritical"]/thinkRoot/subNodes</xpath>
+    <order>First</order>
+    <value>
+      <li Class="ThinkNode_ConditionalMentalState">
+        <state>ProjectOvermind_MindControlled</state>
+        <subNodes>
+          <li Class="ThinkNode_Priority">
+            <subNodes>
+              <li Class="ProjectOvermind.JobGiver_MindControlledAttack" />
+              <li Class="JobGiver_WanderAnywhere">
+                <maxDanger>Deadly</maxDanger>
+              </li>
+            </subNodes>
+          </li>
+        </subNodes>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

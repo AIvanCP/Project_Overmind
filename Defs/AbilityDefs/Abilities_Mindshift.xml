@@ -87,7 +87,13 @@
 	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 		<showPsycastEffects>true</showPsycastEffects>
 		<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-		<jobDef>CastAbilityOnThingOrPosition</jobDef>
+		<!--
+		  No <jobDef> on purpose. CastAbilityOnThingOrPosition does not exist in 1.6 and
+		  naming it produced a cross-reference error every load, which left the field null
+		  anyway. Vanilla's Ability.GetJob already falls back to CastAbilityOnThing:
+		      JobMaker.MakeJob(def.jobDef ?? JobDefOf.CastAbilityOnThing)
+		  so leaving it out is both correct and quiet.
+		-->
 	</AbilityDef>
 
 </Defs>

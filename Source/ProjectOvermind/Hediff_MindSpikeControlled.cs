@@ -57,14 +57,26 @@ namespace ProjectOvermind
                 if (pawn == null || pawn.Dead || pawn.InMentalState)
                     return;
 
-                // Use vanilla berserk but we'll handle it specially
-                MentalStateDef berserkDef = MentalStateDefOf.Berserk;
-                
-                if (berserkDef != null && pawn.mindState != null)
+                // Use our own mental state, NOT vanilla Berserk.
+                //
+                // Vanilla Berserk routes through JobGiver_Berserk, whose TryGiveJob
+                // hardcodes JobDefOf.AttackMelee and never looks at the equipped
+                // weapon. That is why spiked archers and gunners used to walk up and
+                // punch their allies. ProjectOvermind_MindControlled is routed to
+                // JobGiver_MindControlledAttack instead (see
+                // Patches/ThinkTree_MindControl.xml), which shoots with ranged weapons
+                // and only melees when the pawn has no usable ranged verb.
+                //
+                // Falls back to Berserk if the def somehow failed to load, so the
+                // ability still does something rather than silently doing nothing.
+                MentalStateDef controlDef =
+                    DefDatabase<MentalStateDef>.GetNamedSilentFail("ProjectOvermind_MindControlled")
+                    ?? MentalStateDefOf.Berserk;
+
+                if (controlDef != null && pawn.mindState != null)
                 {
-                    // Force berserk state
                     bool success = pawn.mindState.mentalStateHandler.TryStartMentalState(
-                        berserkDef,
+                        controlDef,
                         null,
                         false,
                         false
@@ -102,10 +114,19 @@ namespace ProjectOvermind
                     return;
                 }
 
-                // Remove mental state
-                if (pawn.InMentalState && pawn.MentalStateDef == MentalStateDefOf.Berserk)
+                // Remove mental state. Must accept BOTH our own state and vanilla
+                // Berserk, because the fallback in ApplyBerserkState can still start
+                // Berserk, and saves made before this change hold Berserk victims.
+                if (pawn.InMentalState)
                 {
-                    pawn.mindState.mentalStateHandler.CurState.RecoverFromState();
+                    MentalStateDef cur = pawn.MentalStateDef;
+                    MentalStateDef controlDef =
+                        DefDatabase<MentalStateDef>.GetNamedSilentFail("ProjectOvermind_MindControlled");
+
+                    if (cur == MentalStateDefOf.Berserk || (controlDef != null && cur == controlDef))
+                    {
+                        pawn.mindState.mentalStateHandler.CurState.RecoverFromState();
+                    }
                 }
 
                 // Apply disorientation debuff

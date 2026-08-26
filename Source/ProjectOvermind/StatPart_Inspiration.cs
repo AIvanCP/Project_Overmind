@@ -44,6 +44,19 @@ namespace ProjectOvermind
             {
                 bonus = Hediff_InspirationAura.BaseMoveSpeed + (Hediff_InspirationAura.ScalingPerPoint * sensitivity);
             }
+            // Research, and book writing along with it.
+            //
+            // Vanilla Books Expanded gives its writing recipes
+            // <workSpeedStat>VBE_WritingSpeed</workSpeedStat>, and that stat lists
+            // ResearchSpeedFactor in its own <statFactors>. So this single entry
+            // covers both, and keeps working whether or not VBE is installed.
+            //
+            // Note VBE_WritingSpeed deliberately does NOT inherit WorkSpeedGlobal,
+            // which is why the work speed bonus above never touched book writing.
+            else if (parentStat == StatDefOf.ResearchSpeedFactor)
+            {
+                bonus = Hediff_InspirationAura.BaseResearchSpeed + (Hediff_InspirationAura.ScalingPerPoint * sensitivity);
+            }
             // Threshold 3: Farming & Production
             else if (sensitivity >= Hediff_InspirationAura.Threshold3)
             {
@@ -113,8 +126,9 @@ namespace ProjectOvermind
             {
                 // Use multiplication for factor-based stats (WorkSpeed, Learning, MoveSpeed)
                 // Use addition for offset-based stats (other skills/speeds)
-                if (parentStat == StatDefOf.WorkSpeedGlobal || 
+                if (parentStat == StatDefOf.WorkSpeedGlobal ||
                     parentStat == StatDefOf.GlobalLearningFactor ||
+                    parentStat == StatDefOf.ResearchSpeedFactor ||
                     parentStat == StatDefOf.MoveSpeed)
                 {
                     val *= (1f + bonus);

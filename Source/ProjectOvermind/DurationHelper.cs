@@ -78,18 +78,44 @@ namespace ProjectOvermind
         }
         
         /// <summary>
-        /// Get human-readable duration string
+        /// Get human-readable duration string.
+        ///
+        /// FIXED 2026-08-15. The old version only divided by TicksPerHour (2500) using
+        /// integer division, so ANY buff shorter than one in-game hour displayed as
+        /// "0h". Nearly every ability here is that short - Cognitive Shield is 1500
+        /// ticks (25s), Psychic Diffusion 1200 (20s), Mind Spike 600 (10s) - so freshly
+        /// cast buffs looked expired in the health tab.
+        ///
+        /// Anything under an hour now reports in seconds/minutes, which is the useful
+        /// unit for combat-length buffs anyway.
         /// </summary>
         public static string GetDurationString(int ticks)
         {
+            if (ticks <= 0)
+                return "0s";
+
+            if (ticks < TicksPerHour)
+            {
+                // 60 ticks = 1 second at normal speed.
+                int seconds = ticks / 60;
+                if (seconds < 1)
+                    return "<1s";
+                if (seconds < 60)
+                    return $"{seconds}s";
+
+                int minutes = seconds / 60;
+                int remainingSeconds = seconds % 60;
+                return remainingSeconds > 0 ? $"{minutes}m {remainingSeconds}s" : $"{minutes}m";
+            }
+
             int hours = ticks / TicksPerHour;
             int days = hours / 24;
             int remainingHours = hours % 24;
-            
+
             if (days > 0)
                 return $"{days}d {remainingHours}h";
-            else
-                return $"{hours}h";
+
+            return $"{hours}h";
         }
     }
 }

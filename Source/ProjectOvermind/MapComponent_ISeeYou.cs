@@ -354,6 +354,8 @@ namespace ProjectOvermind
         /// </summary>
         private void RevealEntity(Thing thing)
         {
+            KeepDecloaked(thing);
+
             try
             {
                 if (thing == null || !thing.Spawned || activeSession == null)
@@ -650,11 +652,67 @@ namespace ProjectOvermind
                     {
                         RevealEntity(revealed.thing);
                     }
+
+                    // Hold the cloak open. Vanilla's disruption only lasts
+                    // recoverFromDisruptedTicks (90 for HoraxianInvisibility), so it
+                    // has to be refreshed well inside that window or the thing fades
+                    // back out between pulses.
+                    if (Find.TickManager.TicksGame % 60 == 0)
+                    {
+                        KeepDecloaked(revealed.thing);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Log.Error($"[I See You] Error updating revealed entities: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Forces a psychically invisible pawn to actually show itself, rather than
+        /// only marking where it is.
+        ///
+        /// HOW THIS WORKS
+        /// --------------
+        /// Vanilla invisibility is a hediff comp, not a thing comp:
+        /// HediffComp_Invisibility, reachable through
+        /// InvisibilityUtility.GetInvisibilityComp(pawn). Its DisruptInvisibility()
+        /// is public and simply stamps lastDisrupted with the current tick.
+        ///
+        /// HediffComp_Invisibility.ForcedVisible then returns true for as long as
+        ///
+        ///     TicksGame &lt; lastDisrupted + Props.recoverFromDisruptedTicks
+        ///
+        /// and - importantly - that particular branch is NOT gated behind the
+        /// props' affectedByDisruptor flag. That flag only guards the separate
+        /// DisruptorFlash hediff check further down the same property. So this
+        /// works on anything using the vanilla invisibility comp, including
+        /// sightstealers and revenants.
+        ///
+        /// recoverFromDisruptedTicks is 90 on HoraxianInvisibility, which is why
+        /// the caller refreshes every 60 ticks: enough margin that the target never
+        /// flickers back out mid-reveal.
+        /// </summary>
+        private void KeepDecloaked(Thing thing)
+        {
+            try
+            {
+                Pawn pawn = thing as Pawn;
+                if (pawn == null || !pawn.Spawned || pawn.Dead)
+                {
+                    return;
+                }
+
+                HediffComp_Invisibility comp = InvisibilityUtility.GetInvisibilityComp(pawn);
+                if (comp != null)
+                {
+                    comp.DisruptInvisibility();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[I See You] Error de-cloaking {thing}: {ex}");
             }
         }
 

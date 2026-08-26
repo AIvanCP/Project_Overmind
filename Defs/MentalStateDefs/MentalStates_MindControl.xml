@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- ============================================================
+       MIND CONTROLLED (Mind Spike)
+
+       Replaces the use of vanilla MentalStateDefOf.Berserk.
+
+       Vanilla Berserk routes through JobGiver_Berserk, whose TryGiveJob
+       hardcodes JobDefOf.AttackMelee. That made mind-controlled pawns run up
+       and punch their own allies even while holding a bow or a pistol.
+
+       This state is routed (see Patches/ThinkTree_MindControl.xml) to
+       ProjectOvermind.JobGiver_MindControlledAttack, which picks the job to
+       match the weapon the victim is actually carrying.
+
+       Recovery is driven entirely by the hediff's HediffComp_Disappears, so
+       every recover-early condition is switched off here - otherwise the pawn
+       could snap out of it while still under the spike.
+       ============================================================ -->
+
+  <MentalStateDef>
+    <defName>ProjectOvermind_MindControlled</defName>
+    <label>mind controlled</label>
+    <description>This pawn's mind has been hijacked. They are attacking their own allies with whatever weapon they are holding.</description>
+    <category>Malicious</category>
+    <blockNormalThoughts>true</blockNormalThoughts>
+    <stopsJobs>true</stopsJobs>
+    <allowBeatfire>false</allowBeatfire>
+    <nameColor>(0.6, 0.2, 0.9)</nameColor>
+    <recoveryMessage>{0} is no longer mind controlled.</recoveryMessage>
+    <baseInspectLine>Mental state: mind controlled</baseInspectLine>
+
+    <!-- Duration is owned by the Mind Spike hediff, not by the mental state. -->
+    <recoveryMtbDays>-1</recoveryMtbDays>
+    <minTicksBeforeRecovery>999999</minTicksBeforeRecovery>
+    <maxTicksBeforeRecovery>999999</maxTicksBeforeRecovery>
+    <recoverFromSleep>false</recoverFromSleep>
+    <recoverFromDowned>true</recoverFromDowned>
+    <recoverFromCaptured>true</recoverFromCaptured>
+    <recoverFromCollapsingExhausted>true</recoverFromCollapsingExhausted>
+
+    <prisonersCanDo>true</prisonersCanDo>
+    <slavesCanDo>true</slavesCanDo>
+    <colonistsOnly>false</colonistsOnly>
+    <allowGuilty>true</allowGuilty>
+  </MentalStateDef>
+
+</Defs>

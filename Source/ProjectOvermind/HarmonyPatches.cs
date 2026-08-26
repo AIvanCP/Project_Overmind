@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
@@ -138,7 +138,7 @@ namespace ProjectOvermind
                 if (Prefs.DevMode)
                 {
                     float reduction = (1f - multiplier) * 100f;
-                    Log.Message($"[Mind Core] Reduced psyfocus cost by {reduction:F0}% for {pawn.LabelShort} ({originalValue:F2} → {value:F2})");
+                    Log.Message($"[Mind Core] Reduced psyfocus cost by {reduction:F0}% for {pawn.LabelShort} ({originalValue:F2} â†’ {value:F2})");
                 }
             }
             catch (Exception ex)
@@ -148,131 +148,69 @@ namespace ProjectOvermind
         }
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // REMOVED 2026-08-14: three patches whose targets do not exist in RimWorld 1.6.
+    //
+    //   1. [HarmonyPatch(typeof(Ability), "GetEntropyUsedByPawn")]
+    //   2. [HarmonyPatch(typeof(Ability))] + ("EntropyUsed", MethodType.Getter)
+    //        RimWorld.Ability has NO member containing "Entropy" at all. Both of these
+    //        belong to VPE's VanillaPsycastsExpanded.Psycast, not to vanilla Ability,
+    //        so `typeof(Ability)` resolved to the wrong type.
+    //
+    //   3. [HarmonyPatch(typeof(Pawn_PsychicEntropyTracker), "GainPsyfocus")]
+    //        Real signature is GainPsyfocus(Thing focus) - there is no `amount`
+    //        parameter, so Harmony could not bind `ref float amount` either.
+    //
+    // WHY THIS MATTERED: Harmony.PatchAll() throws on the first bad patch class and
+    // aborts the whole loop, so every patch declared after #1 never applied - the
+    // movement bonus and damage prevention included. Deleting these three is what
+    // makes the rest of the mod actually work.
+    //
+    // All three only implemented psyfocus/entropy cost reduction. Their replacement
+    // is Ability_FinalPsyfocusCost_Patch directly below, which hooks the method that
+    // actually exists in 1.6.
+    // ─────────────────────────────────────────────────────────────────────────
+
     /// <summary>
-    /// Additional patch for VPE compatibility - patches the ability's GetEntropyUsedByCurrentPawn method
-    /// This ensures VPE abilities also get cost reduction
+    /// Mind Core: reduce the PSYFOCUS cost of casting.
+    ///
+    /// This is the patch the two removed VPE patches were trying to be. The real
+    /// 1.6 entry point is Ability.FinalPsyfocusCost(LocalTargetInfo) - verified to
+    /// be called from Psycast.Activate, so reducing __result reduces both the cost
+    /// shown in the UI and the psyfocus actually spent.
+    ///
+    /// Applies to EVERY psycast the pawn owns, not just Project Overmind's, because
+    /// Ability is the shared base class for vanilla and VPE psycasts alike.
     /// </summary>
-    [HarmonyPatch(typeof(Ability), "GetEntropyUsedByPawn")]
-    public static class Ability_GetEntropyUsedByPawn_Patch
+    [HarmonyPatch(typeof(Ability), nameof(Ability.FinalPsyfocusCost))]
+    public static class Ability_FinalPsyfocusCost_Patch
     {
-        static void Postfix(Ability __instance, Pawn caster, ref float __result)
+        public static bool Prepare()
         {
-            try
-            {
-                if (caster == null || __result <= 0f)
-                    return;
-
-                // Check if pawn has Mind Core buff
-                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
-                if (mindCoreDef == null)
-                    return;
-
-                Hediff hediff = caster.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
-                if (hediff == null)
-                    return;
-
-                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
-                if (mindCore == null)
-                    return;
-
-                // Apply cost multiplier to the result
-                float multiplier = mindCore.GetPsyfocusCostMultiplier();
-                float originalCost = __result;
-                __result *= multiplier;
-
-                if (Prefs.DevMode)
-                {
-                    float reduction = (1f - multiplier) * 100f;
-                    Log.Message($"[Mind Core] GetEntropyUsedByPawn reduced by {reduction:F0}% for {caster.LabelShort}: {originalCost:F2} → {__result:F2}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"[Mind Core] Error in GetEntropyUsedByPawn patch: {ex}");
-            }
+            return AccessTools.Method(typeof(Ability), "FinalPsyfocusCost") != null;
         }
-    }
 
-    /// <summary>
-    /// Patch Ability.EntropyUsed property to show reduced cost in UI (VPE compatibility)
-    /// This makes the gizmo tooltip display the correct reduced cost
-    /// </summary>
-    [HarmonyPatch(typeof(Ability))]
-    [HarmonyPatch("EntropyUsed", MethodType.Getter)]
-    public static class Ability_EntropyUsed_Patch
-    {
-        static void Postfix(Ability __instance, ref float __result)
+        public static void Postfix(Ability __instance, ref float __result)
         {
             try
             {
+                if (__result <= 0f) return;
+
                 Pawn pawn = __instance?.pawn;
-                if (pawn == null || __result <= 0f)
-                    return;
+                if (pawn == null) return;
 
-                // Check if pawn has Mind Core buff
-                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
-                if (mindCoreDef == null)
-                    return;
+                HediffDef mindCoreDef = DefDatabase<HediffDef>.GetNamedSilentFail("ProjectOvermind_MindCore");
+                if (mindCoreDef == null) return;
 
-                Hediff hediff = pawn.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
-                if (hediff == null)
-                    return;
+                Hediff_MindCore mindCore =
+                    pawn.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef) as Hediff_MindCore;
+                if (mindCore == null) return;
 
-                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
-                if (mindCore == null)
-                    return;
-
-                // Apply cost multiplier
-                float multiplier = mindCore.GetPsyfocusCostMultiplier();
-                __result *= multiplier;
+                __result *= mindCore.GetPsyfocusCostMultiplier();
             }
             catch (Exception ex)
             {
-                Log.Error($"[Mind Core] Error in EntropyUsed patch: {ex}");
-            }
-        }
-    }
-
-    /// <summary>
-    /// Patch psyfocus recovery to boost it with Mind Core
-    /// This enhances the natural psyfocus regeneration
-    /// </summary>
-    [HarmonyPatch(typeof(Pawn_PsychicEntropyTracker), "GainPsyfocus")]
-    public static class PsychicEntropyTracker_GainPsyfocus_Patch
-    {
-        static void Prefix(ref float amount, Pawn ___pawn)
-        {
-            try
-            {
-                if (___pawn == null || amount <= 0f)
-                    return;
-
-                // Check if pawn has Mind Core buff
-                HediffDef mindCoreDef = HediffDef.Named("ProjectOvermind_MindCore");
-                if (mindCoreDef == null)
-                    return;
-
-                Hediff hediff = ___pawn.health?.hediffSet?.GetFirstHediffOfDef(mindCoreDef);
-                if (hediff == null)
-                    return;
-
-                Hediff_MindCore mindCore = hediff as Hediff_MindCore;
-                if (mindCore == null)
-                    return;
-
-                // Boost psyfocus gain (this is separate from the passive tick regen)
-                // Apply a moderate 15% boost to meditation/neural supercharger gains
-                float originalAmount = amount;
-                amount *= 1.15f;
-
-                if (Prefs.DevMode && (originalAmount > 0.01f)) // Only log significant gains
-                {
-                    Log.Message($"[Mind Core] Boosted psyfocus gain for {___pawn.LabelShort}: {originalAmount:F3} → {amount:F3}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"[Mind Core] Error in GainPsyfocus patch: {ex}");
+                Log.Error($"[Mind Core] Error in FinalPsyfocusCost patch: {ex}");
             }
         }
     }
@@ -314,7 +252,7 @@ namespace ProjectOvermind
 
                 if (Prefs.DevMode)
                 {
-                    Log.Message($"[Mind Core] Reduced cooldown by {(1f - multiplier):P0} for {pawn.LabelShort} ({originalTicks} → {ticks} ticks)");
+                    Log.Message($"[Mind Core] Reduced cooldown by {(1f - multiplier):P0} for {pawn.LabelShort} ({originalTicks} â†’ {ticks} ticks)");
                 }
             }
             catch (Exception ex)
@@ -324,24 +262,16 @@ namespace ProjectOvermind
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Overmind Adaptation – terrain movement cost reduction (safe Postfix only)
-    // Compatible with DMC mod's movement patches (both use Postfix, stack safely)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Overmind Adaptation â€“ terrain movement cost reduction (safe Postfix only)
+    // Compatible with DMC mod's movement patches (both use Postfix, stack safely).
     //
-    // IMPORTANT: We patch the INSTANCE method CostToMoveIntoCell(IntVec3 c), NOT
-    // the static overload CostToMoveIntoCell(Pawn, IntVec3). The static version
-    // is inlined by the JIT when called from SetupMoveIntoNextCell, making it
-    // impossible to Harmony-patch reliably. The instance method is the actual
-    // call target from SetupMoveIntoNextCell and is not inlined.
-    //
-    // The instance method calls the static internally, but we intercept AFTER
-    // the call returns so we see the final cost value.
-    //
-    // __instance = the Pawn_PathFollower; use field injection ___pawn to get pawn.
-    // ─────────────────────────────────────────────────────────────────────────
+    // We patch SetupMoveIntoNextCell and directly scale internal movement cost
+    // fields (nextCellCostTotal / nextCellCostLeft). This is the most reliable
+    // hook even when lower-level CostToMoveIntoCell methods are JIT-inlined.
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-    [HarmonyPatch(typeof(Pawn_PathFollower), "CostToMoveIntoCell",
-        new[] { typeof(IntVec3) })]
+    [HarmonyPatch(typeof(Pawn_PathFollower), "SetupMoveIntoNextCell")]
     public static class OvermindAdaptation_MovementCost_Patch
     {
         // Cached HediffDef to avoid per-tick string lookups
@@ -357,17 +287,22 @@ namespace ProjectOvermind
             }
         }
 
+        // (removed _lastDevLogTick - the per-tick dev logging it throttled is gone)
+
         /// <summary>
-        /// Postfix on the INSTANCE CostToMoveIntoCell(IntVec3) — the method called by
-        /// SetupMoveIntoNextCell. Reduce terrain movement cost by TerrainIgnoreFraction.
-        /// ___pawn injects the private Pawn_PathFollower.pawn field via Harmony.
-        /// Only modifies __result — never skips original. Safe with DMC and other mods.
+        /// Postfix on SetupMoveIntoNextCell. Scale next-cell movement costs by
+        /// (1 - TerrainIgnoreFraction), with a minimum cost floor of 1 tick.
+        /// ___pawn / ___nextCellCostTotal / ___nextCellCostLeft are private
+        /// field injections from Pawn_PathFollower.
         /// </summary>
-        public static void Postfix(Pawn_PathFollower __instance, Pawn ___pawn, ref float __result)
+        public static void Postfix(
+            Pawn_PathFollower __instance,
+            Pawn ___pawn,
+            ref float ___nextCellCostTotal,
+            ref float ___nextCellCostLeft)
         {
             try
             {
-                // Quick bail-outs (performance-sensitive, called every pathfinding tick)
                 Pawn pawn = ___pawn;
                 if (pawn == null) return;
                 if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike) return;
@@ -383,10 +318,24 @@ namespace ProjectOvermind
                 float ignore = hediff.TerrainIgnoreFraction; // 0..1
                 if (ignore <= 0f) return;
 
-                __result *= (1f - ignore);
+                float multiplier = 1f - ignore;
+
+                ___nextCellCostTotal *= multiplier;
+                ___nextCellCostLeft *= multiplier;
 
                 // Clamp to minimum of 1 (1 tick minimum cost) to avoid zero/negative
-                if (__result < 1f) __result = 1f;
+                if (___nextCellCostTotal < 1f) ___nextCellCostTotal = 1f;
+                if (___nextCellCostLeft < 1f) ___nextCellCostLeft = 1f;
+
+                // NO LOGGING HERE. This runs from Pawn_PathFollower.SetupMoveIntoNextCell,
+                // i.e. every time any adapted pawn steps into a cell. The old code logged
+                // once per 120 ticks behind Prefs.DevMode, which still produced 8,250 lines
+                // in a single session - over half the entire Player.log - and buried every
+                // other mod's messages. Dev mode is left on permanently in this setup, so it
+                // is not a usable gate for a per-tick hot path.
+                //
+                // If this ever needs debugging again, log from a one-shot place (the ability
+                // cast, or Hediff_OvermindAdaptation.PostAdd) instead of from the mover.
             }
             catch
             {
@@ -395,10 +344,10 @@ namespace ProjectOvermind
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Overmind Adaptation – environmental damage absorption (Postfix on PreApplyDamage)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Overmind Adaptation â€“ environmental damage absorption (Postfix on PreApplyDamage)
     // Handles gas and vacuum direct damage. Temperature + disease handled in Hediff Tick.
-    // ─────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     [HarmonyPatch(typeof(Pawn_HealthTracker), "PreApplyDamage")]
     public static class OvermindAdaptation_DamagePrevention_Patch
@@ -480,7 +429,7 @@ namespace ProjectOvermind
             }
             catch
             {
-                // Swallow silently – never crash health system
+                // Swallow silently â€“ never crash health system
             }
         }
     }

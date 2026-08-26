@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -26,6 +26,11 @@ namespace ProjectOvermind
         /// </summary>
         public override void DrawHighlight(LocalTargetInfo target)
         {
+            // Draws the MAX CAST RANGE ring around the caster (plus the AoE ring from
+            // HighlightFieldRadiusAroundTarget and the target-cell highlight). Without this
+            // call only the custom drawing below ran, so the range circle never appeared.
+            base.DrawHighlight(target);
+
             if (target.IsValid && CasterPawn != null)
             {
                 float radius = DurationHelper.CalculateRadius(CasterPawn, BaseRadius, RadiusPerStep);
